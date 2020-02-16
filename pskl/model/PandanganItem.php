@@ -10,7 +10,7 @@ class PandanganItem {
 	}
 
 	public function getPandanganItem($id){	
-		$sql = "SELECT * FROM ".$this->dbPrefix."form_item WHERE id=?";
+		$sql = "SELECT * FROM ".$this->dbPrefix."borang_matlamat WHERE id=?";
 		$sth = $this->dbh->prepare($sql);
 		$sth->execute(array($id));
 		
@@ -20,7 +20,7 @@ class PandanganItem {
 	}
 
 	public function getPandanganItems(){
-		$sql = 	"SELECT * FROM ".$this->dbPrefix."form_item";		
+		$sql = 	"SELECT * FROM ".$this->dbPrefix."borang_matlamat";		
 		$sth = $this->dbh->prepare($sql);
 		$sth->execute();
 		return json_encode($sth->fetchAll());
