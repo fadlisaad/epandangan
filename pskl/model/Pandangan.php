@@ -33,7 +33,7 @@ class Pandangan {
 		$sql = 	"SELECT * FROM ".$this->dbPrefix."borang WHERE last_update > ?";		
 		$sth = $this->dbh->prepare($sql);
 		$sth->execute(array($lastUpdate));
-		return json_encode($sth->fetchAll());
+		return $sth->fetchAll();
 	}
 
 	public function getForm($id){	
@@ -75,7 +75,7 @@ class Pandangan {
 		$sql = 	"SELECT * FROM ".$this->dbPrefix."borang_matlamat WHERE last_update > ?";		
 		$sth = $this->dbh->prepare($sql);
 		$sth->execute(array($lastUpdate));
-		return json_encode($sth->fetchAll());
+		return $sth->fetchAll();
 	}
 
 	public function getItemByIds($borang_id, $matlamat_id, $halatuju_id, $tindakan_id){	
