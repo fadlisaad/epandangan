@@ -29,6 +29,13 @@ class Pandangan {
 	/*************************
 	********* Form  **********
 	*************************/
+	public function getNewForms($lastUpdate){	
+		$sql = 	"SELECT * FROM ".$this->dbPrefix."borang WHERE last_update > ?";		
+		$sth = $this->dbh->prepare($sql);
+		$sth->execute(array($lastUpdate));
+		return json_encode($sth->fetchAll());
+	}
+
 	public function getForm($id){	
 		$sql = "SELECT * FROM ".$this->dbPrefix."borang WHERE id=?";
 		$sth = $this->dbh->prepare($sql);
@@ -64,6 +71,13 @@ class Pandangan {
 	/*************************
 	****** Form Item *********
 	*************************/
+	public function getNewItems($lastUpdate){	
+		$sql = 	"SELECT * FROM ".$this->dbPrefix."borang_matlamat WHERE last_update > ?";		
+		$sth = $this->dbh->prepare($sql);
+		$sth->execute(array($lastUpdate));
+		return json_encode($sth->fetchAll());
+	}
+
 	public function getItemByIds($borang_id, $matlamat_id, $halatuju_id, $tindakan_id){	
 		$sql = "SELECT * FROM ".$this->dbPrefix."borang_matlamat WHERE borang_id=? AND matlamat_id=? AND halatuju_id=? AND tindakan_id=?";
 		$sth = $this->dbh->prepare($sql);
