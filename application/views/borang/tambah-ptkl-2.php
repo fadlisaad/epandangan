@@ -38,7 +38,7 @@
                                 <p class="mb-0" data-tag="berjaya-keterangan">Borang anda telah lengkap diisi.</p>
                             </div>
 
-                            <form method="post" id="borang-ptkl" data-parsley-validate="" enctype="multipart/form-data" action="<?php echo BASE_URL ?>borang/add_ptkl">
+                            <form method="post" id="borang-ptkl" data-parsley-validate="" enctype="multipart/form-data" action="<?php echo BASE_URL ?>borang/add_ptkl/ptkl_2">
 
                                 <div class="form-row">
                                     <div class="form-group col-md-9">
@@ -55,11 +55,11 @@
                                     <p><span data-tag="kategori"></span> <span class="text-danger">*</span></p>
 
                                     <div class="radio mb-1 radio-info form-check-inline">
-                                        <input type="radio" name="kategori" id="individu" value="Individu">
+                                        <input type="radio" name="kategori" id="individu" value="Individu" required="" checked="checked">
                                         <label for="individu" data-tag="individu"></label>
                                     </div>
                                     <div class="radio radio-info form-check-inline">
-                                        <input type="radio" name="kategori" id="organisasi" value="Organisasi" required="">
+                                        <input type="radio" name="kategori" id="organisasi" value="Organisasi">
                                         <label for="organisasi" data-tag="organisasi"></label>
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@
 
                                 <div class="form-group">
                                     <label for="pandangan_awam"><span data-tag="pandangan-awam"></span> <span class="text-danger">*</span></label>
-                                    <textarea id="pandangan_awam" class="form-control" name="pandangan_awam" rows="10" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-validation-threshold="50" placeholder="Contoh: Selaraskan Syarat Nyata"></textarea>
+                                    <textarea id="pandangan_awam" class="form-control" name="pandangan_awam" rows="10" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-validation-threshold="50" required="" placeholder="Contoh: Selaraskan Syarat Nyata"></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -160,10 +160,24 @@
                                 </div>
                                 <div class="alert alert-info" data-tag="alert-lampiran"></div>
 
+                                <?php if($_SESSION['permission'] != 'user'): ?>
+                                <h4 class="header-title">Nama Pegawai Key-in</h4>
+                                <p class="sub-header">Sila pilih nama pegawai yang key-in borang ini</p>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <select class="form-control" id="pegawai" required="" name="pegawai"></select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <a id="clear_select" href="#" class="btn btn-warning">Clear Selection</a>
+                                        <a href="#add-modal" class="btn btn-primary waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"><i class="mdi mdi-plus-circle mr-1"></i> Tambah Pegawai</a>
+                                    </div>
+                                </div>
+                                <?php endif; ?>
+
                                 <div class="form-group mb-0">
                                     <input type="hidden" name="token" value="<?php echo $token ?>">
-                                    <input type="hidden" name="draf" value="1">
-                                    <input type="submit" class="btn btn-success" name="submit" value="Hantar">
+                                    <input type="hidden" name="draf" value="2">
+                                    <input type="submit" class="btn btn-success" name="submit" value="Simpan">
                                 </div>
 
                             </form>
@@ -226,3 +240,24 @@
         <!-- ============================================================== -->
         <!-- End Page content -->
         <!-- ============================================================== -->
+
+        <!-- Add Modal -->
+        <div id="add-modal" class="modal-demo">
+            <button type="button" class="close" onclick="Custombox.modal.close();">
+                <span>&times;</span><span class="sr-only">Tutup</span>
+            </button>
+            <h4 class="custom-modal-title">Tambah Nama Pegawai</h4>
+            <div class="custom-modal-text text-left">
+                <form id="tambah-pegawai">
+                    <div class="form-group">
+                        <label for="name">Nama Penuh</label>
+                        <input type="text" class="form-control" name="nama" placeholder="Masukkan nama pegawai">
+                    </div>
+
+                    <div class="text-right">
+                        <button id="save-pegawai" class="btn btn-success waves-effect waves-light" onclick="Custombox.modal.close();">Simpan</button>
+                        <button type="button" class="btn btn-danger waves-effect waves-light m-l-10" onclick="Custombox.modal.close();">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>

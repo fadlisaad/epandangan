@@ -84,7 +84,7 @@ class Fpx extends Controller {
 			$data['payee_phone_number'] = $_POST['payee_phone_number'];
 			$data['payment_type'] = $_POST['payment_type'];
 			$data['api_key'] = $_POST['api_key'];
-			$data['VERSION'] = $_POST['VERSION'];
+			$data['VERSION'] = $_POST['version'];
 
 			switch ($data['STATUS']) {
 				case '1':
@@ -93,8 +93,10 @@ class Fpx extends Controller {
 					# generate download link
 					$url = BASE_URL.'space/download/'.$data['TRANS_ID'];
 
-					if($data['VERSION'] == 'en') $link = getenv('DOWNLOAD_LINK_EN');
-					else $link = getenv('DOWNLOAD_LINK_MY');
+					if(isset($data['VERSION'])){
+						if($data['VERSION'] == 'en') $link = getenv('DOWNLOAD_LINK_EN');
+						else $link = getenv('DOWNLOAD_LINK_MY');
+					}
 
 					# store download link
 					$downloadData = array(
@@ -108,7 +110,7 @@ class Fpx extends Controller {
 				
 				default:
 					$status = 'failed';
-					$link = NULL;
+					$url = NULL;
 					break;
 			}
 
@@ -140,58 +142,61 @@ class Fpx extends Controller {
 
 			if($_POST['PAYMENT_MODE'] == 'fpx'){
 				$payment_mode = 'Perbankan Internet (Individu)';
-				$buyer_name = $data['BUYER_NAME'];
-				$buyer_bank = $data['BUYER_BANK'];
+				$buyer_name = $_POST['BUYER_NAME'];
+				$buyer_bank = $_POST['BUYER_BANK'];
 			}
 
 			if($_POST['PAYMENT_MODE'] == 'migs'){
 				$payment_mode = 'Kad Kredit/Debit';
-				$buyer_name = $data['payee_name'];
+				$buyer_name = $_POST['BUYER_NAME'];
 				$buyer_bank = 'N/A';
 			}
 
-	    	/** Email start *****************************/
+			if($data['STATUS'] == 1){
 
-			# send receipt email
-			$email = $this->loadHelper('Email_helper');
-				
-			# choose email template
-			$e_model = $this->loadModel('Mailer_model');
-			$template = $e_model->getByID(4);
-			$body = $template[0]['body'];
-			$subject = $template[0]['subject'];
+		    	/** Email start *****************************/
 
-			$transaction_details = "<ul>
-				<li>Payment Date/Time: ".$data['PAYMENT_DATETIME']."</li>
-				<li>Amount: RM ".$data['AMOUNT']."</li>
-				<li>Status: ".ucfirst($status)."</li>
-				<li>FPX Transaction ID: ".$data['PAYMENT_TRANS_ID']."</li>
-				<li>Seller Order ID: ".$data['SELLER_ORDER_NO']."</li>
-				<li>Buyer Bank: ".$buyer_bank."</li>
-				<li>Buyer Name: ".$buyer_name."</li>
-			</ul>";
+				# send receipt email
+				$email = $this->loadHelper('Email_helper');
+					
+				# choose email template
+				$e_model = $this->loadModel('Mailer_model');
+				$template = $e_model->getByID(4);
+				$body = $template[0]['body'];
+				$subject = $template[0]['subject'];
 
-			# prepare the variable for email
-			$vars = array(
-				"{{EMAIL}}" => $data['email'],
-				"{{FULLNAME}}" => $data['payee_name'],
-				"{{DETAILS}}" => "Maklumat pembayaran adalah seperti berikut:<br>Jumlah : RM ".$_POST['AMOUNT']."<br>Daripada : ".$buyer_name." - ".$data['email']."<br>Jenis Pembayaran : ".strtoupper($_POST['payment_type'])."<br>Cara Pembayaran : ".$payment_mode."<br>Transaction ID: ".$_POST['TRANS_ID']."<br>Status : ".ucfirst($status)."<br>Keterangan Transaksi : <br>".$transaction_details,
-				"{{BUTTON}}" => '<tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-				<td class="content-block aligncenter" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="'.$url.'" class="login">Muat Turun</a></td></tr>'
-			);
+				$transaction_details = "<ul>
+					<li>Payment Date/Time: ".$data['PAYMENT_DATETIME']."</li>
+					<li>Amount: RM ".$data['AMOUNT']."</li>
+					<li>Status: ".ucfirst($status)."</li>
+					<li>FPX Transaction ID: ".$data['PAYMENT_TRANS_ID']."</li>
+					<li>Seller Order ID: ".$data['SELLER_ORDER_NO']."</li>
+					<li>Buyer Bank: ".$buyer_bank."</li>
+					<li>Buyer Name: ".$buyer_name."</li>
+				</ul>";
 
-			$content = strtr($body, $vars);
+				# prepare the variable for email
+				$vars = array(
+					"{{EMAIL}}" => $data['email'],
+					"{{FULLNAME}}" => $buyer_name,
+					"{{DETAILS}}" => "Maklumat pembayaran adalah seperti berikut:<br>Jumlah : RM ".$_POST['AMOUNT']."<br>Daripada : ".$buyer_name." - ".$data['email']."<br>Jenis Pembayaran : ".strtoupper($_POST['payment_type'])."<br>Cara Pembayaran : ".$payment_mode."<br>Transaction ID: ".$_POST['TRANS_ID']."<br>Status : ".ucfirst($status)."<br>Keterangan Transaksi : <br>".$transaction_details,
+					"{{BUTTON}}" => '<tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+					<td class="content-block aligncenter" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="'.$url.'" class="login">Muat Turun</a></td></tr>'
+				);
 
-			$email_data = array(
-				'email' => $data['email'], 
-				'subject' => $subject, 
-				'content' => $content 
-			);
+				$content = strtr($body, $vars);
 
-			# send the email
-			$send = $email->send($email_data);
+				$email_data = array(
+					'email' => $data['email'], 
+					'subject' => $subject, 
+					'content' => $content 
+				);
 
-			/** email end ******************************/
+				# send the email
+				$send = $email->send($email_data);
+
+				/** email end ******************************/
+			}
 
 			if($_POST['payment_type'] != 'WEB')
 			{

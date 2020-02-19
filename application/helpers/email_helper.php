@@ -5,6 +5,7 @@
 *  Author: Fadli Saad
 *  Website: https://fadli.my
 */
+use Aura\Sql\ExtendedPdo;
 Class Email_helper extends Controller {
 
 	protected $mail;
@@ -12,6 +13,13 @@ Class Email_helper extends Controller {
 	public function __construct()
 	{
 		$this->mail = new PHPMailer;
+		$this->pdo = new ExtendedPdo(
+		    'mysql:host='.getenv('DB_HOST').';dbname='.getenv('DB_NAME').'',
+		    ''.getenv('DB_USER').'',
+		    ''.getenv('DB_PASS').'',
+		    [], // driver attributes/options as key-value pairs
+		    []  // queries to execute after connection
+		);
 	}
 	
 	function send($data)
@@ -65,6 +73,15 @@ Class Email_helper extends Controller {
 			$msg = false;
 		} else {
 			$msg = true;
+
+			# add email to log
+			$stm  = 'INSERT INTO email_log (recipient, subject, body) VALUE (:recipient, :subject, :body)';
+			$bind = array(
+				'recipient' => $data['email'],
+				'subject' => $data['subject'],
+				'body' => $data['content']
+			);
+			$this->pdo->fetchAffected($stm, $bind);
 			$this->mail->clearAddresses(); # Important for sending 2 separate email in one connection
  		}
  		return $msg;

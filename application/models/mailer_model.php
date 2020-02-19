@@ -14,4 +14,16 @@ class Mailer_model extends Model {
 			echo $e->getMessage();
 		}
 	}
+
+	public function getEmailLog()
+	{
+		try{
+			$stm  = "SELECT * FROM email_log";
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
 }

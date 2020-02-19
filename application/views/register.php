@@ -33,7 +33,7 @@
 
                                     <div class="form-group mb-3">
                                         <label for="fullname" data-tag="fullname"></label>
-                                        <input class="form-control" name="nama-penuh" type="text" required="" placeholder="Nama penuh">
+                                        <input class="form-control" name="fullname" type="text" required="" placeholder="Nama penuh">
                                     </div>
 
                                     <div class="form-group mb-3">

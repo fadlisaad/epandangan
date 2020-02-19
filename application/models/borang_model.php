@@ -39,10 +39,10 @@ Class Borang_model extends Model {
 		}
 	}
 
-	public function addPTKL($data)
+	public function addPTKL($data, $table)
 	{
 		try{
-			$stm = "INSERT INTO borang_ptkl (peta_indeks, no_lot, muka_surat, pandangan_awam, cadangan, user_id, tarikh_terima, hadir, kategori, nama_organisasi, jumlah_nama) VALUES (:peta_indeks, :no_lot, :muka_surat, :pandangan_awam, :cadangan, :user_id, :tarikh_terima, :hadir, :kategori, :nama_organisasi, :jumlah_nama)";
+			$stm = "INSERT INTO borang_".$table." (peta_indeks, no_lot, muka_surat, pandangan_awam, cadangan, user_id, pegawai_id, tarikh_terima, tarikh_key_in, hadir, kategori, nama_organisasi, jumlah_nama) VALUES (:peta_indeks, :no_lot, :muka_surat, :pandangan_awam, :cadangan, :user_id, :pegawai_id, :tarikh_terima, :tarikh_key_in, :hadir, :kategori, :nama_organisasi, :jumlah_nama)";
 			$bind = array(
 				'peta_indeks' => $data['peta_indeks'],
 				'no_lot' => $data['no_lot'],
@@ -50,7 +50,9 @@ Class Borang_model extends Model {
 				'pandangan_awam' => $data['pandangan_awam'],
 				'cadangan' => $data['cadangan'],
 				'user_id' => $data['user_id'],
+				'pegawai_id' => $data['pegawai_id'],
 				'tarikh_terima' => $data['tarikh_terima'],
+				'tarikh_key_in' => $data['tarikh_key_in'],
 				'hadir' => $data['hadir'],
 				'kategori' => $data['kategori'],
 				'nama_organisasi' => $data['nama_organisasi'],
@@ -155,6 +157,23 @@ Class Borang_model extends Model {
 		}
 		catch(Exception $e){
 			echo $e->getMessage();
+		}
+	}
+
+	public function addPegawai($data)
+	{
+		try{
+			$stm  = "INSERT INTO pegawai (nama) VALUES (:nama)";
+			$bind = array(
+				'nama' => $data['nama']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
 		}
 	}
 }

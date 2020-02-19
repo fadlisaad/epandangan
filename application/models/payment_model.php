@@ -48,9 +48,10 @@ class Payment_model extends Model {
 	public function updatePayment($data)
 	{
 		try{
-			$stm  = "UPDATE payments SET status = :status WHERE transaction_id = :transaction_id";
+			$stm  = "UPDATE payments SET status = :status, remarks = :remarks WHERE transaction_id = :transaction_id";
 			$bind = array(
 				'status' => $data['status'],
+				'remarks' => $data['remarks'],
 				'transaction_id' => $data['transaction_id']
 			);
 			

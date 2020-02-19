@@ -15,19 +15,27 @@ class Pengguna_model extends Model {
 			return $e->getMessage();
 		}
 	}
-	
-	public function addProfile($data)
+
+	public function addCompleteProfile($data)
 	{
-		$stm  = "INSERT INTO user_profile (phone_number, verification_code, sessionid, messageid, last_update) VALUES (:phone_number, :verification_code, :sessionid, :messageid, :last_update)";
-		$bind = array(
-			'phone_number' => $data['phone_number'],
-			'verification_code' => $data['verification_code'],
-			'sessionid' => $data['sessionid'],
-			'messageid' => $data['messageid'],
-			'last_update' => $data['last_update']
-		);
-		$result = $this->pdo->fetchAffected($stm, $bind);
-		return $result;
+		try{
+			$stm  = "INSERT INTO profile (user_id, nama_penuh, ic_passport, alamat, poskod, telefon_rumah, telefon_pejabat, telefon_bimbit) VALUES (:user_id, :nama_penuh, :ic_passport, :alamat, :poskod, :telefon_rumah, :telefon_pejabat, :telefon_bimbit)";
+			$bind = array(
+				'user_id' => $data['user_id'],
+				'nama_penuh' => $data['nama_penuh'],
+				'ic_passport' => $data['ic_passport'],
+				'alamat' => $data['alamat'],
+				'poskod' => $data['poskod'],
+				'telefon_rumah' => $data['telefon_rumah'],
+				'telefon_pejabat' => $data['telefon_pejabat'],
+				'telefon_bimbit' => $data['telefon_bimbit']
+			);
+
+			return $this->pdo->fetchAffected($stm, $bind);
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
 	}
 
 	public function updateProfile($data)
@@ -41,7 +49,8 @@ class Pengguna_model extends Model {
 				'poskod' => $data['poskod'],
 				'telefon_rumah' => $data['telefon_rumah'],
 				'telefon_pejabat' => $data['telefon_pejabat'],
-				'telefon_bimbit' => $data['telefon_bimbit']
+				'telefon_bimbit' => $data['telefon_bimbit'],
+				'user_id' => $data['user_id'],
 			);
 			
 			return $this->pdo->fetchAffected($stm, $bind);

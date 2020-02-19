@@ -112,6 +112,43 @@ class Auth extends Controller {
 	}
 
 	# user login page
+	public function login()
+	{
+		# load EasyCSRF and session provider
+		$session = new EasyCSRF\NativeSessionProvider();
+
+		if(isset($id)) $session->set('source',$id);
+		else $session->set('source', getenv('CURRENT_SOURCE'));
+
+		if($session->get('loggedin')){
+			$this->redirect('dashboard');
+		}else{
+			$easyCSRF = new EasyCSRF\EasyCSRF($session);
+
+			# generate token
+			$token = $easyCSRF->generate('token');
+
+			$header = $this->loadView('auth-header');
+			$footer = $this->loadView('auth-footer');
+	        $template = $this->loadView('login-user');
+
+	        $custom_js = "<script>
+				var referrer = document.referrer;
+				$(document).ready(function() {
+					$('#redirect').val(referrer);
+				});
+			</script>";
+
+			$footer->set('custom_js', $custom_js);
+			$template->set('token', $token);
+
+			$header->render();
+			$template->render();
+			$footer->render();
+		}
+	}
+
+	# user login page
 	public function admin_login()
 	{
 		# load EasyCSRF and session provider
@@ -221,11 +258,11 @@ class Auth extends Controller {
 		$session = new EasyCSRF\NativeSessionProvider();
 		$easyCSRF = new EasyCSRF\EasyCSRF($session);
 
-		try{
-			$easyCSRF->check('token', $_POST['token']);
-		}catch(Exception $e){
-			echo $e->getMessage();
-		}
+		// try{
+		// 	$easyCSRF->check('token', $_POST['token']);
+		// }catch(Exception $e){
+		// 	echo $e->getMessage();
+		// }
 
 		if(isset($_POST['submit'])){
 			
@@ -340,7 +377,7 @@ class Auth extends Controller {
 					"{{FULLNAME}}" => $full_name,
 					"{{PASSWORD}}" => $_POST['password'],
 					"{{BUTTON}}" => '<tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-				<td class="content-block aligncenter" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="'.BASE_URL.'auth/login" class="login">Log masuk</a></td></tr>'
+				<td class="content-block aligncenter" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="'.BASE_URL.'auth" class="login">Log masuk</a></td></tr>'
 				);
 
 				$content = strtr($body, $vars);
@@ -356,20 +393,20 @@ class Auth extends Controller {
 
 				if($send){
 					$msg = array(
-						'error_msg' => 'Satu e-mail telah dihantar kepada alamat e-mail anda mengandungi maklumat log masuk dan kata laluan. Sila semak e-mail anda nanti.',
+						'error_msg' => 'Satu e-mail telah dihantar kepada alamat e-mail anda mengandungi maklumat log masuk dan kata laluan. Sila semak e-mail anda nanti. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 						'error_type' => 'success',
 						'error_title' => 'Pendaftaran berjaya'
 					);
 				}else{
 					$msg = array(
-						'error_msg' => 'Kami tidak berjaya menghantar e-mail kepada alamat yang anda masukkan. Sila semak semula samada ada kesalahan ejaan dan cuba semula.',
+						'error_msg' => 'Kami tidak berjaya menghantar e-mail kepada alamat yang anda masukkan. Sila semak semula samada ada kesalahan ejaan dan cuba semula. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 						'error_type' => 'danger',
 						'error_title' => 'Gagal menghantar e-mail'
 					);
 				}
 			}else{
 				$msg = array(
-					'error_msg' =>'Maklumat pendaftaran menggunakan alamat e-mail '.$_POST['username'].' telah wujud dalam sistem kami. Jika anda pasti ia adalah e-mail anda yang betul, sila klik pada pautan Log Masuk atau Lupa Kata Laluan bagi mendapatkan semula maklumat log masuk anda.',
+					'error_msg' =>'Maklumat pendaftaran menggunakan alamat e-mail '.$_POST['username'].' telah wujud dalam sistem kami. Jika anda pasti ia adalah e-mail anda yang betul, sila klik pada pautan Log Masuk atau Lupa Kata Laluan bagi mendapatkan semula maklumat log masuk anda. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 					'error_type' => 'warning',
 					'error_title' => 'Pendaftaran telah wujud'
 				);
@@ -463,20 +500,20 @@ class Auth extends Controller {
 
 				if($send){
 					$msg = array(
-						'error_msg' => 'Satu e-mail telah dihantar kepada alamat e-mail anda mengandungi pautan untuk set semula kata laluan anda. Sila semak e-mail anda nanti. Kod pengaktifan ini hanya sah bermula 15 minit dari sekarang.',
+						'error_msg' => 'Satu e-mail telah dihantar kepada alamat e-mail anda mengandungi pautan untuk set semula kata laluan anda. Sila semak e-mail anda nanti. E-mail pengaktifan ini hanya sah bermula 15 minit dari sekarang. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 						'error_type' => 'success',
 						'error_title' => 'Arahan set semula kata laluan berjaya'
 					);
 				}else{
 					$msg = array(
-						'error_msg' => 'Kami tidak berjaya menghantar e-mail kepada alamat yang anda masukkan. Sila semak semula samada ada kesalahan ejaan dan cuba semula.',
+						'error_msg' => 'Kami tidak berjaya menghantar e-mail kepada alamat yang anda masukkan. Sila semak semula samada ada kesalahan ejaan dan cuba semula. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 						'error_type' => 'danger',
 						'error_title' => 'Gagal menghantar e-mail'
 					);
 				}
 			}else{
 				$msg = array(
-					'error_msg' =>'Tiada maklumat pendaftaran menggunakan alamat e-mail '.$_POST['username'].' wujud dalam sistem kami. Jika anda pasti ia adalah e-mail anda yang betul, sila klik pada pautan Log Masuk atau Lupa Kata Laluan bagi mendapatkan semula maklumat log masuk anda.',
+					'error_msg' =>'Tiada maklumat pendaftaran menggunakan alamat e-mail '.$_POST['username'].' wujud dalam sistem kami. Jika anda pasti ia adalah e-mail anda yang betul, sila klik pada pautan Log Masuk atau Lupa Kata Laluan bagi mendapatkan semula maklumat log masuk anda. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 					'error_type' => 'warning',
 					'error_title' => 'E-mail tidak wujud'
 				);
@@ -569,20 +606,20 @@ class Auth extends Controller {
 
 				if($send){
 					$msg = array(
-						'error_msg' => 'Satu e-mail telah dihantar kepada alamat e-mail anda mengandungi maklumat kata laluan baru anda. Sila semak e-mail anda nanti. Anda boleh masuk ke e-Pandangan dengan menggunakan kata laluan yang baru ini.',
+						'error_msg' => 'Satu e-mail telah dihantar kepada alamat e-mail anda mengandungi maklumat kata laluan baru anda. Sila semak e-mail anda nanti. Anda boleh masuk ke e-Pandangan dengan menggunakan kata laluan yang baru ini. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 						'error_type' => 'success',
 						'error_title' => 'Set semula kata laluan berjaya'
 					);
 				}else{
 					$msg = array(
-						'error_msg' => 'Kami tidak berjaya menghantar e-mail kepada alamat yang anda masukkan. Sila semak semula samada ada kesalahan ejaan dan cuba semula.',
+						'error_msg' => 'Kami tidak berjaya menghantar e-mail kepada alamat yang anda masukkan. Sila semak semula samada ada kesalahan ejaan dan cuba semula. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 						'error_type' => 'danger',
 						'error_title' => 'Gagal menghantar e-mail'
 					);
 				}
 			}else{
 				$msg = array(
-					'error_msg' =>'Tiada maklumat pendaftaran menggunakan alamat e-mail '.$profile[0]['email'].' wujud dalam sistem kami. Jika anda pasti ia adalah e-mail anda yang betul, sila klik pada pautan Log Masuk atau Lupa Kata Laluan bagi mendapatkan semula maklumat log masuk anda.',
+					'error_msg' =>'Tiada maklumat pendaftaran menggunakan alamat e-mail '.$profile[0]['email'].' wujud dalam sistem kami. Jika anda pasti ia adalah e-mail anda yang betul, sila klik pada pautan Log Masuk atau Lupa Kata Laluan bagi mendapatkan semula maklumat log masuk anda. Jika anda mempunyai sebarang isu berkaitan proses ini, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).',
 					'error_type' => 'warning',
 					'error_title' => 'E-mail tidak wujud'
 				);
@@ -619,7 +656,7 @@ class Auth extends Controller {
 				if($check[0]['expiry'] > Carbon:: now()){
 
 					# redirect to reset password page
-					$this->redirect('reset_password/'.$check[0]['user_id']);
+					$this->redirect('auth/reset_password/'.$token);
 
 				}else{
 					$msg = array(

@@ -13,7 +13,8 @@ class Dashboard extends Controller {
 			'assets/libs/datatables/dataTables.bootstrap4.css',
 			'assets/libs/datatables/responsive.bootstrap4.css',
 			'assets/libs/datatables/buttons.bootstrap4.css',
-			'assets/libs/datatables/select.bootstrap4.css'
+			'assets/libs/datatables/select.bootstrap4.css',
+			'assets/libs/rwd-table/rwd-table.min.css'
 		);
 
 		$this->js = array(
@@ -27,7 +28,9 @@ class Dashboard extends Controller {
 			'assets/libs/datatables/buttons.print.min.js',
 			'assets/libs/pdfmake/pdfmake.min.js',
 			'assets/libs/pdfmake/vfs_fonts.js',
-			'assets/js/pages/datatables.init.js'
+			'assets/js/pages/datatables.init.js',
+			'assets/libs/rwd-table/rwd-table.min.js',
+			'assets/js/pages/responsive-table.init.js'
 		);
 
 		if(empty($this->session->get('loggedin'))){

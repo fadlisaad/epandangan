@@ -137,7 +137,7 @@
                                         </tr>
                                         <tr>
                                             <td>Pegawai Key-in</td>
-                                            <td><?php echo ($data[0]['pegawai_id']) ? $data[0]['pegawai_id']: 'Tiada' ?></td>
+                                            <td><?php echo ($data[0]['pegawai']) ? $data[0]['pegawai']: 'Tiada' ?></td>
                                         </tr>
                                         <tr>
                                             <td>Tarikh Key-in</td>

@@ -38,7 +38,7 @@
                                 <p class="mb-0" data-tag="berjaya-keterangan">Borang anda telah lengkap diisi.</p>
                             </div>
 
-                            <form method="post" id="borang-ptkl" data-parsley-validate="" enctype="multipart/form-data" action="<?php echo BASE_URL ?>borang/add_ptkl">
+                            <form method="post" id="borang-ptkl" data-parsley-validate="" enctype="multipart/form-data" action="<?php echo BASE_URL ?>borang/add_ptkl/ptkl">
 
                                 <div class="form-row">
                                     <div class="form-group col-md-9">

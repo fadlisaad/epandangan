@@ -82,11 +82,11 @@
                                                 <p><span data-tag="kategori"></span> <span class="text-danger">*</span></p>
 
                                                 <div class="radio mb-1 radio-info form-check-inline">
-                                                    <input type="radio" name="kategori" id="individu" value="Individu">
+                                                    <input type="radio" name="kategori" id="individu" value="Individu" required="" checked="checked">
                                                     <label for="individu" data-tag="individu"></label>
                                                 </div>
                                                 <div class="radio radio-info form-check-inline">
-                                                    <input type="radio" name="kategori" id="organisasi" value="Organisasi" required="">
+                                                    <input type="radio" name="kategori" id="organisasi" value="Organisasi">
                                                     <label for="organisasi" data-tag="organisasi"></label>
                                                 </div>
                                             </div>
@@ -135,6 +135,13 @@
                                                     <input type="file" name="lampiran_a" data-parsley-max-file-size="2000">
                                                 </div>
                                             <div class="alert alert-info" data-tag="alert-lampiran"></div>
+
+                                            <div class="form-row">
+                                                <ul class="list-inline wizard">
+                                                    </li>
+                                                    <li class="next list-inline-item text-right"><a href="javascript: void(0);" class="btn btn-secondary" data-tag="next" id="selepas"></a></li>
+                                                </ul>
+                                            </div>
                                         
                                     </div>
 
@@ -152,6 +159,12 @@
                                                 <label for="tidak" data-tag="hadir-tidak"></label>
                                             </div>
                                         </div>
+
+                                        <ul class="list-inline wizard mb-0">
+                                            <li class="previous list-inline-item"><a href="javascript: void(0);" class="btn btn-secondary" data-tag="previous" id="sebelum"></a>
+                                            </li>
+                                            <li class="next list-inline-item float-right"><a href="javascript: void(0);" class="btn btn-secondary" data-tag="next" id="selepas"></a></li>
+                                        </ul>
                                     </div>
 
                                     <div class="tab-pane fade" id="third">
@@ -164,7 +177,7 @@
 
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label for="komen_bentuk_kandungan"><span data-tag="padangan-cadangan"></span> <span class="text-danger">*</span></label>
+                                                    <label for="komen_bentuk_kandungan"><span data-tag="padangan-cadangan"></span></label>
                                                     <textarea id="komen_bentuk_kandungan" class="form-control" name="komen_bentuk_kandungan" rows="5" required=""></textarea>
                                                 </div>
                                             </div>
@@ -179,156 +192,58 @@
                                     
                                             <div class="card-body">
 
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-4">
-                                                        <label for="matlamat_1"><span data-tag="matlamat"></span> <span class="text-danger">*</span></label>
-                                                        <select class="form-control" name="matlamat[]" id="matlamat_1">
-                                                            <option value="" data-tag="pilih"></option>
-                                                            <?php foreach ($matlamat as $value): ?>
-                                                            <option value="<?php echo $value['id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="form-group col-md-4">
-                                                        <label for="halatuju_1" data-tag="halatuju"></label>
-                                                        <select class="form-control" name="halatuju[]" id="halatuju_1">
-                                                            <option value="" data-tag="pilih"></option>
-                                                            <?php foreach ($halatuju as $value): ?>
-                                                            <option value="<?php echo $value['id'] ?>" class="<?php echo $value['matlamat_id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="form-group col-md-4">
-                                                        <label for="tindakan_1" data-tag="tindakan"></label>
-                                                        <select class="form-control" name="tindakan[]" id="tindakan_1">
-                                                            <option value="" data-tag="pilih"></option>
-                                                            <?php foreach ($tindakan as $value): ?>
-                                                            <option value="<?php echo $value['id'] ?>" class="<?php echo $value['halatuju_id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-
-                                                <div id="borang_pandangan_1">
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label for="cadangan_1"><span data-tag="padangan-cadangan"></span> <span class="text-danger">*</span></label>
-                                                            <textarea id="cadangan_1" class="form-control" name="cadangan[]" rows="5"  required=""></textarea>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label for="justifikasi_1"><span data-tag="justifikasi"></span> <span class="text-danger">*</span></label>
-                                                            <textarea id="justifikasi_1" class="form-control" name="justifikasi[]" rows="5" required=""></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <button type="button" class="btn btn-info" id="btnAdd1"><i class="fas fa-plus-circle"></i> <span data-tag="tambah"></span></button>
-                                                    </div>
-                                                </div>
-
-                                                <div id="borang_matlamat_2">
+                                                <div class="borang-pandangan">
 
                                                     <div class="form-row">
                                                         <div class="form-group col-md-4">
-                                                            <label for="matlamat_2"><span data-tag="matlamat"></span> <span class="text-danger">*</span></label>
-                                                            <select class="form-control" name="matlamat[]" id="matlamat_2">
+                                                            <label for="matlamat"><span data-tag="matlamat"></span> <span class="text-danger">*</span></label>
+                                                            <select class="form-control matlamat" name="matlamat[]">
                                                                 <option value="" data-tag="pilih"></option>
                                                                 <?php foreach ($matlamat as $value): ?>
                                                                 <option value="<?php echo $value['id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
+                                                                <?php endforeach; ?>
                                                             </select>
                                                         </div>
 
                                                         <div class="form-group col-md-4">
-                                                            <label for="halatuju_2" data-tag="halatuju"></label>
-                                                            <select class="form-control" name="halatuju[]" id="halatuju_2">
+                                                            <label for="halatuju" data-tag="halatuju"></label>
+                                                            <select class="form-control halatuju" name="halatuju[]">
                                                                 <option value="" data-tag="pilih"></option>
                                                                 <?php foreach ($halatuju as $value): ?>
                                                                 <option value="<?php echo $value['id'] ?>" class="<?php echo $value['matlamat_id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
+                                                                <?php endforeach; ?>
                                                             </select>
                                                         </div>
 
                                                         <div class="form-group col-md-4">
-                                                            <label for="tindakan_2" data-tag="tindakan"></label>
-                                                            <select class="form-control" name="tindakan[]" id="tindakan_2">
+                                                            <label for="tindakan" data-tag="tindakan"></label>
+                                                            <select class="form-control tindakan" name="tindakan[]">
                                                                 <option value="" data-tag="pilih"></option>
                                                                 <?php foreach ($tindakan as $value): ?>
                                                                 <option value="<?php echo $value['id'] ?>" class="<?php echo $value['halatuju_id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
+                                                                <?php endforeach; ?>
                                                             </select>
                                                         </div>
-                                                    </div>
-                                                
-                                                    <div id="borang_pandangan_2">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6">
-                                                                <label for="cadangan_2"><span data-tag="padangan-cadangan"></span> <span class="text-danger">*</span></label>
-                                                                <textarea id="cadangan_2" class="form-control" name="cadangan[]" rows="5" ></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="justifikasi_2"><span data-tag="justifikasi"></span> <span class="text-danger">*</span></label>
-                                                                <textarea id="justifikasi_2" class="form-control" name="justifikasi[]" rows="5"></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <button type="button" class="btn btn-info" id="btnAdd2"><i class="fas fa-plus-circle"></i> <span data-tag="tambah"></span></button>
-                                                            <button type="button" class="btn btn-danger" id="btnDel2"><span data-tag="hapus"></span></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <div id="borang_matlamat_3">
+                                                    </div>
+
+                                                    <div class="form-row extra-pandangan">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="cadangan"><span data-tag="padangan-cadangan"></span> <span class="text-danger">*</span></label>
+                                                            <textarea class="form-control cadangan" name="cadangan[]" rows="5"  required=""></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="justifikasi"><span data-tag="justifikasi"></span> <span class="text-danger">*</span></label>
+                                                            <textarea class="form-control justifikasi" name="justifikasi[]" rows="5" required=""></textarea>
+                                                        </div>
+                                                    </div>
                                                     <div class="form-row">
-                                                        <div class="form-group col-md-4">
-                                                            <label for="matlamat_3"><span data-tag="matlamat"></span> <span class="text-danger">*</span></label>
-                                                            <select class="form-control" name="matlamat[]" id="matlamat_3">
-                                                                <option value="" data-tag="pilih"></option>
-                                                                <?php foreach ($matlamat as $value): ?>
-                                                                <option value="<?php echo $value['id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="form-group col-md-4">
-                                                            <label for="halatuju_3" data-tag="halatuju"></label>
-                                                            <select class="form-control" name="halatuju[]" id="halatuju_3">
-                                                                <option value="" data-tag="pilih"></option>
-                                                                <?php foreach ($halatuju as $value): ?>
-                                                                <option value="<?php echo $value['id'] ?>" class="<?php echo $value['matlamat_id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="form-group col-md-4">
-                                                            <label for="tindakan_3" data-tag="tindakan"></label>
-                                                            <select class="form-control" name="tindakan[]" id="tindakan_3">
-                                                                <option value="" data-tag="pilih"></option>
-                                                                <?php foreach ($tindakan as $value): ?>
-                                                                <option value="<?php echo $value['id'] ?>" class="<?php echo $value['halatuju_id'] ?>"><?php echo $value['tajuk'] ?></option>
-                                                            <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div id="borang_pandangan_3">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6">
-                                                                <label for="cadangan_3"><span data-tag="padangan-cadangan"></span> <span class="text-danger">*</span></label>
-                                                                <textarea id="cadangan_3" class="form-control" name="cadangan[]" rows="5" ></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="justifikasi_3"><span data-tag="justifikasi"></span> <span class="text-danger">*</span></label>
-                                                                <textarea id="justifikasi_3" class="form-control" name="justifikasi[]" rows="5"></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <button type="button" class="btn btn-danger" id="btnDel3" data-tag="hapus"></button>
-                                                        </div>
+                                                        <button type="button" class="btn btn-info btnAdd"><i class="fas fa-plus-circle"></i> <span data-tag="tambah"></span></button>
+                                                        <button type="button" class="btn btn-danger btnDel"><i class="fas fa-dash"></i> <span data-tag="hapus"></span></button>
                                                     </div>
                                                 </div>
+
+                                                <div class="borang-box"></div>
                                                 
                                             </div>
 
@@ -340,7 +255,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label for="komen_lain_lain"><span data-tag="padangan-cadangan"> <span class="text-danger">*</span></label>
+                                                    <label for="komen_lain_lain"><span data-tag="padangan-cadangan"></label>
                                                     <textarea id="komen_lain_lain" class="form-control" name="komen_lain_lain" rows="5"></textarea>
                                                 </div>
                                             </div>
@@ -352,15 +267,13 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <ul class="list-inline wizard mb-0">
+                                            <li class="previous list-inline-item"><a href="javascript: void(0);" class="btn btn-secondary" data-tag="previous" id="sebelum"></a>
+                                        </ul>
                                     </div>
 
                                     </form>
-
-                                    <ul class="list-inline wizard mb-0">
-                                        <li class="previous list-inline-item"><a href="javascript: void(0);" class="btn btn-secondary" data-tag="previous"></a>
-                                        </li>
-                                        <li class="next list-inline-item float-right"><a href="javascript: void(0);" class="btn btn-secondary" data-tag="next"></a></li>
-                                    </ul>
 
                                 </div> <!-- tab-content -->
                             </div>
@@ -374,7 +287,7 @@
 
                                 <p class="card-text"><span data-tag="ruangan-bertanda"></span> (<span class="text-danger">*</span>) <span data-tag="ruangan-wajib"></span></p>
                                 
-                                <h5 class="card-title" data-tag="part"> A</h5>
+                                <h5 class="card-title"><span data-tag="part"></span> A</h5>
                                 <p class="card-text">
                                     <ol>
                                         <li data-tag="a-1"></li>
@@ -384,20 +297,19 @@
                                     </ol>
                                 </p>
 
-                                <h5 class="card-title" data-tag="part"> B</h5>
+                                <h5 class="card-title"><span data-tag="part"></span> B</h5>
                                 <p class="card-text">
                                     <ol>
                                         <li data-tag="b-1"></li>
                                     </ol>
                                 </p>
 
-                                <h5 class="card-title" data-tag="part"> C</h5>
+                                <h5 class="card-title"><span data-tag="part"></span> C</h5>
                                 <p class="card-text">
                                     <ol>
                                         <li data-tag="c-1"></li>
                                         <li data-tag="c-2"></li>
                                         <li data-tag="c-4"></li>
-                                        <li data-tag="c-5"></li>
                                     </ol>
                                 </p>
                                 <div class="alert alert-info" role="alert">

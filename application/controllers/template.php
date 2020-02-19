@@ -2,24 +2,42 @@
 
 class Template extends Controller {
 
-	function index()
+	public function __construct()
 	{
-		$session = $this->loadHelper('session_helper');
-		if(empty($session->get('loggedin'))){
+		$this->session = $this->loadHelper('session_helper');
+		$this->model = $this->loadModel('Mailer_model');
+
+		$this->css = array(
+			'assets/libs/datatables/dataTables.bootstrap4.css',
+			'assets/libs/datatables/responsive.bootstrap4.css',
+			'assets/libs/datatables/buttons.bootstrap4.css',
+			'assets/libs/datatables/select.bootstrap4.css',
+			'assets/libs/custombox/custombox.min.css',
+			'assets/libs/sweetalert2/sweetalert2.min.css'
+		);
+
+		$this->js = array(
+			'assets/libs/datatables/jquery.dataTables.min.js',
+			'assets/libs/datatables/dataTables.bootstrap4.js',
+			'assets/libs/datatables/dataTables.responsive.min.js',
+			'assets/libs/datatables/responsive.bootstrap4.min.js',
+			'assets/libs/datatables/dataTables.buttons.min.js',
+			'assets/libs/datatables/buttons.html5.min.js',
+			'assets/libs/datatables/buttons.flash.min.js',
+			'assets/libs/datatables/buttons.print.min.js',
+			'assets/js/pages/datatables.init.js',
+			'assets/libs/custombox/custombox.min.js',
+			'assets/libs/sweetalert2/sweetalert2.min.js',
+			'assets/js/pages/sweet-alerts.init.js'
+		);
+
+		if(empty($this->session->get('loggedin'))){
 			$this->redirect('auth');
 		}
+	}
 
-		$css = array(
-			'assets/plugins/datatables/jquery.dataTables.min.css',
-			'assets/plugins/datatables/buttons.bootstrap.min.css'
-		);
-
-		$js = array(
-			'assets/plugins/datatables/media/js/jquery.dataTables.min.js',
-			'assets/plugins/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js',
-			'assets/pages/datatables.init.js'
-		);
-
+	function index()
+	{
 		$custom_js = "<script type=\"text/javascript\">
 			var base_url = '".BASE_URL."template/process';
 			
@@ -44,12 +62,52 @@ class Template extends Controller {
 		</script>";
 		
 		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
+		$navigation = $this->loadView('topbar');
 		$footer = $this->loadView('footer');
         $template = $this->loadView('template/index');
 
-		$header->set('css', $css);
-		$footer->set('js', $js);
+		$header->set('css', $this->css);
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function email_log()
+	{
+		$custom_js = "<script type=\"text/javascript\">
+			var base_url = '".BASE_URL."template/process_emaillog';
+			
+			$(document).ready(function() {
+    			$('#datatable').dataTable({
+    				serverSide : true,
+    				processing : true,
+    				ajax : {
+    					url : base_url,
+    					type : 'POST'
+    				},
+    				deferRender : true,
+    				error : true,
+    				columns: [
+			            { data: 'recipient' },
+			            { data: 'subject' },
+			            { data: 'last_update' },
+			            { data: 'action' }
+			        ]
+    			});
+    		});
+		</script>";
+		
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('template/email-log');
+
+		$header->set('css', $this->css);
+		$footer->set('js', $this->js);
 		$footer->set('custom_js', $custom_js);
 		
 		$header->render();
@@ -292,14 +350,7 @@ class Template extends Controller {
 	// process datatable
 	function process()
 	{
-		global $config;
-
-		$session = $this->loadHelper('session_helper');
 		$datatable = $this->loadHelper('datatable_helper');
-
-		if(empty($session->get('loggedin'))){
-			$this->redirect('auth');
-		}
 
 		// DB table to use
 		$table = 'email_template';
@@ -318,6 +369,46 @@ class Template extends Controller {
 		    	'dt' => 'action',
 		    	'formatter' => function( $d, $row ) {
             		return "<a href=\"".BASE_URL."template/edit/".$d."\" class=\"btn btn-info btn-xs\">Edit</a>";
+        		}
+        	)
+		);
+		 
+		// SQL server connection information
+		$sql_details = array(
+		    'user' => DB_USER,
+		    'pass' => DB_PASS,
+		    'db'   => DB_NAME,
+		    'host' => DB_HOST
+		);
+		 
+		$data = json_encode(
+		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+		);
+		print_r($data);
+	}
+
+	// process datatable
+	function process_emaillog()
+	{
+		$datatable = $this->loadHelper('datatable_helper');
+
+		// DB table to use
+		$table = 'email_log';
+		 
+		// Table's primary key
+		$primaryKey = 'id';
+		 
+		// Array of database columns which should be read and sent back to DataTables. The `db` parameter represents the column name in the database, while the `dt` parameter represents the DataTables column identifier. In this case object parameter names
+
+		$columns = array(
+		    array( 'db' => 'recipient', 'dt' => 'recipient' ),
+		    array( 'db' => 'subject', 'dt' => 'subject' ),
+		    array( 'db' => 'last_update', 'dt' => 'last_update' ),
+        	array(
+		    	'db' => 'id',
+		    	'dt' => 'action',
+		    	'formatter' => function( $d, $row ) {
+            		return "<a href=\"".BASE_URL."template/view_email/".$d."\" class=\"btn btn-info btn-xs\">Edit</a>";
         		}
         	)
 		);

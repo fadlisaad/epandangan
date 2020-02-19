@@ -18,9 +18,9 @@
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label for="version" class="control-label">Versi</label>
+                                        <label for="version" class="control-label">Versi <span class="text-danger">*</span></label>
                                         <div class="radio radio-inline">
-                                            <input type="radio" id="my" value="my" name="version" required="" checked="checked">
+                                            <input type="radio" id="my" value="my" name="version" required="">
                                             <label for="my">Bahasa Melayu</label>
                                         </div>
                                         <div class="radio radio-inline">
@@ -35,7 +35,7 @@
                                     </div>
                                     
                                     <div class="form-group mb-3">
-                                        <label for="bank_code" class="control-label">Kaedah Pembayaran</label>
+                                        <label for="bank_code" class="control-label">Kaedah Pembayaran <span class="text-danger">*</span></label>
                                         <div class="radio radio-inline">
                                             <img src="<?php echo BASE_URL."assets/images/fpx.png" ?>">
                                             <input type="radio" id="fpx" value="fpx" name="payment_mode" required="" checked="checked">
@@ -51,12 +51,12 @@
                                     <div id="select_bank"></div>
 
                                     <div class="form-group mb-3">
-                                        <label for="fullname" class="control-label">Nama Penuh</label>
+                                        <label for="fullname" class="control-label">Nama Penuh <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="fullname" required="">
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label for="email" class="control-label">E-mail</label>
+                                        <label for="email" class="control-label">E-mail <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="email" required="">
                                     </div>
 

@@ -72,10 +72,10 @@
                         <ul class="navigation-menu">
                             <?php if($_SESSION['permission'] != 'user'): ?>
                             <li><a href="<?php echo BASE_URL ?>dashboard/admin"><i class="fe-home"></i>Dashboard</a></li>
-                            <li class="has-submenu"><a href="#"><i class="fe-layers"></i>Borang</a>
+                            <li class="has-submenu"><a href="#"><i class="fe-layers"></i>Senarai Borang</a>
                                 <ul class="submenu">
                                     <li><a href="<?php echo BASE_URL ?>borang/ptkl"><i class="fe-file-text"></i> Draf Perubahan 1 PBRKL 2020</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>borang/ptkl2"><i class="fe-file-text"></i> Draf Perubahan 2 PBRKL 2020</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>borang/ptkl_2"><i class="fe-file-text"></i> Draf Perubahan 2 PBRKL 2020</a></li>
                                     <li><a href="<?php echo BASE_URL ?>borang/pskl"><i class="fe-file-text"></i> Draf PSKL 2040</a></li>
                                 </ul>
                             </li>
@@ -115,6 +115,7 @@
                             <?php else: ?>
                             <li><a href="<?php echo BASE_URL ?>dashboard"><i class="fe-home"></i>Dashboard</a></li>
                             <?php endif; ?>
+                            <li><a href="<?php echo BASE_URL ?>auth/logout"><i class="fe-log-out"></i><span data-tag="logout"></span></a></li>
                         </ul>
                         <!-- End navigation menu -->
 

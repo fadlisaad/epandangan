@@ -22,6 +22,10 @@
                     <!-- end page title -->
 
                     <div class="row">
+                        <a href="<?php echo BASE_URL ?>borang/pandangan/ptkl-2" class="btn btn-success btn-rounded mb-3"><i class="mdi mdi-plus"></i> Borang Manual Draf Perubahan 2 PBRKL 2020</a>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-3">
                             <div class="card-box bg-pattern">
                                 <div class="row">

@@ -60,14 +60,14 @@
 
                         <div class="row mt-3">
                             <div class="col-12 text-center">
-                                <form action="<?php echo BASE_URL ?>language/setLocale" method="post">
+                                <!-- <form action="<?php echo BASE_URL ?>language/setLocale" method="post">
                                     <select name="language">
                                         <option value="en"<?php if( $_COOKIE["language"] == "en" ) { echo " selected"; } ?>>English</option>
                                         <option value="my"<?php if( $_COOKIE["language"] == "my" ) { echo " selected"; } ?>>Bahasa Melayu</option>
                                     </select>
                                     <input type="submit" value="Select Language" class="btn btn-success btn-xs">
-                                </form>
-                            </div> <!-- end col -->
+                                </form> -->
+                            </div>
                         </div>
 
                     </div> <!-- end col -->

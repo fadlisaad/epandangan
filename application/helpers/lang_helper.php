@@ -8,7 +8,7 @@
 
 class Lang_helper extends Model {
 	
-	function createLanguageFile($lang, $regenerate = FALSE)
+	function createLanguageFile($lang)
 	{
 		$filename = ROOT_DIR.'languages/'.$lang.'.json';
 

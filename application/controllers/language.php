@@ -14,6 +14,7 @@ class Language extends Controller {
 	{
 		$this->session = $this->loadHelper('session_helper');
 		$this->model = $this->loadModel('Language_model');
+		$this->language = $this->loadHelper('Lang_helper');
 
 		$this->css = array(
 			'assets/libs/datatables/dataTables.bootstrap4.css',
@@ -139,8 +140,7 @@ class Language extends Controller {
 
 	function regenerate()
 	{
-		$lang = new Lang_helper();
-		$lang->createLanguageFile('en',true);
+		$this->language->createLanguageFile('en');
 
 		# log user action
 		$log = $this->loadHelper('log_helper');
@@ -152,7 +152,7 @@ class Language extends Controller {
 		);
 		$log->add($log_data1);
 
-		$lang->createLanguageFile('my',true);
+		$this->language->createLanguageFile('my');
 
 		# log user action
 		$log_data2 = array(

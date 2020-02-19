@@ -37,7 +37,7 @@
         </script>
         <script src="<?php echo BASE_URL; ?>assets/js/translate.js"></script>
         <script>
-        var currentLng = "<?php echo $_COOKIE['language'] ?>";
+        var currentLng = "my";
         function load(){
             var translate = new Translate();
             var attributeName = 'data-tag';
