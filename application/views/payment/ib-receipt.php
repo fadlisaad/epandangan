@@ -28,7 +28,7 @@
                                             <?php
                                                 $eps = unserialize($data[0]['remarks']);
                                                 foreach ($eps as $key => $value) {
-                                                    if(in_array($key, array('PAYMENT_DATETIME', 'AMOUNT', 'PAYMENT_TRANS_ID', 'MERCHANT_ORDER_NO', 'BUYER_BANK'))) echo "<li>".ucfirst($key).": ".$value."</li>";
+                                                    if(in_array($key, array('VERSION', 'PAYMENT_DATETIME', 'AMOUNT', 'PAYMENT_TRANS_ID', 'MERCHANT_ORDER_NO', 'BUYER_BANK'))) echo "<li>".ucfirst($key).": ".$value."</li>";
                                                 }
                                             ?>
                                             </ul>
@@ -37,11 +37,11 @@
                                     </tr>
                                     <?php if($data[0]['status'] == 'success'): ?>
                                     <tr>
-                                        <td><div class="alert alert-info">Sila semak e-mail anda untuk mendapatkan pautan muat-turun dokumen ini. Jika anda mempunyai sebarang pertanyaan, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).</div></td>
+                                        <td><div class="alert alert-info">Sila semak e-mail anda untuk mendapatkan pautan muat-turun dokumen ini. Jika anda mempunyai sebarang pertanyaan, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Struktur, Jabatan Perancangan Bandaraya).</div></td>
                                     </tr>
                                     <?php else: ?>
                                     <tr>
-                                        <td><div class="alert alert-warning">Pembelian anda tidak berjaya. Sila cuba semula. Jika anda mempunyai sebarang pertanyaan, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Tempatan, Jabatan Perancangan Bandaraya).</div></td>
+                                        <td><div class="alert alert-warning">Pembelian anda tidak berjaya. Sila cuba semula. Jika anda mempunyai sebarang pertanyaan, sila e-mail kepada klmycity2040@dbkl.gov.my atau klmycity2040@gmail.com atau hubungi talian 03–2617 9544 / 9545 / 9546 (Seksyen Perancangan Pelan Struktur, Jabatan Perancangan Bandaraya).</div></td>
                                     </tr>
                                     <?php endif ?>
                                     <tr>

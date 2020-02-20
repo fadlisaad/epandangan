@@ -84,7 +84,7 @@ class Fpx extends Controller {
 			$data['payee_phone_number'] = $_POST['payee_phone_number'];
 			$data['payment_type'] = $_POST['payment_type'];
 			$data['api_key'] = $_POST['api_key'];
-			$data['VERSION'] = $_POST['version'];
+			$data['VERSION'] = $_POST['VERSION'];
 
 			switch ($data['STATUS']) {
 				case '1':
@@ -94,8 +94,14 @@ class Fpx extends Controller {
 					$url = BASE_URL.'space/download/'.$data['TRANS_ID'];
 
 					if(isset($data['VERSION'])){
-						if($data['VERSION'] == 'en') $link = getenv('DOWNLOAD_LINK_EN');
-						else $link = getenv('DOWNLOAD_LINK_MY');
+
+						if($data['VERSION'] == 'en'){
+							$link = getenv('DOWNLOAD_LINK_EN');
+							$version = 'ENGLISH';
+						}else{
+							$link = getenv('DOWNLOAD_LINK_MY');
+							$version = 'BAHASA MELAYU';
+						}
 					}
 
 					# store download link
@@ -131,6 +137,7 @@ class Fpx extends Controller {
 					'fpx_transaction_id' => $data['PAYMENT_TRANS_ID'],
 					'seller_order_id' => $data['SELLER_ORDER_NO'],
 					'receipt_no' => $_POST['RECEIPT_NO'],
+					'version' => $version,
 					'link' => $url
 				),
 				'message' => array(
@@ -148,7 +155,7 @@ class Fpx extends Controller {
 
 			if($_POST['PAYMENT_MODE'] == 'migs'){
 				$payment_mode = 'Kad Kredit/Debit';
-				$buyer_name = $_POST['BUYER_NAME'];
+				$buyer_name = $_POST['payee_name'];
 				$buyer_bank = 'N/A';
 			}
 
@@ -179,7 +186,7 @@ class Fpx extends Controller {
 				$vars = array(
 					"{{EMAIL}}" => $data['email'],
 					"{{FULLNAME}}" => $buyer_name,
-					"{{DETAILS}}" => "Maklumat pembayaran adalah seperti berikut:<br>Jumlah : RM ".$_POST['AMOUNT']."<br>Daripada : ".$buyer_name." - ".$data['email']."<br>Jenis Pembayaran : ".strtoupper($_POST['payment_type'])."<br>Cara Pembayaran : ".$payment_mode."<br>Transaction ID: ".$_POST['TRANS_ID']."<br>Status : ".ucfirst($status)."<br>Keterangan Transaksi : <br>".$transaction_details,
+					"{{DETAILS}}" => "<br>Maklumat pembayaran adalah seperti berikut:<br><br>Jumlah : RM ".$_POST['AMOUNT']."<br>Daripada : ".$buyer_name." - ".$data['email']."<br>Jenis Pembayaran : ".strtoupper($_POST['payment_type'])."<br>Cara Pembayaran : ".$payment_mode."<br>Transaction ID: ".$_POST['TRANS_ID']."<br>Status : ".ucfirst($status)."<br>Versi Dokumen : ".$version."<br>Keterangan Transaksi : <br><br>".$transaction_details,
 					"{{BUTTON}}" => '<tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 					<td class="content-block aligncenter" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="'.$url.'" class="login">Muat Turun</a></td></tr>'
 				);
