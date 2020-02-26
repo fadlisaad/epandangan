@@ -24,7 +24,7 @@ $table = $_GET['table'];
 
 if(isset($_GET['q'])){
 	
-	$sql = "SELECT id, nama as text FROM $table WHERE nama = :q";
+	$sql = "SELECT id, nama as text FROM $table WHERE nama LIKE :q";
 	$bind = array('q' => "%".$_GET['q']."%");
 	$row = $pdo->fetchAssoc($sql, $bind);
 
