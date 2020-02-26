@@ -4,7 +4,7 @@ class Pengguna_model extends Model {
 	
 	public function listSingle($user_id)
 	{
-		$stm  = "SELECT * FROM view_user WHERE user_id = :user_id";
+		$stm  = "SELECT * FROM view_profile WHERE user_id = :user_id";
 		$bind = array('user_id' => $user_id);
 
 		try{
@@ -54,6 +54,30 @@ class Pengguna_model extends Model {
 			);
 			
 			return $this->pdo->fetchAffected($stm, $bind);
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
+	public function updateUser($data)
+	{
+		try{
+			$stm_user  = "UPDATE users SET permission = :permission WHERE id = :id";
+			$bind_user = array(
+				'permission' => $data['permission'],
+				'id' => $data['user_id']
+			);
+			
+			$this->pdo->fetchAffected($stm_user, $bind_user);
+
+			$stm_profile  = "UPDATE profile SET nama_penuh = :nama_penuh WHERE user_id = :user_id";
+			$bind_profile = array(
+				'nama_penuh' => $data['nama_penuh'],
+				'user_id' => $data['user_id']
+			);
+			
+			$this->pdo->fetchAffected($stm_profile, $bind_profile);
 		}
 		catch(Exception $e){
 			return $e->getMessage();

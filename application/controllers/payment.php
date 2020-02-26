@@ -80,6 +80,7 @@ class Payment extends Controller {
 				'payee_phone_number' => $_POST['mobile'],
 				'payment_type' => $payment_type,
 				'payment_mode' => $_POST['payment_mode'],
+				'version' => $_POST['version'],
 				'bank_code' => $_POST['BANK_CODE'],
 				'be_message' => $_POST['BE_MESSAGE']
 			);

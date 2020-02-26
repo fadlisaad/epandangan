@@ -28,12 +28,12 @@
                             <h4 class="header-title"><span data-tag="part"></span> A</h4>
                             <p class="sub-header" data-tag="maklumat-peribadi"></p>
 
-                            <div class="alert alert-warning d-none fade show">
+                            <div class="alert alert-warning d-none fade show" id="alert-warning">
                                 <h4 data-tag="ralat">Ralat!</h4>
                                 <p class="mb-0" data-tag="ralat-keterangan">Terdapat kesalahan dalam pengisian borang anda. Sila semak dan isi dengan betul.</p>
                             </div>
 
-                            <div class="alert alert-info d-none fade show">
+                            <div class="alert alert-info d-none fade show" id="alert-info">
                                 <h4 data-tag="berjaya">Berjaya!</h4>
                                 <p class="mb-0" data-tag="berjaya-keterangan">Borang anda telah lengkap diisi.</p>
                             </div>
@@ -43,7 +43,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-9">
                                         <label for="nama_penuh"><span data-tag="nama-penuh"></span> <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="nama_penuh" id="nama_penuh" value="<?php echo @$profile[0]['nama_penuh'] ?>">
+                                        <input type="text" class="form-control" name="nama_penuh" id="nama_penuh" value="<?php echo @$profile[0]['nama_penuh'] ?>" required="" data-parsley-minlength="6">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="ic_passport"><span data-tag="no-ic"></span> <span class="text-danger">*</span></label>

@@ -88,14 +88,12 @@
                             </li>
                             <li class="has-submenu"><a href="#"><i class="fe-users"></i>Pengguna</a>
                                 <ul class="submenu">
-                                    <li><a href="<?php echo BASE_URL ?>pengguna/senarai"><i class="fe-list"></i> Senarai Pengguna</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>pengguna/tambah"><i class="fe-plus-circle"></i> Tambah Pengguna</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>pengguna"><i class="fe-file-text"></i> Senarai Pengguna</a></li>
                                 </ul>
                             </li>
                             <li class="has-submenu"><a href="#"><i class="fe-pie-chart"></i>Laporan</a>
                                 <ul class="submenu">
-                                    <li><a href="<?php echo BASE_URL ?>laporan/pengguna"><i class="fe-users"></i> Jenis Pengguna</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>laporan/struktur"><i class="fe-life-buoy"></i> Struktur PSKL 2040</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>laporan/download"><i class="fe-download-cloud"></i> Muat Turun</a></li>
                                     <li><a href="<?php echo BASE_URL ?>laporan/topik"><i class="fe-box"></i> Topik PBRKL 2040</a></li>
                                     <li><a href="<?php echo BASE_URL ?>laporan/sektor"><i class="fe-layout"></i> Sektor PBRKL 2040</a></li>
                                     <li><a href="<?php echo BASE_URL ?>laporan/zon"><i class="fe-map-pin"></i> Zon Strategik PBRKL 2040</a></li>

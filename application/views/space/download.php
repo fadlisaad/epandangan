@@ -12,10 +12,13 @@
 
                                 <?php
                                     $limit = getenv('DOWNLOAD_COUNT_LIMIT') - $data[0]['count'];
+                                    if($data[0]['link'] == 'http://bit.ly/PSKL2040en') $version = 'English';
+                                    else $version = 'Bahasa Melayu';
                                 ?>
 
                                 <div class="mb-0 text-center">
                                     <p>Dokumen: Draf Pelan Struktur 2040</p>
+                                    <p>Versi: <?php echo $version ?></p>
                                     <p>Saiz: 130 MB</p>
                                     <p>Had muat-turun: <?php echo $limit ?> kali</p>
                                 </div>

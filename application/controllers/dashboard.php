@@ -40,6 +40,8 @@ class Dashboard extends Controller {
 
 	public function index()
 	{
+		$this->session->set('borang_id', NULL);
+
 		$css = array(
 			'assets/libs/select2/select2.min.css',
 			'assets/libs/sweetalert2/sweetalert2.min.css',
@@ -71,6 +73,7 @@ class Dashboard extends Controller {
 		$template->set('ptkl', $ptkl);
 		$template->set('ptkl2', $ptkl2);
 		$template->set('pskl', $pskl);
+
 		$template->render();
 
 		$footer = $this->loadView('footer');
@@ -80,10 +83,22 @@ class Dashboard extends Controller {
 
 	public function admin()
 	{
+		$this->session->set('borang_id', NULL);
+		$this->session->set('user_email', NULL);
+
+		if($this->session->get('permission') == 'user'){
+			$this->redirect('dashboard');
+		}
+
 		$header = $this->loadView('header');
 		$topbar = $this->loadView('topbar');
         $template = $this->loadView('dashboard-admin');
 		$footer = $this->loadView('footer');
+
+		/* Download */
+		$template->set('countDownload', $this->model->countDownload());
+		$template->set('totalDownload', $this->model->totalDownload());
+		$template->set('countRegister', $this->model->countRegister());
 		
 		$header->render();
 		$topbar->render();

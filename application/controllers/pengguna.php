@@ -25,10 +25,7 @@ class Pengguna extends Controller {
 			'assets/libs/datatables/buttons.html5.min.js',
 			'assets/libs/datatables/buttons.flash.min.js',
 			'assets/libs/datatables/buttons.print.min.js',
-			'assets/libs/pdfmake/pdfmake.min.js',
-			'assets/libs/pdfmake/vfs_fonts.js',
 			'assets/js/pages/datatables.init.js',
-			'assets/js/pages/select2.init.js',
 			'assets/libs/sweetalert2/sweetalert2.min.js',
 			'assets/js/pages/sweet-alerts.init.js'
 		);
@@ -46,26 +43,20 @@ class Pengguna extends Controller {
 			$(document).ready(function() {
 
     			$('#datatable').DataTable({
-    				responsive : true,
     				serverSide : true,
     				processing : true,
     				ajax : {
     					url : base_url,
     					type : 'POST'
     				},
+    				deferRender : true,
     				error : true,
     				columns: [
-			            { data: 'full_name' },
+			            { data: 'nama_penuh' },
 			            { data: 'email' },
-			            { data: 'role_id' },
-			            { data: 'status' },
+			            { data: 'permission' },
 			            { data: 'action' }
-			        ],
-			        columnDefs: [
-					    { width: '10%', 'targets': 1 },
-					    { width: '5%', 'targets': 3 },
-					    { width: '5%', 'targets': 4 }
-					]
+			        ]
     			});
     		});
 		</script>";
@@ -231,7 +222,7 @@ class Pengguna extends Controller {
 		$data = $this->model->listSingle($id);
 
 		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
+		$navigation = $this->loadView('topbar');
 		$footer = $this->loadView('footer');
         $template = $this->loadView('pengguna/edit');
 
@@ -250,15 +241,14 @@ class Pengguna extends Controller {
 	{
 		if(isset($_POST)){
 
-			$id = $_POST['id'];
 			$data = array(
-				'full_name' => $_POST['full_name'],
+				'user_id' => $_POST['user_id'],
+				'nama_penuh' => $_POST['nama_penuh'],
 				'email' => $this->filter->isEmail($_POST['email']),
-				'role_id' => $_POST['role_id'],
-				'status' => $_POST['status']
+				'permission' => $_POST['permission']
 			);
 
-			$this->model->editRecord($data, $id);
+			$this->model->updateUser($data);
 
 			$log = $this->loadHelper('log_helper');
 			$log_data = array(
@@ -268,7 +258,6 @@ class Pengguna extends Controller {
 				'action' => 'Update user '.$_POST['full_name']
 			);
 			$log->add($log_data);
-
 
 			$this->redirect('pengguna/index');
 			
@@ -328,40 +317,35 @@ class Pengguna extends Controller {
 		$datatable = $this->loadHelper('datatable_helper');
 
 		// DB table to use
-		$table = 'view_user';
+		$table = 'view_profile';
 		 
 		// Table's primary key
 		$primaryKey = 'user_id';
 
 		$columns = array(
-		    array( 'db' => 'full_name', 'dt' => 'full_name' ),
+		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
 		    array( 'db' => 'email', 'dt' => 'email' ),
 		    array(
-		    	'db' => 'role_id',
-		    	'dt' => 'role_id',
+		    	'db' => 'permission',
+		    	'dt' => 'permission',
 		    	'formatter' => function( $d, $row ) {
 		    		switch ($d) {
-		    			case '0':
+		    			case 'super':
 		    				return "Super Administrator";
 		    				break;
-		    			case '1':
+		    			case 'admin':
 		    				return "Administrator";
 		    				break;
-		    			case '2':
-		    				return "User";
+		    			case 'officer':
+		    				return "Pegawai";
+		    				break;
+		    			case 'user':
+		    				return "Public";
 		    				break;
 		    			default:
-		    				return "User";
+		    				return "Public";
 		    				break;
 		    		}
-        		}
-		    ),
-		   	array(
-		    	'db' => 'status',
-		    	'dt' => 'status',
-		    	'formatter' => function( $d, $row ) {
-		    		if ($d == 'active') return "<span class=\"label label-success label-xs\">Active</span>";
-		    		else return "<span class=\"label label-warning label-xs\">Inactive</span>";
         		}
 		    ),
         	array(

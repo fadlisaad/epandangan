@@ -37,7 +37,7 @@ class Fpx extends Controller {
 			$data['payment_type'] = $_POST['payment_type'];
 			$data['BE_MESSAGE'] = $_POST['be_message'];
 			$data['CURRENCY'] = 'MYR';
-			$data['VERSION'] = $_POST['version'];
+			$data['version'] = $_POST['version'];
 
 			$encrypt = new StringEncrypter($secretKey, $passPhrase);
 			$data['CHECKSUM'] = $encrypt->encrypt($data['TRANS_ID'].$data['PAYMENT_MODE'].$data['AMOUNT'].$data['MERCHANT_CODE']);
@@ -84,7 +84,7 @@ class Fpx extends Controller {
 			$data['payee_phone_number'] = $_POST['payee_phone_number'];
 			$data['payment_type'] = $_POST['payment_type'];
 			$data['api_key'] = $_POST['api_key'];
-			$data['VERSION'] = $_POST['VERSION'];
+			$data['version'] = $_POST['version'];
 
 			switch ($data['STATUS']) {
 				case '1':
@@ -93,15 +93,18 @@ class Fpx extends Controller {
 					# generate download link
 					$url = BASE_URL.'space/download/'.$data['TRANS_ID'];
 
-					if(isset($data['VERSION'])){
+					if(isset($data['version'])){
 
-						if($data['VERSION'] == 'en'){
+						if($data['version'] == 'en'){
 							$link = getenv('DOWNLOAD_LINK_EN');
 							$version = 'ENGLISH';
 						}else{
 							$link = getenv('DOWNLOAD_LINK_MY');
 							$version = 'BAHASA MELAYU';
 						}
+					}else{
+						$link = getenv('DOWNLOAD_LINK_EN');
+						$version = 'ENGLISH';
 					}
 
 					# store download link
