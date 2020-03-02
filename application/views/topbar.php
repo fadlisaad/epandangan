@@ -94,18 +94,21 @@
                             <li class="has-submenu"><a href="#"><i class="fe-pie-chart"></i>Laporan</a>
                                 <ul class="submenu">
                                     <li><a href="<?php echo BASE_URL ?>laporan/download"><i class="fe-download-cloud"></i> Muat Turun</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>laporan/topik"><i class="fe-box"></i> Topik PBRKL 2040</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>laporan/sektor"><i class="fe-layout"></i> Sektor PBRKL 2040</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>laporan/zon"><i class="fe-map-pin"></i> Zon Strategik PBRKL 2040</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>laporan/borang"><i class="fe-layers"></i> Jenis Borang</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu"><a href="#"><i class="fe-settings"></i>Log</a>
+                                <ul class="submenu">
+                                    <li><a href="<?php echo BASE_URL ?>email"><i class="fe-mail"></i> E-mail</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>log/audit"><i class="fe-list"></i> Audit Trail</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>log/error"><i class="fe-alert-circle"></i> Error Log</a></li>
                                 </ul>
                             </li>
                             <li class="has-submenu"><a href="#"><i class="fe-settings"></i>Tetapan</a>
                                 <ul class="submenu">
                                     <li><a href="<?php echo BASE_URL ?>tetapan/index/struktur"><i class="fe-life-buoy"></i> Struktur PSKL 2040</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/topik"><i class="fe-box"></i> Topik PBRKL 2040</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/zon"><i class="fe-map-pin"></i> Zon Strategik PBRKL 2040</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/sektor"><i class="fe-layout"></i> Sektor PBRKL 2040</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/topik"><i class="fe-box"></i> Topik PBRKL 2020</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/zon"><i class="fe-map-pin"></i> Zon Strategik PBRKL 2020</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/sektor"><i class="fe-layout"></i> Sektor PBRKL 2020</a></li>
                                     <li><a href="<?php echo BASE_URL ?>tetapan/index/lokasi"><i class="fe-map"></i> Lokasi Sesi Pendengaran</a></li>
                                     <li><a href="<?php echo BASE_URL ?>language"><i class="fe-flag"></i> Terjemahan Bahasa</a></li>
                                 </ul>

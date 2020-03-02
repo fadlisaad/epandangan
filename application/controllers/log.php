@@ -8,17 +8,25 @@ class Log extends Controller {
 		$this->model = $this->loadModel('Log_model');
 
 		$this->css = array(
-			'assets/plugins/datatables/jquery.dataTables.min.css',
-			'assets/plugins/datatables/responsive.bootstrap.min.css',
-			'assets/plugins/datatables/buttons.bootstrap.min.css'
+			'assets/libs/datatables/dataTables.bootstrap4.css',
+			'assets/libs/datatables/responsive.bootstrap4.css',
+			'assets/libs/datatables/buttons.bootstrap4.css',
+			'assets/libs/datatables/select.bootstrap4.css',
+			'assets/libs/sweetalert2/sweetalert2.min.css'
 		);
 
 		$this->js = array(
-			'assets/plugins/datatables/media/js/jquery.dataTables.min.js',
-			'assets/plugins/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js',
-			'assets/plugins/datatables/dataTables.responsive.min.js',
-			'assets/plugins/datatables/responsive.bootstrap.min.js',
-			'assets/pages/datatables.init.js'
+			'assets/libs/datatables/jquery.dataTables.min.js',
+			'assets/libs/datatables/dataTables.bootstrap4.js',
+			'assets/libs/datatables/dataTables.responsive.min.js',
+			'assets/libs/datatables/responsive.bootstrap4.min.js',
+			'assets/libs/datatables/dataTables.buttons.min.js',
+			'assets/libs/datatables/buttons.html5.min.js',
+			'assets/libs/datatables/buttons.flash.min.js',
+			'assets/libs/datatables/buttons.print.min.js',
+			'assets/js/pages/datatables.init.js',
+			'assets/libs/sweetalert2/sweetalert2.min.js',
+			'assets/js/pages/sweet-alerts.init.js'
 		);
 
 		if(empty($this->session->get('loggedin'))){
@@ -32,7 +40,7 @@ class Log extends Controller {
 			var base_url = '".BASE_URL."log/process_audit';
 			
 			$(document).ready(function() {
-    			$('#datatable').dataTable({
+    			$('#datatable').DataTable({
     				responsive : true,
     				serverSide : true,
     				processing : true,
@@ -43,7 +51,8 @@ class Log extends Controller {
     				error : true,
     				columns: [
 			            { data: 'id' },
-			            { data: 'full_name' },
+			            { data: 'nama_penuh' },
+			            { data: 'email' },
 			            { data: 'controller' },
 			            { data: 'function' },
 			            { data: 'action' }
@@ -105,7 +114,7 @@ class Log extends Controller {
 		</script>";
 		
 		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
+		$navigation = $this->loadView('topbar');
 		$footer = $this->loadView('footer');
         $template = $this->loadView('log/audit');
 
@@ -139,136 +148,6 @@ class Log extends Controller {
 			'controller' => 'Log',
 			'function' => 'truncate',
 			'action' => 'Truncate '.$table
-		);
-		$log->add($log_data);
-	}
-
-	public function email()
-	{
-		$custom_js = "<script type='text/javascript'>
-
-			var base_url = '".BASE_URL."log/process_email';
-			
-			$(document).ready(function() {
-
-    			$('#datatable').dataTable({
-    				responsive : true,
-    				serverSide : true,
-    				processing : true,
-    				ajax : {
-    					url : base_url,
-    					type : 'POST'
-    				},
-    				error : true,
-    				columns: [
-			            { data: 'id' },
-			            { data: 'recipient' },
-			            { data: 'subject' },
-			            { data: 'last_update' },
-			            { data: 'action' }
-			        ],
-			        columnDefs: [
-					    {
-			                targets: [ 0 ],
-			                visible: false,
-			                searchable: false
-			            }
-					],
-				    order: [
-						[ 0, 'desc' ]
-					]
-    			});
-
-    			var delete_url = '".BASE_URL."log/deleteLog/email_log';
-				var main_url = '".BASE_URL."log/email/';
-
-			    $('#clear-log-button').on('click', function(){
-			        swal({
-			            title: 'Are you sure?',
-			            text: 'You will not be able to recover this record!',
-			            type: 'question',
-			            showCancelButton: true,
-			            confirmButtonText: 'Yes, delete it!',
-			            cancelButtonText: 'Cancel'
-			        }).then(function(){
-						$.ajax({
-							type: 'POST',
-							url: delete_url,
-							success: function(){
-								
-							}
-						})
-						.done(function() {
-							swal({
-								title: 'Success',
-								text: 'The record is successfully deleted.',
-								type: 'success'
-							}).then(function() {
-								window.location.href = main_url;
-							});
-						})
-						.error(function() {
-							swal('Oops', 'Error connecting to the server!', 'error');
-						});
-					}, function (dismiss) {
-						if (dismiss === 'cancel') {
-							swal(
-								'Cancelled',
-								'The record is safe :)',
-								'info'
-							)
-						}
-					});
-			    });
-
-    		});
-
-		</script>";
-		
-		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
-		$footer = $this->loadView('footer');
-        $template = $this->loadView('log/email');
-
-		$header->set('css', $this->css);
-		$footer->set('js', $this->js);
-		$footer->set('custom_js', $custom_js);
-		
-		$header->render();
-		$navigation->render();
-		$template->render();
-		$footer->render();
-
-		$log = $this->loadHelper('log_helper');
-		$log_data = array(
-			'user_id' => $this->session->get('user_id'),
-			'controller' => 'Log',
-			'function' => 'email',
-			'action' => 'View email log'
-		);
-		$log->add($log_data);
-	}
-
-	public function view_email($id)
-	{		
-		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
-		$footer = $this->loadView('footer');
-        $template = $this->loadView('log/view-email');
-
-        $template->set('data', $this->model->listSingle('email_log', $id));
-		
-		$header->render();
-		$navigation->render();
-		$template->render();
-		$footer->render();
-
-		$log = $this->loadHelper('log_helper');
-		$log_data = array(
-			'user_id' => $this->session->get('user_id'),
-			'controller' => 'Log',
-			'function' => 'email',
-			'action' => 'View email log details #'.$id
 		);
 		$log->add($log_data);
 	}
@@ -355,7 +234,7 @@ class Log extends Controller {
 		</script>";
 		
 		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
+		$navigation = $this->loadView('topbar');
 		$footer = $this->loadView('footer');
         $template = $this->loadView('log/error');
 
@@ -386,7 +265,8 @@ class Log extends Controller {
 
 		$columns = array(
 		    array( 'db' => 'id', 'dt' => 'id' ),
-		    array( 'db' => 'full_name', 'dt' => 'full_name' ),
+		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
+		    array( 'db' => 'email', 'dt' => 'email' ),
 		    array( 'db' => 'controller', 'dt' => 'controller' ),
 		    array( 'db' => 'function', 'dt' => 'function' ),
 		    array( 'db' => 'action', 'dt' => 'action' )
@@ -401,41 +281,6 @@ class Log extends Controller {
 
 		$datatable = $this->loadHelper('datatable_helper');
 		 
-		$data = json_encode(
-		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
-		);
-		print_r($data);
-	}
-
-	public function process_email()
-	{
-		$table = 'email_log';
-		 
-		$primaryKey = 'id';
-		 
-		$columns = array(
-		    array( 'db' => 'id', 'dt' => 'id' ),
-		    array( 'db' => 'recipient', 'dt' => 'recipient' ),
-		    array( 'db' => 'subject', 'dt' => 'subject' ),
-		    array( 'db' => 'last_update', 'dt' => 'last_update' ),
-		    array(
-		    	'db' => 'id',
-		    	'dt' => 'action',
-		    	'formatter' => function( $d, $row ) {
-            		return "<a href=\"".BASE_URL."log/view_email/".$d."\" class=\"btn btn-primary btn-xs\">View</a>";
-        		}
-        	)
-		);
-		 
-		$sql_details = array(
-		    'user' => DB_USER,
-		    'pass' => DB_PASS,
-		    'db'   => DB_NAME,
-		    'host' => DB_HOST
-		);
-		 
-		$datatable = $this->loadHelper('datatable_helper');
-
 		$data = json_encode(
 		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
 		);

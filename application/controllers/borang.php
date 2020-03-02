@@ -405,8 +405,252 @@ class Borang extends Controller {
 		}
 		</style>";
 
+		$custom_js = "<script>
+
+		var select_panel = '".BASE_URL."search.php?table=panel';
+
+		$('#panel').select2({
+			placeholder: 'Pilih nama panel',
+		    ajax: {
+		        url: select_panel,
+		        dataType: 'json',
+		        processResults: function (data) {
+		            return {
+		            	results: data
+		            };
+		        }
+		    },
+		    cache: true
+		});
+
+		var select_jawatan = '".BASE_URL."search.php?table=jawatan';
+
+		$('#jawatan').select2({
+			placeholder: 'Pilih jawatan panel',
+		    ajax: {
+		        url: select_jawatan,
+		        dataType: 'json',
+		        processResults: function (data) {
+		            return {
+		            	results: data
+		            };
+		        }
+		    },
+		    cache: true
+		});
+
+		$('#clear_select').click(function(){
+			$('#pegawai, #jawatan').val(null).trigger('change');
+		});
+
+		// tambah ulasan oleh pegawai
+		function createUlasan(){
+
+			var post_url = '".BASE_URL."borang/addUlasan';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#ulasan').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa menyimpan ringkasan keseluruhan ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Ringkasan keseluruhan telah berjaya ditambah.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+
+		}
+
+		// update ulasan oleh pegawai
+		function updateUlasan(){
+
+			var post_url = '".BASE_URL."borang/updateUlasan';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#ulasan').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa mengemaskini rigkasan keseluruhan ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Ringkasan keseluruhan telah berjaya dikemaskini.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+		}
+
+		// create ulasan matlamat oleh pegawai
+		function createUlasanMatlamat(){
+
+			var post_url = '".BASE_URL."borang/addUlasanMatlamat';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#ulasan-matlamat').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa menambah ulasan dan implikasi matlamat ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Ulasan matlamat telah berjaya ditambah.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+		}
+
+		// update ulasan matlamat oleh pegawai
+		function updateUlasanMatlamat(){
+
+			var post_url = '".BASE_URL."borang/updateUlasanMatlamat';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#ulasan-matlamat').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa mengemaskini ulasan dan implikasi ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Ulasan dan implikasi telah berjaya dikemaskini.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+		}
+
+		$(document).ready(function(){
+
+			$('button#save-ulasan').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				createUlasan();
+			});
+
+			$('button#update-ulasan').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updateUlasan();
+			});
+
+			$('button.load-matlamat').each(function(){
+				$(this).on('click', function(){
+
+					var borang_id = $(this).data('borang-id');
+					var borang_matlamat_id = $(this).data('borang-matlamat-id');
+					var action = $(this).data('action');
+
+					$('#borang-id').val(borang_id);
+					$('#borang-matlamat-id').val(borang_matlamat_id);
+					$('#modal-ulasan').val('');
+					$('#modal-implikasi').val('');
+
+					if(action == 'insert'){
+						$('button#tambah-ulasan-matlamat').show();
+						$('button#ubah-ulasan-matlamat').hide();
+					}else{
+						$('button#tambah-ulasan-matlamat').hide();
+						$('button#ubah-ulasan-matlamat').show();
+					}
+				});
+			});
+
+			$('button.edit-matlamat').each(function(){
+				$(this).on('click', function(){
+
+					var id = $(this).data('id');
+					var borang_id = $(this).data('borang-id');
+					var borang_matlamat_id = $(this).data('borang-matlamat-id');
+					var ulasan = $(this).data('ulasan');
+					var implikasi = $(this).data('implikasi');
+					var action = $(this).data('action');
+
+					$('#id').val(id);
+					$('#borang-id').val(borang_id);
+					$('#borang-matlamat-id').val(borang_matlamat_id);
+					$('#modal-ulasan').val(ulasan);
+					$('#modal-implikasi').val(implikasi);
+					
+					if(action == 'update'){
+						$('button#tambah-ulasan-matlamat').hide();
+						$('button#ubah-ulasan-matlamat').show();
+					}else{
+						$('button#tambah-ulasan-matlamat').show();
+						$('button#ubah-ulasan-matlamat').hide();
+					}
+				});
+			});
+
+			$('button#tambah-ulasan-matlamat').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				createUlasanMatlamat();
+			});
+
+			$('button#ubah-ulasan-matlamat').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updateUlasanMatlamat();
+			});
+
+			$('div.matlamat-box').each(function(){
+				if( $('button.edit-matlamat').length ){
+			    	$('button.load-matlamat').hide();
+				}
+			});
+		});
+
+		</script>";
+
 		$data = $this->model->getByID('pskl', $id);
 		$matlamat = $this->model->getByID('matlamat', $id);
+		$ulasan = $this->model->getByID('ulasan', $id);
+		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
 
 		$header = $this->loadView('header');
 		$navigation = $this->loadView('topbar');
@@ -414,9 +658,14 @@ class Borang extends Controller {
         $template = $this->loadView('borang/view-pskl');
 
 		$header->set('custom_css', $custom_css);
+		$header->set('css', $this->css);
 		$template->set('data', $data);
 		$template->set('matlamat', $matlamat);
+		$template->set('ulasan', $ulasan);
+		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('helper', $this->loadHelper('upload_helper'));
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
 		
 		$header->render();
 		$navigation->render();
@@ -757,6 +1006,116 @@ class Borang extends Controller {
 				'action' => 'Add new officer name'
 			);
 			$log->add($data2);
+			return $add;
+		}
+	}
+
+	function addUlasan()
+	{
+		if(isset($_POST['ringkasan'])){
+			
+			$data = array(
+				'borang_id' => $_POST['borang_id'],
+				'user_id' => $_POST['user_id'],
+				'ringkasan' => $_POST['ringkasan']
+			);
+
+			$add = $this->model->addUlasan($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'addUlasan',
+				'action' => 'Tambah ulasan borang '.$_POST['borang_id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}
+	}
+
+	function addUlasanMatlamat()
+	{
+		if(isset($_POST['borang_id'])){
+			
+			$data = array(
+				'borang_id' => $_POST['borang_id'],
+				'borang_matlamat_id' => $_POST['borang_matlamat_id'],
+				'user_id' => $this->session->get('user_id'),
+				'ulasan' => $_POST['ulasan'],
+				'implikasi' => $_POST['implikasi']
+			);
+
+			$add = $this->model->addUlasanMatlamat($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'addUlasanMatlamat',
+				'action' => 'Tambah ulasan matlamat #ID '.$_POST['borang_matlamat_id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}
+	}
+
+	function updateUlasan()
+	{
+		if(isset($_POST['ringkasan'])){
+			
+			$data = array(
+				'id' => $_POST['id'],
+				'borang_id' => $_POST['borang_id'],
+				'user_id' => $_POST['user_id'],
+				'ringkasan' => $_POST['ringkasan']
+			);
+
+			$add = $this->model->updateUlasan($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'updateUlasan',
+				'action' => 'Kemaskini ulasan borang '.$_POST['borang_id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}
+	}
+
+	function updateUlasanMatlamat()
+	{
+		if(isset($_POST['id'])){
+			
+			$data = array(
+				'id' => $_POST['id'],
+				'borang_id' => $_POST['borang_id'],
+				'borang_matlamat_id' => $_POST['borang_matlamat_id'],
+				'user_id' => $this->session->get('user_id'),
+				'ulasan' => $_POST['ulasan'],
+				'implikasi' => $_POST['implikasi']
+			);
+
+			$add = $this->model->updateUlasanMatlamat($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'updateUlasanMatlamat',
+				'action' => 'Kemaskini ulasan matlamat #ID '.$_POST['borang_matlamat_id']
+			);
+			$log->add($data2);
+
 			return $add;
 		}
 	}

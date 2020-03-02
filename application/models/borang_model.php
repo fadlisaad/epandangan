@@ -229,4 +229,86 @@ Class Borang_model extends Model {
 			echo "0";
 		}
 	}
+
+	public function addUlasan($data)
+	{
+		try{
+			$stm  = "INSERT INTO ulasan (borang_id, user_id, ringkasan) VALUES (:borang_id, :user_id, :ringkasan)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'user_id' => $data['user_id'],
+				'ringkasan' => $data['ringkasan']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function addUlasanMatlamat($data)
+	{
+		try{
+			$stm  = "INSERT INTO ulasan_matlamat (borang_id, borang_matlamat_id, user_id, ulasan, implikasi) VALUES (:borang_id, :borang_matlamat_id, :user_id, :ulasan, :implikasi)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'borang_matlamat_id' => $data['borang_matlamat_id'],
+				'user_id' => $data['user_id'],
+				'ulasan' => $data['ulasan'],
+				'implikasi' => $data['implikasi']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function updateUlasan($data)
+	{
+		try{
+			$stm  = "UPDATE ulasan SET borang_id = :borang_id, user_id = :user_id, ringkasan = :ringkasan WHERE id = :id";
+			$bind = array(
+				'id' => $data['id'],
+				'borang_id' => $data['borang_id'],
+				'user_id' => $data['user_id'],
+				'ringkasan' => $data['ringkasan']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function updateUlasanMatlamat($data)
+	{
+		try{
+			$stm  = "UPDATE ulasan_matlamat SET borang_id = :borang_id, borang_matlamat_id = :borang_matlamat_id, user_id = :user_id, ulasan = :ulasan, implikasi = :implikasi WHERE id = :id";
+			$bind = array(
+				'id' => $data['id'],
+				'borang_id' => $data['borang_id'],
+				'borang_matlamat_id' => $data['borang_matlamat_id'],
+				'user_id' => $data['user_id'],
+				'ulasan' => $data['ulasan'],
+				'implikasi' => $data['implikasi']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
 }
