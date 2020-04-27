@@ -75,3 +75,31 @@
                 </form>
             </div>
         </div>
+
+        <!-- Start modal edit -->
+        <div id="edit-modal" class="modal fade lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Tetapan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form id="edit-tetapan" method="post">
+                                <div class="form-group">
+                                    <label for="nama" class="control-label" id="tetapan-nama">Nama</label>
+                                    <div id="result"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal"><i class="fe-x"></i> Tutup</button>
+                        <button type="button" class="btn btn-success waves-effect waves-light" id="save-tetapan"><i class="fe-save"></i> Simpan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->

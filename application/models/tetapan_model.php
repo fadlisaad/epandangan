@@ -46,15 +46,18 @@ Class Tetapan_model extends Model {
 	public function update($data)
 	{
 		try{
-			$stm  = "UPDATE ".$data['table']." SET name = ".$data['name']." WHERE id = :id";
+			$stm  = "UPDATE ".$data['table']." SET nama = :nama WHERE id = :id";
 			$bind = array(
-				'id' => $data['id']
+				'id' => $data['id'],
+				'nama' => $data['nama']
 			);
 			
-			return $this->pdo->fetchAffected($stm, $bind);
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
 		}
 		catch(Exception $e){
-			return $e->getMessage();
+			echo $e->getMessage();
+			echo "0";
 		}
 	}
 

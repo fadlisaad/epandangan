@@ -105,12 +105,16 @@
                             </li>
                             <li class="has-submenu"><a href="#"><i class="fe-settings"></i>Tetapan</a>
                                 <ul class="submenu">
+                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/panel"><i class="fe-users"></i> Ahli Panel</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/jawatan"><i class="fe-pie-chart"></i> Jawatan Panel</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/lokasi"><i class="fe-map"></i> Lokasi Sesi Pendengaran</a></li>
                                     <li><a href="<?php echo BASE_URL ?>tetapan/index/struktur"><i class="fe-life-buoy"></i> Struktur PSKL 2040</a></li>
                                     <li><a href="<?php echo BASE_URL ?>tetapan/index/topik"><i class="fe-box"></i> Topik PBRKL 2020</a></li>
                                     <li><a href="<?php echo BASE_URL ?>tetapan/index/zon"><i class="fe-map-pin"></i> Zon Strategik PBRKL 2020</a></li>
                                     <li><a href="<?php echo BASE_URL ?>tetapan/index/sektor"><i class="fe-layout"></i> Sektor PBRKL 2020</a></li>
-                                    <li><a href="<?php echo BASE_URL ?>tetapan/index/lokasi"><i class="fe-map"></i> Lokasi Sesi Pendengaran</a></li>
+                                    <?php if($_SESSION['permission'] == 'super'): ?>
                                     <li><a href="<?php echo BASE_URL ?>language"><i class="fe-flag"></i> Terjemahan Bahasa</a></li>
+                                    <?php endif; ?>
                                 </ul>
                             </li>
                             <?php else: ?>

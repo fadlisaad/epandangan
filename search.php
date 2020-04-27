@@ -22,33 +22,51 @@ $json = [];
 
 $table = $_GET['table'];
 
-if(isset($_GET['q'])){
+switch ($table) {
+	case 'sesi_jadual':
+		$sql = "SELECT id, CONCAT(jenis, \":Sesi \",id) as text FROM view_$table";
+		$row = $pdo->fetchAll($sql);
+		
+		try{
+			foreach ($row as $value) {
+				$json[] = ['id'=>$value['id'], 'text'=>$value['text']];
+			}
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+		break;
 	
-	$sql = "SELECT id, nama as text FROM $table WHERE nama LIKE :q";
-	$bind = array('q' => "%".$_GET['q']."%");
-	$row = $pdo->fetchAssoc($sql, $bind);
+	default:
+		if(isset($_GET['q'])){
+	
+			$sql = "SELECT id, nama as text FROM $table WHERE nama LIKE :q";
+			$bind = array('q' => "%".$_GET['q']."%");
+			$row = $pdo->fetchAssoc($sql, $bind);
 
-	try{
-		foreach ($row as $value) {
-			$json[] = ['id'=>$value['id'], 'text'=>$value['text']];
+			try{
+				foreach ($row as $value) {
+					$json[] = ['id'=>$value['id'], 'text'=>$value['text']];
+				}
+			}
+			catch(Exception $e){
+				return $e->getMessage();
+			}
 		}
-	}
-	catch(Exception $e){
-		return $e->getMessage();
-	}
-}
-else{
-	$sql = "SELECT id, nama as text FROM $table";
-	$row = $pdo->fetchAll($sql);
-	
-	try{
-		foreach ($row as $value) {
-			$json[] = ['id'=>$value['id'], 'text'=>$value['text']];
+		else{
+			$sql = "SELECT id, nama as text FROM $table";
+			$row = $pdo->fetchAll($sql);
+			
+			try{
+				foreach ($row as $value) {
+					$json[] = ['id'=>$value['id'], 'text'=>$value['text']];
+				}
+			}
+			catch(Exception $e){
+				return $e->getMessage();
+			}
 		}
-	}
-	catch(Exception $e){
-		return $e->getMessage();
-	}
+		break;
 }
 
 echo json_encode($json);

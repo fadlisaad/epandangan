@@ -26,6 +26,32 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function getSesiByID($table, $borang_id)
+	{
+		try{
+			$stm  = "SELECT * FROM view_".$table." WHERE borang_id = :borang_id";
+			$bind = array('borang_id' => $borang_id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
+	public function getSingleByID($table, $id, $id_name)
+	{
+		try{
+			$stm = "SELECT * FROM ".$table." WHERE ".$id_name." = :id";
+			$bind = array('id' => $id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function getLastIDPSKL()
 	{
 		try{
@@ -137,6 +163,27 @@ Class Borang_model extends Model {
 				'tindakan_id' => $data['tindakan_id'],
 				'cadangan' => $data['cadangan'],
 				'justifikasi' => $data['justifikasi']
+			);
+			
+			return $this->pdo->fetchAffected($stm, $bind);
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
+	public function addTindakan($data)
+	{
+		try{
+			$stm = "INSERT INTO tindakan (borang_id, topik_id, zon_id, sektor_id, pegawai_id, sesi_id, status) VALUES (:borang_id, :topik_id, :zon_id, :sektor_id, :pegawai_id, :sesi_id, :status)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'topik_id' => $data['topik_id'],
+				'zon_id' => $data['zon_id'],
+				'sektor_id' => $data['sektor_id'],
+				'pegawai_id' => $data['pegawai_id'],
+				'sesi_id' => $data['sesi_id'],
+				'status' => $data['status']
 			);
 			
 			return $this->pdo->fetchAffected($stm, $bind);
@@ -301,6 +348,24 @@ Class Borang_model extends Model {
 				'user_id' => $data['user_id'],
 				'ulasan' => $data['ulasan'],
 				'implikasi' => $data['implikasi']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function addSesi($data)
+	{
+		try{
+			$stm  = "INSERT INTO sesi_pendengaran (sesi_id, borang_id) VALUES (:sesi_id, :borang_id)";
+			$bind = array(
+				'sesi_id' => $data['sesi_id'],
+				'borang_id' => $data['borang_id']
 			);
 			
 			$this->pdo->fetchAffected($stm, $bind);

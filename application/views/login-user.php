@@ -57,18 +57,24 @@
                             </div> <!-- end card-body -->
                         </div>
                         <!-- end card -->
-
-                        <div class="row mt-3">
-                            <div class="col-12 text-center">
-                                <!-- <form action="<?php echo BASE_URL ?>language/setLocale" method="post">
-                                    <select name="language">
-                                        <option value="en"<?php if( $_COOKIE["language"] == "en" ) { echo " selected"; } ?>>English</option>
-                                        <option value="my"<?php if( $_COOKIE["language"] == "my" ) { echo " selected"; } ?>>Bahasa Melayu</option>
-                                    </select>
-                                    <input type="submit" value="Select Language" class="btn btn-success btn-xs">
-                                </form> -->
-                            </div>
-                        </div>
+                        <!-- Close announcement -->
+                        <div id="announcement" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                        <h4 class="modal-title" id="myModalLabel">Announcement</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h3>Makluman Gangguan Capaian Portal PPKL2040/E-Pandangan</h3>
+                                        <p>Adalah dimaklumkan bahawa akan berlaku gangguan capaian ke portal PPKL2040/E-Pandangan bermula jam 7.00 malam, 6 Mac 2020 (Jumaat) dan dijangka akan beroperasi semula pada jam 7.00 malam, 8 Mac 2020 (Ahad) disebabkan oleh kerja-kerja menaiktaraf rangkaian DBKL. Segala kesulitan amatlah dikesali</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
 
                     </div> <!-- end col -->
                 </div>

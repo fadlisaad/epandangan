@@ -15,7 +15,8 @@ class Webhook extends Controller {
 	 * @author  Miloslav Hůla (https://github.com/milo)
 	 */
 
-	public function pull(){
+	public function pull()
+	{
 
 		$hookSecret = 'rJFaLnArRh4v;BYrNh&awsWHIs4q.(5w4';  # set NULL to disable check, make sure this is the same as gihub secret
 
@@ -102,5 +103,10 @@ class Webhook extends Controller {
 				echo "Event:$_SERVER[HTTP_X_GITHUB_EVENT] Payload:\n";
 				print_r($payload); # For debug only. Can be found in GitHub hook log.
 		}
+	}
+
+	public function backup()
+	{
+		
 	}
 }

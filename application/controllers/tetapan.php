@@ -39,7 +39,65 @@ class Tetapan extends Controller {
 	function index($table)
 	{
 		$custom_js = "<script type=\"text/javascript\">
+			
 			var base_url = '".BASE_URL."tetapan/process/".$table."';
+
+			function editTetapan(id){
+
+				var post_url = '".BASE_URL."tetapan/get';
+				var table = '".$table."';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'text',
+					data: 'table=' + table +'&id=' + id,
+					success:function(response){
+						var json_data = JSON.parse(response);
+						var idd = json_data[0].id;
+						var nama = json_data[0].nama;
+						var data_html = '<input type=\"text\" class=\"form-control\" name=\"nama\" value=\"'+nama+'\"><input type=\"hidden\" name=\"id\" value=\"'+idd+'\"><input type=\"hidden\" name=\"table\" value=\"'+table+'\">';
+						$('#result').html(data_html);
+					}
+			    });
+			}
+
+			// update entry
+			function updateTetapan(){
+
+				var post_url = '".BASE_URL."tetapan/update';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#edit-tetapan').serialize(),
+					success:function(result){
+						if(parseInt(result) == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Tiada maklumat dikemaskini',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Maklumat telah berjaya dikemaskini.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+
+			}
+
+			$('button#save-tetapan').bind('click', function(e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updateTetapan();
+			});
 			
 			$(document).ready(function() {
 
@@ -61,7 +119,7 @@ class Tetapan extends Controller {
 			        columnDefs: [
 					    { width: '5%', 'targets': 0 },
 					    { width: '15%', 'targets': 2 },
-					    { width: '10%', 'targets': 3 }
+					    { width: '15%', 'targets': 3 }
 					]
     			});
 
@@ -96,7 +154,7 @@ class Tetapan extends Controller {
 
 				}
 
-				$('button#save').bind('click', function (e) {
+				$('button#save').bind('click', function(e) {
 					e.preventDefault();
 					$(this).attr('disabled', 'disabled');
 					createTetapan();
@@ -141,32 +199,6 @@ class Tetapan extends Controller {
 				})
 			}
 
-			// update entry
-			function updateTetapan(id){
-
-				var post_url = '".BASE_URL."tetapan/add';
-
-				$.ajax({
-					type: 'POST',
-					url: post_url,
-					dataType: 'html',
-					data: $('form#tambah-tetapan').serialize()
-			    });
-
-			}
-
-			function modalTetapan(id){
-
-				$('#id').val(id);
-				$('#nama').val(nama);
-				$('#con-close-modal').modal('show');
-
-				//e.preventDefault();
-				//$(this).attr('disabled', 'disabled');
-				//updateTetapan(id);
-				
-			}
-
 		</script>";
 		
 		$header = $this->loadView('header');
@@ -183,6 +215,14 @@ class Tetapan extends Controller {
 		$navigation->render();
 		$template->render();
 		$footer->render();
+	}
+
+	function get()
+	{
+		if(isset($_POST['id'])){
+			$data = $this->model->getTetapanByID($_POST['table'], $_POST['id']);
+			echo json_encode($data);
+		}
 	}
 
 	function add()
@@ -206,66 +246,7 @@ class Tetapan extends Controller {
 			);
 			$log->add($data2);
 			return $add;
-			
 		}
-	}
-	
-	function edit($id)
-	{
-		$custom_js = "<script type='text/javascript'>
-
-			//Parameter
-			var delete_url = '".BASE_URL."candidate/delete/".$id."';
-			var main_url = '".BASE_URL."candidate/posts/';
-
-		    $('#delete').click(function(){
-		        swal({
-		            title: 'Are you sure?',
-		            text: 'You will not be able to recover this record!',
-		            type: 'warning',
-		            showCancelButton: true,
-		            confirmButtonText: 'Yes, delete it!',
-		            cancelButtonText: 'Cancel',
-		            closeOnConfirm: false,
-		            closeOnCancel: true
-		        },function(){
-					$.ajax({
-						type: 'POST',
-						url: delete_url,
-						success: function(){
-							
-						}
-					})
-					.done(function() {
-						swal({
-							title: 'Success',
-							text: 'The record is successfully deleted.',
-							type: 'success'
-						},function() {
-							window.location.href = main_url;
-						});
-					})
-					.error(function() {
-						swal('Oops', 'Error connecting to the server!', 'error');
-					});
-				});
-		    });
-		</script>";
-
-		$data = $this->model->getPosition($id);
-
-		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
-		$footer = $this->loadView('footer');
-        $template = $this->loadView('candidate/edit_post');
-
-		$footer->set('custom_js', $custom_js);
-		$template->set('data', $data);
-		
-		$header->render();
-		$navigation->render();
-		$template->render();
-		$footer->render();
 	}
 
 	function update()
@@ -274,11 +255,11 @@ class Tetapan extends Controller {
 
 			$data = array(
 				'table' => $_POST['table'],
-				'name' => $_POST['name'],
+				'nama' => $_POST['nama'],
 				'id' => $_POST['id']
 			);
 
-			$this->model->update($data);
+			$update = $this->model->update($data);
 
 			# log user action
 			$log = $this->loadHelper('log_helper');
@@ -289,10 +270,7 @@ class Tetapan extends Controller {
 				'action' => 'Update data'
 			);
 			$log->add($data2);
-			return true;
-
-		}else{
-			return false;
+			return $update;
 		}
 	}
 	
@@ -339,7 +317,7 @@ class Tetapan extends Controller {
 		    	'db' => 'id',
 		    	'dt' => 'action',
 		    	'formatter' => function( $d, $row ) {
-            		return "<button class=\"btn btn-xs btn-info\" onclick=\"modalTetapan('".$d."')\"> <i class=\"mdi mdi-square-edit-outline\"></i> </button> <button class=\"delete btn btn-xs btn-danger\" onclick=\"deleteTetapan('".$d."')\"> <i class=\"mdi mdi-delete\"></i> </button>";
+            		return "<button class=\"btn btn-info btn-xs edit\" data-toggle=\"modal\" data-target=\"#edit-modal\" onclick=\"editTetapan('".$d."')\"><i class=\"fe-scissors\"></i> Edit</button> <button class=\"delete btn btn-xs btn-danger\" onclick=\"deleteTetapan('".$d."')\"> <i class=\"mdi mdi-delete\"></i> Delete</button>";
         		}
         	)
 		);

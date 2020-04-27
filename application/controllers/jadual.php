@@ -14,7 +14,9 @@ class Jadual extends Controller {
 			'assets/libs/custombox/custombox.min.css',
 			'assets/libs/sweetalert2/sweetalert2.min.css',
 			'assets/libs/select2/select2.min.css',
-			'assets/libs/flatpickr/flatpickr.min.css'
+			'assets/libs/flatpickr/flatpickr.min.css',
+			'assets/libs/fullcalendar/fullcalendar.min.css',
+			'assets/libs/summernote/summernote.min.css'
 		);
 
 		$this->js = array(
@@ -33,7 +35,10 @@ class Jadual extends Controller {
 			'assets/libs/parsleyjs/parsleyjs.min.js',
 			'assets/libs/parsleyjs/il8n/ms.js',
 			'assets/libs/select2/select2.min.js',
-			'assets/libs/flatpickr/flatpickr.min.js'
+			'assets/libs/flatpickr/flatpickr.min.js',
+			'assets/libs/moment/moment.min.js',
+			'assets/libs/fullcalendar/fullcalendar.min.js',
+			'assets/libs/summernote/summernote.min.js'
 		);
 
 		if(empty($this->session->get('loggedin'))){
@@ -46,6 +51,43 @@ class Jadual extends Controller {
 		$custom_js = "<script type=\"text/javascript\">
 
 			var base_url = '".BASE_URL."jadual/process_senarai';
+
+			// delete entry
+			function deleteJadual(id){
+
+				var delete_url = '".BASE_URL."jadual/delete';
+				var table = 'sesi_jadual';
+
+				Swal.fire({
+					title: 'Anda pasti?',
+					text: 'Data ini akan dipadam dan tidak boleh dipulihkan',
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Ya',
+					cancelButtonText: 'Batal',
+					preConfirm: function() {
+					return new Promise(function(result) {
+						console.log(result);
+						$.ajax({
+							url: delete_url,
+							type: 'POST',
+							data: 'table=' + table +'&id=' + id,
+							success:function(response){
+								Swal.fire(
+									'Berjaya!',
+									'Maklumat ini telah berjaya dipadam',
+									'success'
+								).then(function() {
+					                location.reload();
+					            });
+							}
+						})
+					});
+					}
+				})
+			}
 			
 			$(document).ready(function() {
 
@@ -60,13 +102,14 @@ class Jadual extends Controller {
     				error : true,
     				columns: [
 			            { data: 'id' },
-			            { data: 'lokasi_id' },
-			            { data: 'zon_id' },
+			            { data: 'lokasi' },
+			            { data: 'jenis' },
 			            { data: 'tarikh' },
 			            { data: 'slot_masa' },
 			            { data: 'chairman' },
 			            { data: 'ajk_1' },
 			            { data: 'ajk_2' },
+			            { data: 'ajk_3' },
 			            { data: 'action' }
 			        ],
 			        columnDefs: [
@@ -125,16 +168,41 @@ class Jadual extends Controller {
 		$footer->render();
 	}
 
-	function tambahSesi()
+	function sesi()
+	{
+		$custom_js = "<script>
+			$('#calendar').fullCalendar();
+		</script>";
+
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('jadual/sesi');
+
+		$header->set('css', $this->css);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function editJadual($id)
 	{
 		$easyCSRF = new EasyCSRF\EasyCSRF($this->session);
 
 		# generate token
 		$token = $easyCSRF->generate('token');
 
+		$data = $this->model->getByID('sesi_jadual', $id);
+
 		$custom_js = "<script>
+
 		var select_lokasi = '".BASE_URL."search.php?table=lokasi';
-		var select_zon = '".BASE_URL."search.php?table=zon';
+		var select_panel = '".BASE_URL."search.php?table=panel';
+		var tarikh = '".$data[0]['tarikh']."';
 
 		$(document).ready(function(){
 			
@@ -152,10 +220,151 @@ class Jadual extends Controller {
 			    cache: true
 			});
 
-			$('#zon').select2({
-				placeholder: 'Pilih zon strategik',
+			$('#chairman,#ajk_1,#ajk_2,#ajk_3').select2({
+				placeholder: 'Pilih',
 			    ajax: {
-			        url: select_zon,
+			        url: select_panel,
+			        dataType: 'json',
+			        processResults: function (data) {
+			            return {
+			            	results: data
+			            };
+			        }
+			    },
+			    cache: true
+			});
+
+			$('#datepicker').flatpickr({
+				defaultDate: tarikh,
+				altInput: true,
+				altFormat: \"j F Y\",
+				dateFormat: \"Y-m-d\"
+			});
+
+			$('.timepicker').flatpickr({
+				enableTime: true,
+				noCalendar: true,
+				dateFormat: \"H:i K\"
+			});
+
+			$('.summernote').summernote({
+			    height: 250,
+			    minHeight: null,
+			    maxHeight: null,
+			    focus: false,
+			    toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+					['para', ['ul', 'ol']],
+				]
+			});
+		});
+
+		// update jadual
+		function updateJadual(){
+
+			var post_url = '".BASE_URL."jadual/updateJadual';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#update-jadual').serialize(),
+				success:function(response){
+					if(parseInt(response) == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ruangan wajib tidak lengkap. Sila isi dengan betul.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Jadual ini berjaya dikemaskini.',
+							type: 'success'
+						}).then(function() {
+			                
+			            });
+					}
+				}
+		    });
+
+		}
+
+		$('button#save-jadual').bind('click', function (e) {
+			e.preventDefault();
+			$(this).attr('disabled', 'disabled');
+			updateJadual();
+		});
+		</script>";
+		
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('jadual/ubah-sesi');
+
+		$header->set('css', $this->css);
+		$template->set('token', $token);
+		$template->set('data', $data);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function updateJadual()
+	{
+		$this->filter = $this->loadHelper('Filter_helper');
+			
+		$data = array(
+			'id' => $this->filter->isInt($_POST['id']),
+			'lokasi_id' => $this->filter->isInt($_POST['lokasi_id']),
+			'jenis' => $this->filter->sanitize($_POST['jenis']),
+			'tarikh' => $this->filter->sanitize($_POST['tarikh']),
+			'slot_masa' => $this->filter->sanitize($_POST['masa_mula']).'-'.$this->filter->sanitize($_POST['masa_tamat']),
+			'chairman' => $this->filter->isInt($_POST['chairman']),
+			'ajk_1' => $this->filter->isInt($_POST['ajk_1']),
+			'ajk_2' => $this->filter->isInt($_POST['ajk_2']),
+			'ajk_3' => $this->filter->isInt($_POST['ajk_3']),
+			'keterangan' => $this->filter->htmlEntity($_POST['keterangan'])
+		);
+
+		$this->model->updateJadual($data);
+	}
+
+	function tambahSesi()
+	{
+		$easyCSRF = new EasyCSRF\EasyCSRF($this->session);
+
+		# generate token
+		$token = $easyCSRF->generate('token');
+
+		$custom_js = "<script>
+		var select_lokasi = '".BASE_URL."search.php?table=lokasi';
+		var select_panel = '".BASE_URL."search.php?table=panel';
+
+		$(document).ready(function(){
+			
+			$('#lokasi').select2({
+				placeholder: 'Pilih lokasi',
+			    ajax: {
+			        url: select_lokasi,
+			        dataType: 'json',
+			        processResults: function (data) {
+			            return {
+			            	results: data
+			            };
+			        }
+			    },
+			    cache: true
+			});
+
+			$('#chairman,#ajk_1,#ajk_2,#ajk_3').select2({
+				placeholder: 'Pilih',
+			    ajax: {
+			        url: select_panel,
 			        dataType: 'json',
 			        processResults: function (data) {
 			            return {
@@ -221,12 +430,13 @@ class Jadual extends Controller {
 			
 			$data = array(
 				'lokasi_id' => $this->filter->sanitize($_POST['lokasi_id']),
-				'zon_id' => $this->filter->sanitize($_POST['zon_id']),
+				'jenis' => $this->filter->sanitize($_POST['jenis']),
 				'tarikh' => $this->filter->sanitize($_POST['tarikh']),
 				'slot_masa' => $this->filter->sanitize($_POST['masa_mula']).'-'.$this->filter->sanitize($_POST['masa_tamat']),
 				'chairman' => $this->filter->sanitize($_POST['chairman']),
 				'ajk_1' => $this->filter->sanitize($_POST['ajk_1']),
 				'ajk_2' => $this->filter->sanitize($_POST['ajk_2']),
+				'ajk_3' => $this->filter->sanitize($_POST['ajk_3']),
 				'keterangan' => $this->filter->sanitize($_POST['keterangan'])
 			);
 
@@ -272,6 +482,154 @@ class Jadual extends Controller {
 		}
 	}
 
+	function sesiPendengaran($jadual_id)
+	{
+		$easyCSRF = new EasyCSRF\EasyCSRF($this->session);
+
+		# generate token
+		$token = $easyCSRF->generate('token');
+
+		$jadual = $this->model->getByID('sesi_jadual', $jadual_id);
+		$data = $this->model->getByID('sesi_pendengaran', $jadual_id);
+
+		$custom_js = "<script type=\"text/javascript\">
+
+			var base_url = '".BASE_URL."jadual/process_sesi_pendengaran/".$jadual_id."';
+			var sesi_id = '".$jadual_id."';
+			
+			$(document).ready(function() {
+
+    			var table = $('#datatable').DataTable({
+    				serverSide : true,
+    				processing : true,
+    				ajax : {
+    					url : base_url,
+    					type : 'POST'
+    				},
+    				deferRender : true,
+    				error : true,
+    				columns: [
+			            { data: 'borang_id' },
+			            { data: 'nama_penuh' },
+			            { data: 'ic_passport' },
+			            { data: 'tarikh_terima' },
+			            { data: 'hadir' },
+			            { data: 'action' }
+			        ]
+    			});
+    			
+    		});
+
+    		function deleteBorang(borang_id)
+			{
+				var delete_url = '".BASE_URL."jadual/deleteBorang';
+		    
+			    Swal.fire({
+			        title: 'Anda pasti?',
+			        text: 'Maklumat ini tidak akan disimpan.',
+			        type: 'warning',
+			        showCancelButton: true,
+			        confirmButtonColor: '#DD6B55',
+			        confirmButtonText: 'Ya, teruskan!',
+			    }).then(function(result){
+			    	if (result.value) {
+				        $.ajax({
+				            url: delete_url,
+				            dataType: 'html',
+				            data: 'borang_id=' + borang_id + '&sesi_id=' + sesi_id,
+				            type: 'POST',
+				            success: function(response) {
+				            	if(parseInt(response) == 1){
+				                	Swal.fire('berjaya!', 'Borang ini telah dikeluarkan dari sesi ini', 'success');
+				                	location.reload();
+			                	}else{
+			                		Swal.fire('Ralat', 'Sila cuba semula. Error: '+response, 'error');
+			                	}
+				            },
+				            error: function (xhr, ajaxOptions, thrownError) {
+				                Swal.fire('Ralat!', 'Sila cuba semula', 'error');
+				            }
+				        });
+				    }else if(result.dismiss === Swal.DismissReason.cancel) {
+				    	Swal.fire('Cancelled', 'Tiada maklumat yang dihapus', 'info');	
+				    }
+			    });
+			}
+
+		</script>";
+		
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('jadual/sesi-pendengaran');
+
+		$header->set('css', $this->css);
+		$template->set('token', $token);
+		$template->set('jadual', $jadual);
+		$template->set('data', $data);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function deleteBorang()
+	{
+		if(isset($_POST)){
+
+			$data = array(
+				'sesi_id' => $_POST['sesi_id'],
+				'borang_id' => $_POST['borang_id']
+			);
+
+			$this->model->deleteBorang($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Jadual',
+				'function' => 'deleteBorang',
+				'action' => 'Delete borang ID '.$_POST['borang_id'].' dari sesi ID '.$_POST['sesi_id']
+			);
+			$log->add($data2);
+			return true;
+
+		}else{
+			return false;
+		}
+	}
+
+	function delete()
+	{
+		if(isset($_POST)){
+
+			$data = array(
+				'table' => $_POST['table'],
+				'id' => $_POST['id']
+			);
+
+			$this->model->delete($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Jadual',
+				'function' => 'delete',
+				'action' => 'Delete jadual'
+			);
+			$log->add($data2);
+			return true;
+
+		}else{
+			return false;
+		}
+	}
+
 	public function process_senarai()
 	{
 		$table = 'view_sesi_jadual';
@@ -280,22 +638,65 @@ class Jadual extends Controller {
 
 		$columns = array(
 		    array( 'db' => 'id', 'dt' => 'id' ),
-		    array( 'db' => 'lokasi', 'dt' => 'lokasi_id' ),
-		    array( 'db' => 'zon', 'dt' => 'zon_id' ),
+		    array( 'db' => 'lokasi', 'dt' => 'lokasi' ),
+		    array( 'db' => 'jenis', 'dt' => 'jenis' ),
 		    array( 'db' => 'tarikh', 'dt' => 'tarikh' ),
 		    array( 'db' => 'slot_masa', 'dt' => 'slot_masa' ),
 		    array( 'db' => 'chairman', 'dt' => 'chairman' ),
 		    array( 'db' => 'ajk_1', 'dt' => 'ajk_1' ),
 		    array( 'db' => 'ajk_2', 'dt' => 'ajk_2' ),
+		    array( 'db' => 'ajk_3', 'dt' => 'ajk_3' ),
 		    array(
 		    	'db' => 'id',
 		    	'dt' => 'action',
 		    	'formatter' => function( $d, $row ) {
-            		return "<a href=\"".BASE_URL."jadual/editJadual/".$d."\" class=\"btn btn-primary btn-xs\">Ubah</a>";
+            		return "<a href=\"".BASE_URL."jadual/editJadual/".$d."\" class=\"btn btn-primary btn-xs\"><i class=\"fe-scissors\"></i> Edit</a> <a href=\"".BASE_URL."jadual/sesiPendengaran/".$d."\" class=\"btn btn-info btn-xs\"><i class=\"fe-glass\"></i> Papar Sesi</a> <button class=\"btn btn-xs btn-danger\" onclick=\"deleteJadual('".$d."')\"> <i class=\"mdi mdi-delete\"></i> Padam</button>";
         		}
         	)
 		);
 		 
+		$sql_details = array(
+		    'user' => DB_USER,
+		    'pass' => DB_PASS,
+		    'db'   => DB_NAME,
+		    'host' => DB_HOST
+		);
+
+		$datatable = $this->loadHelper('datatable_helper');
+		 
+		$data = json_encode(
+		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+		);
+		print_r($data);
+	}
+
+	public function process_sesi_pendengaran()
+	{
+		$table = 'view_sesi_pendengaran';
+		 
+		$primaryKey = 'id';
+
+		$columns = array(
+		    array(
+		    	'db' => 'borang_id',
+		    	'dt' => 'borang_id',
+		    	'formatter' => function( $d, $row ) {
+            		return "PSKL2040/DRAF/".$d;
+        		}
+        	),
+		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
+		    array( 'db' => 'ic_passport', 'dt' => 'ic_passport' ),
+		    array( 'db' => 'tarikh_terima', 'dt' => 'tarikh_terima' ),
+		    array( 'db' => 'hadir', 'dt' => 'hadir' ),
+        	array(
+		    	'db' => 'borang_id',
+		    	'dt' => 'action',
+		    	'formatter' => function( $d, $row ) {
+            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_pskl/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a> <a class=\"btn btn-xs btn-primary\" href=\"".BASE_URL."borang/cetak_pskl/".$d."\"><i class=\"fe-printer\"></i> Cetak</a> <button class=\"btn btn-xs btn-danger\" onclick=\"deleteBorang(".$d.")\">Padam</button>";
+        		}
+        	)
+		);
+
 		$sql_details = array(
 		    'user' => DB_USER,
 		    'pass' => DB_PASS,

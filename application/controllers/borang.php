@@ -17,6 +17,7 @@ class Borang extends Controller {
 			'assets/libs/custombox/custombox.min.css',
 			'assets/libs/sweetalert2/sweetalert2.min.css',
 			'assets/libs/select2/select2.min.css',
+			'assets/libs/summernote/summernote.min.css'
 		);
 
 		$this->js = array(
@@ -34,10 +35,9 @@ class Borang extends Controller {
 			'assets/js/pages/sweet-alerts.init.js',
 			'assets/libs/parsleyjs/parsleyjs.min.js',
 			'assets/libs/parsleyjs/il8n/ms.js',
-			'assets/libs/jquery-countdown/jquery-countdown.min.js',
 			'assets/js/jquery.chained.js',
-			'assets/libs/twitter-bootstrap-wizard/twitter-bootstrap-wizard.min.js',
 			'assets/libs/select2/select2.min.js',
+			'assets/libs/summernote/summernote.min.js'
 		);
 
 		if(empty($this->session->get('loggedin'))){
@@ -216,20 +216,6 @@ class Borang extends Controller {
 
 		$custom_js = "<script type=\"text/javascript\">
 
-			$('#rootwizard').bootstrapWizard({
-		        'onNext': function (tab, navigation, index) {
-		            var form = $($(tab).data(\"targetForm\"));
-		            if (form) {
-		                form.addClass('was-validated');
-		                if (form[0].checkValidity() === false) {
-		                    event.preventDefault();
-		                    event.stopPropagation();
-		                    return false;
-		                }
-		            }
-		        }
-		    });
-
 			var base_url = '".BASE_URL."borang/process/borang_pskl';
 
 			$(document).ready(function() {
@@ -369,7 +355,110 @@ class Borang extends Controller {
 		}
 		</style>";
 
+		$custom_js = "<script>
+			var select_topik = '".BASE_URL."search.php?table=topik';
+
+			$('#topik').select2({
+				placeholder: 'Pilih topik',
+			    ajax: {
+			        url: select_topik,
+			        dataType: 'json',
+			        processResults: function (data) {
+			            return {
+			            	results: data
+			            };
+			        }
+			    },
+			    cache: true
+			});
+
+			var select_zon = '".BASE_URL."search.php?table=zon';
+
+			$('#zon').select2({
+				placeholder: 'Pilih zon',
+			    ajax: {
+			        url: select_zon,
+			        dataType: 'json',
+			        processResults: function (data) {
+			            return {
+			            	results: data
+			            };
+			        }
+			    },
+			    cache: true
+			});
+
+			var select_sektor = '".BASE_URL."search.php?table=sektor';
+
+			$('#sektor').select2({
+				placeholder: 'Pilih sektor',
+			    ajax: {
+			        url: select_sektor,
+			        dataType: 'json',
+			        processResults: function (data) {
+			            return {
+			            	results: data
+			            };
+			        }
+			    },
+			    cache: true
+			});
+
+			var select_sesi = '".BASE_URL."search.php?table=sesi_jadual';
+
+			$('#sesi').select2({
+				placeholder: 'Pilih sesi pendengaran',
+			    ajax: {
+			        url: select_sesi,
+			        dataType: 'json',
+			        processResults: function (data) {
+			            return {
+			            	results: data
+			            };
+			        }
+			    },
+			    cache: true
+			});
+
+			// insert tindakan
+			function insertTindakan(){
+
+				var post_url = '".BASE_URL."borang/insertTindakanPTKL';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#tindakan').serialize(),
+					success:function(response){
+						if(response == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan tindakan ini.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Tindakan telah berjaya disimpan.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+			}
+
+			$('button#simpan').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				insertTindakan();
+			});
+		</script>";
+
 		$data = $this->model->getByID('ptkl_2', $id);
+		$tindakan = $this->model->getSingleByID('tindakan', 'borang_id', $id);
 
 		$header = $this->loadView('header');
 		$navigation = $this->loadView('topbar');
@@ -377,11 +466,117 @@ class Borang extends Controller {
         $template = $this->loadView('borang/view-ptkl-2');
 
 		$header->set('custom_css', $custom_css);
+		$header->set('css', $this->css);
+		$template->set('data', $data);
+		$template->set('tindakan', $tindakan);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function cetak_ptkl_2($id)
+	{
+		$custom_css = "<style>
+		@media print {
+		    .printable {
+		        background-color: white;
+		        height: 100%;
+		        width: 100%;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        margin: 0;
+		        padding: 15px;
+		        font-size: 14px;
+		        line-height: 18px;
+		    }
+		}
+		</style>";
+
+		$data = $this->model->getByID('ptkl_2', $id);
+
+		$header = $this->loadView('header-print');
+		$footer = $this->loadView('footer-print');
+        $template = $this->loadView('borang/cetak-ptkl-2');
+
+		$header->set('custom_css', $custom_css);
 		$template->set('data', $data);
 		$template->set('helper', $this->loadHelper('upload_helper'));
 		
 		$header->render();
-		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function cetak_pskl($id)
+	{
+		$custom_css = "<style>
+		@media print {
+		    .printable {
+		        background-color: white;
+		        height: 100%;
+		        width: 100%;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        margin: 0;
+		        padding: 15px;
+		        font-size: 14px;
+		        line-height: 18px;
+		    }
+		}
+		.square {
+			height: 20px;
+			width: 20px;
+			border: 1px solid grey;
+		}
+		.square-check{
+			padding-left: 20px;
+		}
+		</style>";
+
+		$custom_js = "<script>
+    		var get_matlamat = '".$id."';
+
+    		function getMatlamat()
+			{
+				var get_url = '".BASE_URL."borang/getMatlamat/".$id."';
+				var get_data = $.get(get_url, function(data, status){
+					$('#success').html(data);
+				});
+			}
+
+			getMatlamat();
+		</script>";
+
+		$header = $this->loadView('header-print');
+		$footer = $this->loadView('footer-print');
+        $template = $this->loadView('borang/cetak-pskl');
+
+		$header->set('custom_css', $custom_css);
+
+		$data = $this->model->getByID('pskl', $id);
+		$dataMatlamat = $this->model->getByID('matlamat', $id);
+		$profile = $this->a_model->getUserProfile($data[0]['user_id']);
+		$ulasan = $this->model->getByID('ulasan', $id);
+		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
+
+		$template->set('profile', $profile);
+        $template->set('data', $data);
+        $template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $id));
+        $template->set('matlamat', $dataMatlamat);
+        $template->set('ulasan', $ulasan);
+		$template->set('ulasanMatlamat', $ulasanMatlamat);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+
+		$footer->set('custom_js', $custom_js);
+		
+		$header->render();
 		$template->render();
 		$footer->render();
 	}
@@ -406,6 +601,17 @@ class Borang extends Controller {
 		</style>";
 
 		$custom_js = "<script>
+
+		$('.summernote').summernote({
+		    height: 250,
+		    minHeight: null,
+		    maxHeight: null,
+		    focus: false,
+		    toolbar: [
+				['style', ['bold', 'italic', 'underline', 'clear']],
+				['para', ['ul', 'ol']],
+			]
+		});
 
 		var select_panel = '".BASE_URL."search.php?table=panel';
 
@@ -505,15 +711,17 @@ class Borang extends Controller {
 		}
 
 		// create ulasan matlamat oleh pegawai
-		function createUlasanMatlamat(){
+		function createUlasanMatlamat(matlamat_id){
 
 			var post_url = '".BASE_URL."borang/addUlasanMatlamat';
+
+			var str = $( 'form#tambah-ulasan-matlamat-'+matlamat_id ).serialize();
 
 			$.ajax({
 				type: 'POST',
 				url: post_url,
 				dataType: 'html',
-				data: $('form#ulasan-matlamat').serialize(),
+				data: $('form#tambah-ulasan-matlamat-'+matlamat_id).serialize(),
 				success:function(response){
 					if(response == 0){
 						Swal.fire({
@@ -535,7 +743,7 @@ class Borang extends Controller {
 		}
 
 		// update ulasan matlamat oleh pegawai
-		function updateUlasanMatlamat(){
+		function updateUlasanMatlamat(ulasan_id){
 
 			var post_url = '".BASE_URL."borang/updateUlasanMatlamat';
 
@@ -543,7 +751,7 @@ class Borang extends Controller {
 				type: 'POST',
 				url: post_url,
 				dataType: 'html',
-				data: $('form#ulasan-matlamat').serialize(),
+				data: $('form#ubah-ulasan-matlamat-'+ulasan_id).serialize(),
 				success:function(response){
 					if(response == 0){
 						Swal.fire({
@@ -555,6 +763,52 @@ class Borang extends Controller {
 						Swal.fire({
 							title: 'Berjaya',
 							text: 'Ulasan dan implikasi telah berjaya dikemaskini.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+		}
+
+		var select_sesi = '".BASE_URL."search.php?table=sesi_jadual';
+
+		$('#sesi').select2({
+			placeholder: 'Pilih sesi pendengaran',
+		    ajax: {
+		        url: select_sesi,
+		        dataType: 'json',
+		        processResults: function (data) {
+		            return {
+		            	results: data
+		            };
+		        }
+		    },
+		    cache: true
+		});
+
+		// save sesi pendengaran
+		function saveSesi(){
+
+			var post_url = '".BASE_URL."borang/addSesi';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#sesi-pendengaran').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa menyimpan sesi pendengaran ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Sesi pendengaran telah berjaya ditambah.',
 							type: 'success'
 						}).then(function() {
 			                location.reload();
@@ -578,71 +832,30 @@ class Borang extends Controller {
 				updateUlasan();
 			});
 
-			$('button.load-matlamat').each(function(){
-				$(this).on('click', function(){
-
-					var borang_id = $(this).data('borang-id');
-					var borang_matlamat_id = $(this).data('borang-matlamat-id');
-					var action = $(this).data('action');
-
-					$('#borang-id').val(borang_id);
-					$('#borang-matlamat-id').val(borang_matlamat_id);
-					$('#modal-ulasan').val('');
-					$('#modal-implikasi').val('');
-
-					if(action == 'insert'){
-						$('button#tambah-ulasan-matlamat').show();
-						$('button#ubah-ulasan-matlamat').hide();
-					}else{
-						$('button#tambah-ulasan-matlamat').hide();
-						$('button#ubah-ulasan-matlamat').show();
-					}
+			$('button.tambah-ulasan-matlamat').each(function() {
+				$(this).bind('click', function (e) {
+					var matlamat_id = $(this).data('matlamat');
+					e.preventDefault();
+					$(this).attr('disabled', 'disabled');
+					createUlasanMatlamat(matlamat_id);
 				});
 			});
 
-			$('button.edit-matlamat').each(function(){
-				$(this).on('click', function(){
-
-					var id = $(this).data('id');
-					var borang_id = $(this).data('borang-id');
-					var borang_matlamat_id = $(this).data('borang-matlamat-id');
-					var ulasan = $(this).data('ulasan');
-					var implikasi = $(this).data('implikasi');
-					var action = $(this).data('action');
-
-					$('#id').val(id);
-					$('#borang-id').val(borang_id);
-					$('#borang-matlamat-id').val(borang_matlamat_id);
-					$('#modal-ulasan').val(ulasan);
-					$('#modal-implikasi').val(implikasi);
-					
-					if(action == 'update'){
-						$('button#tambah-ulasan-matlamat').hide();
-						$('button#ubah-ulasan-matlamat').show();
-					}else{
-						$('button#tambah-ulasan-matlamat').show();
-						$('button#ubah-ulasan-matlamat').hide();
-					}
+			$('button.ubah-ulasan-matlamat').each(function() {
+				$(this).bind('click', function (e) {
+					var ulasan_id = $(this).data('ulasan');
+					e.preventDefault();
+					$(this).attr('disabled', 'disabled');
+					updateUlasanMatlamat(ulasan_id);
 				});
 			});
 
-			$('button#tambah-ulasan-matlamat').bind('click', function (e) {
+			$('button#save-sesi').bind('click', function (e) {
 				e.preventDefault();
 				$(this).attr('disabled', 'disabled');
-				createUlasanMatlamat();
+				saveSesi();
 			});
 
-			$('button#ubah-ulasan-matlamat').bind('click', function (e) {
-				e.preventDefault();
-				$(this).attr('disabled', 'disabled');
-				updateUlasanMatlamat();
-			});
-
-			$('div.matlamat-box').each(function(){
-				if( $('button.edit-matlamat').length ){
-			    	$('button.load-matlamat').hide();
-				}
-			});
 		});
 
 		</script>";
@@ -660,6 +873,7 @@ class Borang extends Controller {
 		$header->set('custom_css', $custom_css);
 		$header->set('css', $this->css);
 		$template->set('data', $data);
+		$template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $id));
 		$template->set('matlamat', $matlamat);
 		$template->set('ulasan', $ulasan);
 		$template->set('ulasanMatlamat', $ulasanMatlamat);
@@ -691,6 +905,17 @@ class Borang extends Controller {
 			}).on('form:submit', function() {
 				return;
 			});
+		});
+
+		$('.summernote').summernote({
+		    height: 250,
+		    minHeight: null,
+		    maxHeight: null,
+		    focus: false,
+		    toolbar: [
+				['style', ['bold', 'italic', 'underline', 'clear']],
+				['para', ['ul', 'ol']],
+			]
 		});
 
 		if(currentLng == 'my'){
@@ -1004,6 +1229,30 @@ class Borang extends Controller {
 				'controller' => 'Borang',
 				'function' => 'addPegawai',
 				'action' => 'Add new officer name'
+			);
+			$log->add($data2);
+			return $add;
+		}
+	}
+
+	function addSesi()
+	{
+		if(isset($_POST['sesi_id'])){
+			
+			$data = array(
+				'sesi_id' => $_POST['sesi_id'],
+				'borang_id' => $_POST['borang_id']
+			);
+
+			$add = $this->model->addSesi($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'addSesi',
+				'action' => 'Add borang_id '.$_POST['borang_id'].' into sessi #'.$_POST['sesi_id']
 			);
 			$log->add($data2);
 			return $add;
@@ -1346,8 +1595,8 @@ class Borang extends Controller {
 						'kategori' => $this->filter->sanitize($_POST['kategori']),
 						'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
 						'jumlah_nama' => $this->filter->sanitize($_POST['jumlah_nama']),
-						'komen_bentuk_kandungan' => $this->filter->sanitize($_POST['komen_bentuk_kandungan']),
-						'komen_lain_lain' => $this->filter->sanitize($_POST['komen_lain_lain']),
+						'komen_bentuk_kandungan' => $this->filter->encodeHtml($_POST['komen_bentuk_kandungan']),
+						'komen_lain_lain' => $this->filter->encodeHtml($_POST['komen_lain_lain']),
 						'user_id' => $user_id,
 						'pegawai_id' => $pegawai_id,
 						'tarikh_terima' => Carbon::now()->toDateString(),
@@ -1445,8 +1694,8 @@ class Borang extends Controller {
 						'kategori' => $this->filter->sanitize($_POST['kategori']),
 						'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
 						'jumlah_nama' => $this->filter->sanitize($_POST['jumlah_nama']),
-						'komen_bentuk_kandungan' => $this->filter->sanitize($_POST['komen_bentuk_kandungan']),
-						'komen_lain_lain' => $this->filter->sanitize($_POST['komen_lain_lain']),
+						'komen_bentuk_kandungan' => $_POST['komen_bentuk_kandungan'],
+						'komen_lain_lain' => $_POST['komen_lain_lain'],
 						'user_id' => $user_id,
 						'pegawai_id' => $pegawai_id,
 						'tarikh_terima' => Carbon::now()->toDateString(),
@@ -1565,21 +1814,17 @@ class Borang extends Controller {
 		                <div id=\"cardCollpase-".$value['id']."\" class=\"collapse show\">
 		                    <div class=\"card-body\">
 		                        <dl class=\"row\">
-								<dt class=\"col-md-3\">Matlamat</dt>
-								<dd class=\"col-md-9\">".$value['matlamat']."</dd>
-								<dt class=\"col-md-3\">Halatuju</dt>
-								<dd class=\"col-md-9\">".$value['halatuju']."</dd>
-								<dt class=\"col-md-3\">Tindakan</dt>
-								<dd class=\"col-md-9\">".$value['tindakan']."</dd>
-								</dl>
-						        <div class=\"form-group\">
-						            <label><span data-tag=\"padangan-cadangan\"></span></label>
-						            <textarea class=\"form-control\" rows=\"5\" readonly=\"\">".$value['cadangan']."</textarea>
-						        </div>
-						        <div class=\"form-group\">
-						            <label><span data-tag=\"justifikasi\"></span></label>
-						            <textarea class=\"form-control\" rows=\"5\" readonly=\"\">".$value['justifikasi']."</textarea>
-						        </div>
+									<dt class=\"col-md-3\">Matlamat</dt>
+									<dd class=\"col-md-9\">".$value['matlamat']."</dd>
+									<dt class=\"col-md-3\">Halatuju</dt>
+									<dd class=\"col-md-9\">".$value['halatuju']."</dd>
+									<dt class=\"col-md-3\">Tindakan</dt>
+									<dd class=\"col-md-9\">".$value['tindakan']."</dd>
+							        <dt class=\"col-md-3\"><span data-tag=\"padangan-cadangan\"></span></dt>
+							        <dd class=\"col-md-9\">".$value['cadangan']."</dd>
+							        <dt class=\"col-md-3\"><span data-tag=\"justifikasi\"></span></dt>
+							        <dd class=\"col-md-9\">".$value['justifikasi']."</dd>
+						       	</dl>
 						        <button type=\"button\" data-id=\"".$value['id']."\" class=\"btn btn-danger btn-sm\" onclick=\"deleteMatlamat(".$value['id'].")\"><i class=\"mdi mdi-close\"></i> Padam</button>
 		                    </div>
 		                </div>
@@ -1593,7 +1838,6 @@ class Borang extends Controller {
 		}
 	}
 
-	// process datatable
 	function process($table)
 	{
 		$datatable = $this->loadHelper('datatable_helper');

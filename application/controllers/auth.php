@@ -99,6 +99,7 @@ class Auth extends Controller {
 				var referrer = document.referrer;
 				$(document).ready(function() {
 					$('#redirect').val(referrer);
+					$('#announcement').modal('show');
 				});
 			</script>";
 

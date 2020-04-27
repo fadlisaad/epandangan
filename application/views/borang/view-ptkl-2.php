@@ -13,7 +13,7 @@
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);"><?php echo getenv('SITE_TITLE') ?></a></li>
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Borang</a></li>
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">PBRKL 2040</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">PBRKL 2020</a></li>
                                     <li class="breadcrumb-item active">PBRKL2020/DRAF/2/<?php echo $data[0]['borang_id'] ?></li>
                                 </ol>
                             </div>
@@ -27,7 +27,7 @@
                     <div class="col-9">
                         <div class="card-box ribbon-box">
                             <div class="ribbon ribbon-primary float-right"><i class="fas fa-user"></i> <?php echo $data[0]['kategori'] ?></div>
-                            <h4 class="header-title">Bahagian A: Pandangan anda terhadap Draf Perubahan 2 PBRKL 2040</h4>
+                            <h4 class="header-title">Bahagian A: Pandangan anda terhadap Draf Perubahan 2 PBRKL 2020</h4>
                             <div class="ribbon-content">
                                 <dl class="row">
                                     <dt class="col-sm-3">Jilid Laporan</dt>
@@ -81,6 +81,7 @@
                                     <dt class="col-sm-3">No. Telefon Bimbit</dt>
                                     <dd class="col-sm-9"><?php echo ($data[0]['telefon_bimbit']) ? $data[0]['telefon_bimbit']: '-' ?></dd>
                                 </dl>
+                                <button class="btn btn-secondary" id="back">Kembali</button>
 
                             </div> <!-- end card body-->
                         </div> <!-- end card -->
@@ -147,9 +148,8 @@
                                 </div>
                             </div>
                             <div class="card-footer d-print-none">
-                                <button class="btn btn-secondary" id="back">Kembali</button>
                                 <button class="btn btn-warning" id="tindakan" data-toggle="modal" data-target="#tindakan-modal">Tindakan</button>
-                                <a class="btn btn-info" href="javascript:window.print()">Cetak</a>
+                                <a class="btn btn-info" href="<?php echo BASE_URL."borang/cetak_ptkl_2/".$data[0]['borang_id'] ?>">Cetak</a>
                             </div>
                         </div> <!-- end card-->
                         <?php endif; ?>
@@ -171,31 +171,47 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                     </div>
                     <div class="modal-body p-4">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="topik" class="control-label">Topik</label>
-                                    <input type="text" class="form-control" id="topik" value="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="zon" class="control-label">Zon Strategik</label>
-                                    <input type="text" class="form-control" id="zon" value="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="sektor" class="control-label">Sektor</label>
-                                    <input type="text" class="form-control" id="sektor" value="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="sesi" class="control-label">Sesi Pendengaran</label>
-                                    <input type="text" class="form-control" id="sesi" value="">
-                                </div>
-                                <input type="hidden" id="id" value="<?php echo $data[0]['borang_id'] ?>">
+                        <form id="tindakan" method="post">
+                            <div class="form-group row">
+                                <label for="topik" class="control-label col-md-4">Topik</label>
+                                <select class="col-md-8" name="topik_id" id="topik">
+                                    <option value="<?php echo @$tindakan[0]['topik_id'] ?>" selected><?php echo @$tindakan[0]['topik'] ?></option>
+                                </select>
                             </div>
-                        </div>
+                            <div class="form-group row">
+                                <label for="zon" class="control-label col-md-4">Zon Strategik</label>
+                                <select class="col-md-8" name="zon_id" id="zon">
+                                    <option value="<?php echo @$tindakan[0]['zon_id'] ?>" selected><?php echo @$tindakan[0]['zon'] ?></option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label for="sektor" class="control-label col-md-4">Sektor</label>
+                                <select class="col-md-8" name="sektor_id" id="sektor">
+                                    <option value="<?php echo @$tindakan[0]['sektor_id'] ?>" selected><?php echo @$tindakan[0]['sektor'] ?></option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label for="sesi" class="control-label col-md-4">Sesi Pendengaran</label>
+                                <select class="col-md-8" name="sesi_id" id="sesi">
+                                    <option value="<?php echo @$tindakan[0]['sesi_id'] ?>" selected><?php echo @$tindakan[0]['sesi'] ?></option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label for="status" class="control-label col-md-4">Status</label>
+                                <select class="col-md-8" name="status" id="status">
+                                    <option value="<?php echo @$tindakan[0]['status'] ?>" selected><?php echo @$tindakan[0]['status'] ?></option>
+                                    <option value="Diterima">Diterima</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                    <option value="Ambil maklum">Ambil Maklum</option>
+                                </select>
+                            </div>
+                            <input type="hidden" id="borang_id" name="borang_id" value="<?php echo $data[0]['borang_id'] ?>">
+                            <input type="hidden" id="pegawai_id" name="pegawai_id" value="<?php echo $_SESSION['user_id'] ?>">
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Tutup</button>
-                        <button type="button" class="btn btn-info waves-effect waves-light" data-dismiss="modal">Simpan</button>
+                        <button type="button" class="btn btn-info waves-effect waves-light" data-dismiss="modal" id="simpan">Simpan</button>
                     </div>
                 </div>
             </div>

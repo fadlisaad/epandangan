@@ -25,6 +25,16 @@ class Filter_helper {
 		return filter_var($string, FILTER_SANITIZE_STRING);
 	}
 
+	function encodeHtml($string)
+	{
+		return filter_var($string, FILTER_SANITIZE_ENCODED);
+	}
+
+	function htmlEntity($string)
+	{
+		return htmlentities($string);
+	}
+
 	function isEmail($string)
 	{
 		return filter_var($string, FILTER_VALIDATE_EMAIL);

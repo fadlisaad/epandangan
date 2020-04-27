@@ -150,7 +150,7 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="komen_bentuk_kandungan"><span data-tag="padangan-cadangan"></span></label>
-                                        <textarea id="komen_bentuk_kandungan" class="form-control" name="komen_bentuk_kandungan" rows="5" form="borang-pskl"><?php echo @$data[0]['komen_bentuk_kandungan'] ?></textarea>
+                                        <textarea id="komen_bentuk_kandungan" class="form-control summernote" name="komen_bentuk_kandungan" rows="5" form="borang-pskl"><?php echo @$data[0]['komen_bentuk_kandungan'] ?></textarea>
                                     </div>
                                 </div>
 
@@ -181,7 +181,7 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="komen_lain_lain"><span data-tag="padangan-cadangan"></label>
-                                        <textarea id="komen_lain_lain" class="form-control" name="komen_lain_lain" rows="5" form="borang-pskl"><?php echo @$data[0]['komen_lain_lain'] ?></textarea>
+                                        <textarea id="komen_lain_lain" class="form-control summernote" name="komen_lain_lain" rows="5" form="borang-pskl"><?php echo @$data[0]['komen_lain_lain'] ?></textarea>
                                     </div>
                                 </div>
 
@@ -251,7 +251,7 @@
         <!-- end wrapper -->
 
         <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel">Tambah Komen Matlamat</h4>
@@ -291,11 +291,11 @@
 
                             <div class="form-group">
                                 <label for="cadangan"><span data-tag="padangan-cadangan"></span> <span class="text-danger">*</span></label>
-                                <textarea class="form-control cadangan" name="cadangan" rows="5" form="borang-matlamat"></textarea>
+                                <textarea class="form-control cadangan summernote" name="cadangan" rows="5" form="borang-matlamat"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="justifikasi"><span data-tag="justifikasi"></span> <span class="text-danger">*</span></label>
-                                <textarea class="form-control justifikasi" name="justifikasi" rows="5" form="borang-matlamat"></textarea>
+                                <textarea class="form-control justifikasi summernote" name="justifikasi" rows="5" form="borang-matlamat"></textarea>
                             </div>
                             <input type="hidden" name="borang_id" value="<?php echo @$data[0]['borang_id'] ?>" form="borang-matlamat">
                         </form>
