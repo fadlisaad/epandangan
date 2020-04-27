@@ -32,11 +32,11 @@
                                 <dl class="row">
                                     <dt class="col-sm-3">Bentuk dan Kandungan</dt>
                                     <dd class="col-sm-9">
-                                        <pre><?php echo empty($data[0]['komen_bentuk_kandungan']) ? "Tiada komen" : $data[0]['komen_bentuk_kandungan'] ?></pre>
+                                        <pre><?php echo empty($data[0]['komen_bentuk_kandungan']) ? "Tiada komen" : urldecode(urldecode($data[0]['komen_bentuk_kandungan'])) ?></pre>
                                     </dd>
                                     <dt class="col-sm-3">Lain-lain</dt>
                                     <dd class="col-sm-9">
-                                        <pre><?php print empty($data[0]['komen_lain_lain']) ? "Tiada komen" : $data[0]['komen_lain_lain'] ?></pre>
+                                        <pre><?php print empty($data[0]['komen_lain_lain']) ? "Tiada komen" : urldecode(urldecode($data[0]['komen_lain_lain'])) ?></pre>
                                     </dd>
                                 </dl>
 

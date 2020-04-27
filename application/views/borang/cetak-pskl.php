@@ -121,11 +121,11 @@
                                 <dl>
                                     <dt>Bentuk dan Kandungan</dt>
                                     <dd>
-                                        <?php echo empty($data[0]['komen_bentuk_kandungan']) ? "Tiada komen" : $data[0]['komen_bentuk_kandungan'] ?>
+                                        <?php echo empty($data[0]['komen_bentuk_kandungan']) ? "Tiada komen" : urldecode(urldecode($data[0]['komen_bentuk_kandungan'])) ?>
                                     </dd>
                                     <dt>Lain-lain</dt>
                                     <dd>
-                                        <?php print empty($data[0]['komen_lain_lain']) ? "Tiada komen" : $data[0]['komen_lain_lain'] ?>
+                                        <?php print empty($data[0]['komen_lain_lain']) ? "Tiada komen" : urldecode(urldecode($data[0]['komen_lain_lain'])) ?>
                                     </dd>
                                 </dl>
 
