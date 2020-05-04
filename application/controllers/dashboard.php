@@ -90,6 +90,30 @@ class Dashboard extends Controller {
 			$this->redirect('dashboard');
 		}
 
+		$custom_js = "<script>
+			var base_url = '".BASE_URL."dashboard/process_dashboard';
+
+			$(document).ready(function() {
+
+    			$('#datatable').DataTable({
+    				serverSide : true,
+    				processing : true,
+    				ajax : {
+    					url : base_url,
+    					type : 'POST'
+    				},
+    				deferRender : true,
+    				error : true,
+    				columns: [
+			            { data: 'nama_penuh' },
+			            { data: 'hadir' },
+			            { data: 'matlamat' },
+			            { data: 'action' }
+			        ]
+    			});
+    		});
+		</script>"; 
+
 		$header = $this->loadView('header');
 		$topbar = $this->loadView('topbar');
         $template = $this->loadView('dashboard-admin');
@@ -99,6 +123,12 @@ class Dashboard extends Controller {
 		$template->set('countDownload', $this->model->countDownload());
 		$template->set('totalDownload', $this->model->totalDownload());
 		$template->set('countRegister', $this->model->countRegister());
+		$template->set('countHadir', $this->model->countKehadiran('Ya'));
+		$template->set('countTidakHadir', $this->model->countKehadiran('Tidak'));
+
+		$header->set('css', $this->css);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
 		
 		$header->render();
 		$topbar->render();
@@ -168,6 +198,44 @@ class Dashboard extends Controller {
 		    array( 'db' => 'jawatan', 'dt' => 'jawatan' ),
 		    array( 'db' => 'jabatan', 'dt' => 'jabatan' ),
 		    array( 'db' => 'count', 'dt' => 'count' )
+		);
+		 
+		// SQL server connection information
+		$sql_details = array(
+		    'user' => DB_USER,
+		    'pass' => DB_PASS,
+		    'db'   => DB_NAME,
+		    'host' => DB_HOST
+		);
+		 
+		$data = json_encode(
+		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+		);
+		print_r($data);
+	}
+
+	// process matlamat
+	function process_dashboard()
+	{
+		$datatable = $this->loadHelper('datatable_helper');
+
+		// DB table to use
+		$table = 'view_dashboard';
+		 
+		// Table's primary key
+		$primaryKey = 'borang_id';
+
+		$columns = array(
+		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
+		    array( 'db' => 'hadir', 'dt' => 'hadir' ),
+		    array( 'db' => 'matlamat', 'dt' => 'matlamat' ),
+		    array(
+		    	'db' => 'borang_id',
+		    	'dt' => 'action',
+		    	'formatter' => function( $d, $row ) {
+            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_pskl/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a> <a class=\"btn btn-xs btn-primary\" href=\"".BASE_URL."borang/cetak_pskl/".$d."\"><i class=\"fe-printer\"></i> Cetak</a>";
+        		}
+        	)
 		);
 		 
 		// SQL server connection information

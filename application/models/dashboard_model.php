@@ -37,5 +37,18 @@ class Dashboard_model extends Model {
 			echo $e->getMessage();
 		}
 	}
+
+	public function countKehadiran($hadir)
+	{
+		try{
+			$stm = "SELECT COUNT(borang_id) AS total FROM view_dashboard WHERE hadir = :hadir";
+			$bind = array('hadir' => $hadir);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result[0]['total'];
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
 	
 }
