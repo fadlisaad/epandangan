@@ -40,7 +40,7 @@
                                     </dd>
                                 </dl>
 
-                                <?php if($ulasan): ?>
+                                <?php if($ulasan && $_SESSION['permission'] != 'user'): ?>
                                 <hr>
                                 <h4>Ulasan Pegawai</h4>
                                 <dl class="row">
@@ -147,7 +147,7 @@
                                     <?php endforeach; ?>
                                 <?php endif;?>
                                 
-                                <?php if($ulasanLogic == false): ?>
+                                <?php if($ulasanLogic == false && $_SESSION['permission'] != 'user'): ?>
                                 <div id="<?php echo $value['id'] ?>">
                                     <hr>
                                     <h4>Tambah Ulasan Matlamat oleh Pegawai</h4>
