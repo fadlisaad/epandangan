@@ -40,7 +40,7 @@
                                             <dt class="col-sm-4">Lokasi</dt>
                                             <dd class="col-sm-8"><?php echo $sesi[0]['lokasi'] ?></dd>
                                             <dt class="col-sm-4">Tarikh</dt>
-                                            <dd class="col-sm-8"><?php echo $sesi[0]['tarikh'] ?></dd>
+                                            <dd class="col-sm-8"><?php echo $dateHelper->convertDate($sesi[0]['tarikh']) ?></dd>
                                             <dt class="col-sm-4">Slot Masa</dt>
                                             <dd class="col-sm-8"><?php echo $sesi[0]['slot_masa'] ?></dd>
                                             <dt class="col-sm-4">Keterangan</dt>
@@ -99,7 +99,7 @@
                                             <dt class="col-sm-4">Kehadiran</dt>
                                             <dd class="col-sm-8"><?php echo $data[0]['hadir'] ?></dd>
                                             <dt class="col-sm-4">Tarikh Terima</dt>
-                                            <dd class="col-sm-8"><?php echo ($data[0]['tarikh_terima']) ? $data[0]['tarikh_terima']: '-' ?></dd>
+                                            <dd class="col-sm-8"><?php echo ($data[0]['tarikh_terima']) ? $dateHelper->convertDate($data[0]['tarikh_terima']): '-' ?></dd>
                                             <dt class="col-sm-4">Jenis Borang</dt>
                                             <dd class="col-sm-8"><?php echo $data[0]['kategori'] ?></dd>
                                         </dl>
@@ -141,7 +141,7 @@
                                     <dd><?php echo empty($ulasan[0]['nama_penuh']) ? "Tiada" : $ulasan[0]['nama_penuh'] ?></dd>
 
                                     <dt>Tarikh Kemaskini</dt>
-                                    <dd><?php echo empty($ulasan[0]['last_update']) ? "Tiada" : $ulasan[0]['last_update'] ?></dd>
+                                    <dd><?php echo empty($ulasan[0]['last_update']) ? "Tiada" : $dateHelper->convertTimestamp($ulasan[0]['last_update']) ?></dd>
                                 </dl>
                                 <?php endif;?>
                             </div>
@@ -194,7 +194,7 @@
                                             <dd class="col-sm-9"><?php echo empty($value_ulasan['nama_penuh']) ? "Tiada" : $value_ulasan['nama_penuh'] ?></dd>
 
                                             <dt class="col-sm-3">Tarikh Kemaskini</dt>
-                                            <dd class="col-sm-9"><?php echo empty($value_ulasan['last_update']) ? "Tiada" : $value_ulasan['last_update'] ?></dd>
+                                            <dd class="col-sm-9"><?php echo empty($value_ulasan['last_update']) ? "Tiada" : $dateHelper->convertTimestamp($value_ulasan['last_update']) ?></dd>
                                         </dl>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
@@ -203,6 +203,28 @@
                             </div> <!-- end card body-->
                         </div> <!-- end card -->
                         <?php endforeach; endif;?>
+
+                        <div class="card-box">
+                            <div class="ribbon-content" style="font-size: 1rem !important;">
+                                <h4>Ulasan Keseluruhan Jabatan Perancangan Bandaraya</h4>
+                                <hr>
+                                <?php if($ulasanOverall): ?>
+                                <dl>
+                                    <dt>Ulasan</dt>
+                                    <dd>
+                                        <?php echo empty($ulasanOverall[0]['ringkasan']) ? "Tiada" : $ulasanOverall[0]['ringkasan'] ?>
+                                    </dd>
+                                    <dt>Nama Pegawai</dt>
+                                    <dd><?php echo empty($ulasanOverall[0]['nama_penuh']) ? "Tiada" : $ulasanOverall[0]['nama_penuh'] ?></dd>
+
+                                    <dt>Tarikh Kemaskini</dt>
+                                    <dd><?php echo empty($ulasanOverall[0]['last_update']) ? "Tiada" : $dateHelper->convertTimestamp($ulasanOverall[0]['last_update']) ?></dd>
+                                </dl>
+                                <?php else: ?>
+                                    <p>Tiada</p>
+                                <?php endif;?>
+                            </div>
+                        </div>
 
                         <div class="card bg-default d-print-none">
                             <div class="card-body" style="font-size: 1rem !important;">

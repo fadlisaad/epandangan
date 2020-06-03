@@ -53,7 +53,8 @@ class Pengguna_model extends Model {
 				'user_id' => $data['user_id'],
 			);
 			
-			return $this->pdo->fetchAffected($stm, $bind);
+			$this->pdo->fetchAffected($stm, $bind);
+			return "success";
 		}
 		catch(Exception $e){
 			return $e->getMessage();
@@ -71,10 +72,16 @@ class Pengguna_model extends Model {
 			
 			$this->pdo->fetchAffected($stm_user, $bind_user);
 
-			$stm_profile  = "UPDATE profile SET nama_penuh = :nama_penuh WHERE user_id = :user_id";
+			$stm_profile = "UPDATE profile SET nama_penuh = :nama_penuh, ic_passport = :ic_passport, alamat = :alamat, poskod = :poskod, telefon_rumah = :telefon_rumah, telefon_pejabat = :telefon_pejabat, telefon_bimbit = :telefon_bimbit WHERE user_id = :user_id";
 			$bind_profile = array(
 				'nama_penuh' => $data['nama_penuh'],
-				'user_id' => $data['user_id']
+				'ic_passport' => $data['ic_passport'],
+				'alamat' => $data['alamat'],
+				'poskod' => $data['poskod'],
+				'telefon_rumah' => $data['telefon_rumah'],
+				'telefon_pejabat' => $data['telefon_pejabat'],
+				'telefon_bimbit' => $data['telefon_bimbit'],
+				'user_id' => $data['user_id'],
 			);
 			
 			$this->pdo->fetchAffected($stm_profile, $bind_profile);

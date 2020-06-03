@@ -12,11 +12,11 @@
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>"><?php echo SITE_TITLE ?></a></li>
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Pengguna</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Akaun Saya</a></li>
                                     <li class="breadcrumb-item active">Ubah</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">Ubah Pengguna</h4>
+                            <h4 class="page-title">Ubah Akaun Saya</h4>
                         </div>
                     </div>
                 </div>     
@@ -26,7 +26,7 @@
                     <div class="col-md-9">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="card-title">Ubah Maklumat Pengguna</h3>
+                                <h3 class="card-title">Ubah Akaun Saya</h3>
                             	<!-- Content start -->
                             	<form method="post" role="form" action="<?php echo BASE_URL ?>pengguna/update" id="update-user">
                                 <div class="row">
@@ -41,19 +41,19 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="ic_passport">No kad pengenalan/passport</label>
-                                            <input type="text" name="ic_passport" class="form-control" value="<?php echo $data[0]['ic_passport'] ?>">
+                                            <input type="text" name="ic_passport" class="form-control" required value="<?php echo $data[0]['ic_passport'] ?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="alamat">Alamat</label>
-                                            <input type="text" name="alamat" class="form-control" value="<?php echo $data[0]['alamat'] ?>">
+                                            <input type="text" name="alamat" class="form-control" required value="<?php echo $data[0]['alamat'] ?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="poskod">Poskod</label>
-                                            <input type="text" name="poskod" class="form-control" value="<?php echo $data[0]['poskod'] ?>">
+                                            <input type="text" name="poskod" class="form-control" required value="<?php echo $data[0]['poskod'] ?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="telefon_bimbit">Telefon bimbit</label>
-                                            <input type="text" name="telefon_bimbit" class="form-control" value="<?php echo $data[0]['telefon_bimbit'] ?>">
+                                            <input type="text" name="telefon_bimbit" class="form-control" required value="<?php echo $data[0]['telefon_bimbit'] ?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="telefon_rumah">Telefon rumah</label>
@@ -64,23 +64,11 @@
                                             <input type="text" name="telefon_pejabat" class="form-control" value="<?php echo $data[0]['telefon_pejabat'] ?>">
                                         </div>
                                     </div>
-                                    <?php if(in_array($_SESSION['permission'], array('admin','super'))): ?>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="permission">User Role</label>
-                                            <select id="permission" name="permission" class="form-control" required>
-                                                <option value="user" <?php if($data[0]['permission'] == 'user') echo "selected='selected'"; ?>>Public</option>
-                                                <option value="officer" <?php if($data[0]['permission'] == 'officer') echo "selected='selected'"; ?>>Pegawai</option>
-                                                <option value="admin" <?php if($data[0]['permission'] == 'admin') echo "selected='selected'"; ?>>Administrator</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
                                 </div>
 								<!-- Content end -->
                                 <div class="form-group m-b-0">
                                     <input type="hidden" name="user_id" value="<?php echo $data[0]['user_id'] ?>">
-                                    <input type="hidden" name="type" value="admin">
+                                    <input type="hidden" name="type" value="user">
                                     <button type="submit" class="btn btn-primary waves-effect waves-light m-b-5">Kemaskini</button>
                                     <button type="button" class="btn btn-warning waves-effect waves-light m-b-5" id="back">Batal</button>
                                 </div>

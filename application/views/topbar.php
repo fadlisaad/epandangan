@@ -26,15 +26,9 @@
                             <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                 
                                 <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <a href="<?php echo BASE_URL.'pengguna/profile/'.$_SESSION['user_id'] ?>" class="dropdown-item notify-item">
                                     <i class="fe-user"></i>
                                     <span data-tag="akaun-saya"></span>
-                                </a>
-                
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="fe-settings"></i>
-                                    <span data-tag="tetapan"></span>
                                 </a>
                 
                                 <div class="dropdown-divider"></div>

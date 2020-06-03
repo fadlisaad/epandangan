@@ -30,7 +30,9 @@ class Dashboard extends Controller {
 			'assets/libs/pdfmake/vfs_fonts.js',
 			'assets/js/pages/datatables.init.js',
 			'assets/libs/rwd-table/rwd-table.min.js',
-			'assets/js/pages/responsive-table.init.js'
+			'assets/js/pages/responsive-table.init.js',
+			'assets/libs/morris-js/morris-js.min.js',
+			'assets/libs/raphael/raphael.min.js'
 		);
 
 		if(empty($this->session->get('loggedin'))){
@@ -92,6 +94,7 @@ class Dashboard extends Controller {
 
 		$custom_js = "<script>
 			var base_url = '".BASE_URL."dashboard/process_dashboard';
+			var lang_url = '".BASE_URL."languages/dataTables.my.json';
 
 			$(document).ready(function() {
 
@@ -109,8 +112,22 @@ class Dashboard extends Controller {
 			            { data: 'hadir' },
 			            { data: 'matlamat' },
 			            { data: 'action' }
-			        ]
+			        ],
+			        language : {
+		                url: lang_url
+		            }
     			});
+    		});
+
+    		$(function () {
+    			Morris.Donut({
+			    	element: 'kehadiran',
+			    	data: [
+						{label: 'Ya', value: ".$this->model->countKehadiran('Ya').", color: '#1abc9c'},
+						{label: 'Tidak', value: ".$this->model->countKehadiran('Tidak').", color: '#f1556c' }
+			    	],
+			    	formatter: function (y) { return y + \" orang\" }
+			  	});
     		});
 		</script>"; 
 

@@ -39,6 +39,32 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function getPenilaianByID($table, $id)
+	{
+		try{
+			$stm  = "SELECT * FROM view_".$table." WHERE id = :id";
+			$bind = array('id' => $id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
+	public function checkPenilaianByID($table, $borang_id)
+	{
+		try{
+			$stm  = "SELECT * FROM ".$table." WHERE borang_id = :borang_id";
+			$bind = array('borang_id' => $borang_id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function getSingleByID($table, $id, $id_name)
 	{
 		try{
@@ -172,6 +198,25 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function addBorangMatlamatPegawai($data)
+	{
+		try{
+			$stm = "INSERT INTO pskl_borang_matlamat_pegawai (borang_id, pskl_borang_matlamat_id, matlamat_id, halatuju_id, tindakan_id) VALUES (:borang_id, :pskl_borang_matlamat_id, :matlamat_id, :halatuju_id, :tindakan_id)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'pskl_borang_matlamat_id' => $data['pskl_borang_matlamat_id'],
+				'matlamat_id' => $data['matlamat_id'],
+				'halatuju_id' => $data['halatuju_id'],
+				'tindakan_id' => $data['tindakan_id']
+			);
+			
+			return $this->pdo->fetchAffected($stm, $bind);
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
 	public function addTindakan($data)
 	{
 		try{
@@ -277,10 +322,75 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function addPenilaian($data)
+	{
+		try{
+			$stm  = "INSERT INTO pskl_penilaian (borang_id, kriteria) VALUES (:borang_id, :kriteria)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'kriteria' => $data['kriteria']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function updatePenilaian($data)
+	{
+		try{
+			$stm  = "UPDATE pskl_penilaian SET borang_id = :borang_id, kriteria = :kriteria, pandangan = :pandangan, matlamat_id = :matlamat, halatuju_id = :halatuju, tindakan_id = :tindakan, muka_surat = :muka_surat, ulasan_pandangan = :ulasan_pandangan, cadangan = :cadangan, ulasan_cadangan = :ulasan_cadangan, pengesyoran = :pengesyoran, sedia_id = :sedia_id WHERE id = :id";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'kriteria' => $data['kriteria'],
+				'pandangan' => $data['pandangan'],
+				'matlamat' => $data['matlamat'],
+				'halatuju' => $data['halatuju'],
+				'tindakan' => $data['tindakan'],
+				'muka_surat' => $data['muka_surat'],
+				'ulasan_pandangan' => $data['ulasan_pandangan'],
+				'cadangan' => $data['cadangan'],
+				'ulasan_cadangan' => $data['ulasan_cadangan'],
+				'pengesyoran' => $data['pengesyoran'],
+				'sedia_id' => $data['sedia_id'],
+				'id' => $data['id']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function addUlasan($data)
 	{
 		try{
 			$stm  = "INSERT INTO ulasan (borang_id, user_id, ringkasan) VALUES (:borang_id, :user_id, :ringkasan)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'user_id' => $data['user_id'],
+				'ringkasan' => $data['ringkasan']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function addUlasanKeseluruhan($data)
+	{
+		try{
+			$stm  = "INSERT INTO ulasan_keseluruhan (borang_id, user_id, ringkasan) VALUES (:borang_id, :user_id, :ringkasan)";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
 				'user_id' => $data['user_id'],
@@ -337,6 +447,26 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function updateUlasanKeseluruhan($data)
+	{
+		try{
+			$stm  = "UPDATE ulasan_keseluruhan SET borang_id = :borang_id, user_id = :user_id, ringkasan = :ringkasan WHERE id = :id";
+			$bind = array(
+				'id' => $data['id'],
+				'borang_id' => $data['borang_id'],
+				'user_id' => $data['user_id'],
+				'ringkasan' => $data['ringkasan']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
 	public function updateUlasanMatlamat($data)
 	{
 		try{
@@ -348,6 +478,26 @@ Class Borang_model extends Model {
 				'user_id' => $data['user_id'],
 				'ulasan' => $data['ulasan'],
 				'implikasi' => $data['implikasi']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function updateMatlamatPegawai($data)
+	{
+		try{
+			$stm  = "UPDATE pskl_borang_matlamat_pegawai SET matlamat_id = :matlamat_id, halatuju_id = :halatuju_id, tindakan_id = :tindakan_id WHERE id = :id";
+			$bind = array(
+				'id' => $data['id'],
+				'matlamat_id' => $data['matlamat_id'],
+				'halatuju_id' => $data['halatuju_id'],
+				'tindakan_id' => $data['tindakan_id']
 			);
 			
 			$this->pdo->fetchAffected($stm, $bind);

@@ -39,6 +39,19 @@ Class Laporan_model extends Model {
 		}
 	}
 
+	public function countMatlamat($matlamat_id)
+	{
+		try{
+			$stm = "SELECT COUNT('matlamat_id') as total FROM view_matlamat_vs_user WHERE matlamat_id = :matlamat_id";
+			$bind = array('matlamat_id' => $matlamat_id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function update($data)
 	{
 		try{

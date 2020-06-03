@@ -224,7 +224,18 @@ class Pengguna extends Controller {
 		$header = $this->loadView('header');
 		$navigation = $this->loadView('topbar');
 		$footer = $this->loadView('footer');
-        $template = $this->loadView('pengguna/edit');
+
+		switch ($_SESSION['permission']) {
+			case 'super':
+				$template = $this->loadView('pengguna/edit');
+				break;
+			case 'admin':
+				$template = $this->loadView('pengguna/edit');
+				break;
+			default:
+				$template = $this->loadView('pengguna/ubah');
+				break;
+		}
 
 		$header->set('css', $css);
 		$footer->set('js', $js);
@@ -241,25 +252,38 @@ class Pengguna extends Controller {
 	{
 		if(isset($_POST)){
 
-			$data = array(
-				'user_id' => $_POST['user_id'],
-				'nama_penuh' => $_POST['nama_penuh'],
-				'email' => $this->filter->isEmail($_POST['email']),
-				'permission' => $_POST['permission']
-			);
-
-			$this->model->updateUser($data);
+			$data = [];
+			$data['user_id'] = $_POST['user_id'];
+			$data['nama_penuh'] = $_POST['nama_penuh'];
+			$data['email'] = $this->filter->isEmail($_POST['email']);
+			$data['ic_passport'] = $_POST['ic_passport'];
+			$data['alamat'] = $_POST['alamat'];
+			$data['poskod'] = $_POST['poskod'];
+			$data['telefon_rumah'] = $_POST['telefon_rumah'];
+			$data['telefon_pejabat'] = $_POST['telefon_pejabat'];
+			$data['telefon_bimbit'] = $_POST['telefon_bimbit'];
 
 			$log = $this->loadHelper('log_helper');
 			$log_data = array(
 				'user_id' => $this->session->get('user_id'),
 				'controller' => 'User',
 				'function' => 'update',
-				'action' => 'Update user '.$_POST['full_name']
+				'action' => 'Update user '.$_POST['nama_penuh']
 			);
 			$log->add($log_data);
 
-			$this->redirect('pengguna/index');
+			switch ($_POST['type']) {
+				case 'admin':
+					$data['permission'] = $_POST['permission'];
+					$sql=$this->model->updateUser($data);
+					$this->redirect('pengguna/index');
+					break;
+				
+				default:
+					$sql=$this->model->updateProfile($data);
+					$this->redirect('pengguna/profile/'.$_POST['user_id']);
+					break;
+			}
 			
 		}else{
 			die('Error: Unable to update the record.');
@@ -269,7 +293,7 @@ class Pengguna extends Controller {
 	public function profile($id)
 	{
 		$header = $this->loadView('header');
-		$navigation = $this->loadView('navigation');
+		$navigation = $this->loadView('topbar');
 		$footer = $this->loadView('footer');
         $template = $this->loadView('pengguna/profile');
 		$template->set('user', $this->model->listSingle($id));

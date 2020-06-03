@@ -564,6 +564,7 @@ class Borang extends Controller {
 		$dataMatlamat = $this->model->getByID('matlamat', $id);
 		$profile = $this->a_model->getUserProfile($data[0]['user_id']);
 		$ulasan = $this->model->getByID('ulasan', $id);
+		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
 		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
 
 		$template->set('profile', $profile);
@@ -571,8 +572,10 @@ class Borang extends Controller {
         $template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $id));
         $template->set('matlamat', $dataMatlamat);
         $template->set('ulasan', $ulasan);
+        $template->set('ulasanOverall', $ulasanOverall);
 		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('helper', $this->loadHelper('upload_helper'));
+		$template->set('dateHelper', $this->loadHelper('date_helper'));
 
 		$footer->set('custom_js', $custom_js);
 		
@@ -710,6 +713,67 @@ class Borang extends Controller {
 		    });
 		}
 
+		// tambah ulasan keseluruhan oleh pegawai
+		function createUlasanKeseluruhan(){
+
+			var post_url = '".BASE_URL."borang/addUlasanKeseluruhan';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#ulasan-keseluruhan').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa menyimpan ulasan keseluruhan ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Ulasan keseluruhan telah berjaya ditambah.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+
+		}
+
+		// update ulasan keseluruhan oleh pegawai
+		function updateUlasanKeseluruhan(){
+
+			var post_url = '".BASE_URL."borang/updateUlasanKeseluruhan';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#ulasan-keseluruhan').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa mengemaskini ulasan keseluruhan ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Ulasan keseluruhan telah berjaya dikemaskini.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+		}
+
 		// create ulasan matlamat oleh pegawai
 		function createUlasanMatlamat(matlamat_id){
 
@@ -818,6 +882,48 @@ class Borang extends Controller {
 		    });
 		}
 
+		// create penilaian
+		function createPenilaian(){
+
+			var post_url = '".BASE_URL."borang/addPenilaian';
+
+			$.ajax({
+				type: 'POST',
+				url: post_url,
+				dataType: 'html',
+				data: $('form#penilaian').serialize(),
+				success:function(response){
+					if(response == 0){
+						Swal.fire({
+							title: 'Ralat',
+							text: 'Terdapat ralat semasa mencipta penilaian ini.',
+							type: 'warning'
+						});
+					}else{
+						Swal.fire({
+							title: 'Berjaya',
+							text: 'Penilaian telah berjaya ditambah.',
+							type: 'success'
+						}).then(function() {
+			                location.reload();
+			            });
+					}
+				}
+		    });
+		}
+
+		var get_matlamat = '".$id."';
+
+		function getMatlamatPegawai()
+		{
+			var get_url = '".BASE_URL."borang/getMatlamatPegawai/".$id."';
+			var get_data = $.get(get_url, function(data, status){
+				$('#success').html(data);
+			});
+		}
+
+		getMatlamatPegawai();
+
 		$(document).ready(function(){
 
 			$('button#save-ulasan').bind('click', function (e) {
@@ -830,6 +936,18 @@ class Borang extends Controller {
 				e.preventDefault();
 				$(this).attr('disabled', 'disabled');
 				updateUlasan();
+			});
+
+			$('button#save-ulasan-keseluruhan').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				createUlasanKeseluruhan();
+			});
+
+			$('button#update-ulasan-keseluruhan').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updateUlasanKeseluruhan();
 			});
 
 			$('button.tambah-ulasan-matlamat').each(function() {
@@ -856,6 +974,12 @@ class Borang extends Controller {
 				saveSesi();
 			});
 
+			$('button#save-penilaian').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				createPenilaian();
+			});
+
 		});
 
 		</script>";
@@ -863,7 +987,9 @@ class Borang extends Controller {
 		$data = $this->model->getByID('pskl', $id);
 		$matlamat = $this->model->getByID('matlamat', $id);
 		$ulasan = $this->model->getByID('ulasan', $id);
+		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
 		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
+		$matlamatPegawai = $this->model->getByID('matlamat_pegawai', $id);
 
 		$header = $this->loadView('header');
 		$navigation = $this->loadView('topbar');
@@ -872,12 +998,99 @@ class Borang extends Controller {
 
 		$header->set('custom_css', $custom_css);
 		$header->set('css', $this->css);
+
 		$template->set('data', $data);
 		$template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $id));
+		$template->set('penilaian', $this->model->checkPenilaianByID('pskl_penilaian', $id));
 		$template->set('matlamat', $matlamat);
 		$template->set('ulasan', $ulasan);
+		$template->set('ulasanOverall', $ulasanOverall);
 		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('helper', $this->loadHelper('upload_helper'));
+		$template->set('dateHelper', $this->loadHelper('date_helper'));
+
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function penilaian($id)
+	{
+		$easyCSRF = new EasyCSRF\EasyCSRF($this->session);
+
+		# generate token
+		$token = $easyCSRF->generate('token');
+
+		$data = $this->model->getPenilaianByID('penilaian', $id);
+		$kriteria = $data[0]['kriteria'];
+
+		$custom_js = "<script>
+
+		var kriteria = '".$kriteria."';
+
+		if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+			$('#rujukan,#cadangan-box').show();
+		}else{
+			$('#rujukan,#cadangan-box').hide();
+		}
+
+		$('.summernote').summernote({
+		    height: 250,
+		    minHeight: null,
+		    maxHeight: null,
+		    focus: false,
+		    toolbar: [
+				['style', ['bold', 'italic', 'underline', 'clear']],
+				['para', ['ul', 'ol']],
+			]
+		});
+
+		$('.halatuju').chained('.matlamat');
+		$('.tindakan').chained('.halatuju');
+
+		$(document).ready(function(){
+
+			$('select#kriteria').on('change', function(){
+
+				var kriteria = $(this).val();
+
+				if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+					$('#rujukan,#cadangan-box').slideDown();
+				}else{
+					$('#rujukan,#cadangan-box').slideUp();
+				}
+			});
+
+		});
+
+		</script>";
+
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('borang/penilaian-pskl');
+
+		$header->set('css', $this->css);
+
+		$template->set('data', $data);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+		$template->set('dateHelper', $this->loadHelper('date_helper'));
+		
+		# dropdown chain select
+    	$matlamat = $this->model->getDropdown('pskl_matlamat');
+    	$halatuju = $this->model->getDropdown('pskl_halatuju');
+    	$tindakan = $this->model->getDropdown('pskl_tindakan');
+
+    	$template->set('matlamat', $matlamat);
+    	$template->set('halatuju', $halatuju);
+    	$template->set('tindakan', $tindakan);
+    	
+    	$template->set('token', $token);
+
 		$footer->set('js', $this->js);
 		$footer->set('custom_js', $custom_js);
 		
@@ -1259,6 +1472,104 @@ class Borang extends Controller {
 		}
 	}
 
+	function addPenilaian()
+	{
+		if(isset($_POST['borang_id'])){
+			
+			$data = array(
+				'borang_id' => $_POST['borang_id'],
+				'kriteria' => $_POST['kriteria']
+			);
+
+			$add = $this->model->addPenilaian($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'addPenilaian',
+				'action' => 'Add borang_id '.$_POST['borang_id'].' into addPenilaian'
+			);
+			$log->add($data2);
+			return $add;
+		}
+	}
+
+	function updatePenilaian()
+	{
+		$easyCSRF = new EasyCSRF\EasyCSRF($this->session);
+
+		try{
+			$easyCSRF->check('token', $_POST['token']);
+		}catch(Exception $e){
+			$msg = array(
+				'error_msg' => $e->getMessage(),
+				'error_url' => BASE_URL.'borang/penilaian/'.$_POST['borang_id'],
+				'error_type' => 'danger',
+				'error_title' => 'Security Error!'
+			);
+		}
+
+		if(isset($_POST['borang_id'])){
+
+			$this->filter = $this->loadHelper('Filter_helper');
+			
+			$data = array(
+				'borang_id' => $this->filter->isInt($_POST['borang_id']),
+				'kriteria' => $this->filter->sanitize($_POST['kriteria']),
+				'pandangan' => $this->filter->sanitize($_POST['pandangan']),
+				'matlamat' => $this->filter->isInt($_POST['matlamat']),
+				'halatuju' => $this->filter->isInt($_POST['halatuju']),
+				'tindakan' => $this->filter->isInt($_POST['tindakan']),
+				'muka_surat' => $this->filter->isInt($_POST['muka_surat']),
+				'ulasan_pandangan' => $this->filter->sanitize($_POST['ulasan_pandangan']),
+				'cadangan' => $this->filter->sanitize($_POST['cadangan']),
+				'ulasan_cadangan' => $this->filter->sanitize($_POST['ulasan_cadangan']),
+				'pengesyoran' => $this->filter->sanitize($_POST['pengesyoran']),
+				'sedia_id' => $this->filter->isInt($_POST['sedia_id']),
+				'id' => $this->filter->isInt($_POST['id'])
+			);
+
+			try{
+				$this->model->updatePenilaian($data);
+				$msg = array(
+					'error_msg' => 'Maklumat penilaian borang pandangan awam ini telah berjaya disimpan.',
+					'error_url' => BASE_URL.'borang/penilaian/'.$_POST['id'],
+					'error_type' => 'success',
+					'error_title' => 'Laporan berjaya disimpan'
+				);
+			}catch(Exception $e){
+				$msg = array(
+					'error_msg' => 'Tiada maklumat laporan pandangan awam diterima. Sila cuba semula. Error:'.$e,
+					'error_url' => BASE_URL.'borang/penilaian/'.$_POST['id'],
+					'error_type' => 'danger',
+					'error_title' => 'Tiada maklumat disimpan'
+				);
+			}
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'updatePenilaian',
+				'action' => 'Update borang penilaian #'.$_POST['id'].''
+			);
+
+			$log->add($data2);
+		}
+
+		$header = $this->loadView('auth-header');
+		$footer = $this->loadView('auth-footer');
+        $template = $this->loadView('error/notification');
+		$template->set('data', $msg);
+
+		$header->render();
+		$template->render();
+		$footer->render();
+	}
+
 	function addUlasan()
 	{
 		if(isset($_POST['ringkasan'])){
@@ -1278,6 +1589,32 @@ class Borang extends Controller {
 				'controller' => 'Borang',
 				'function' => 'addUlasan',
 				'action' => 'Tambah ulasan borang '.$_POST['borang_id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}
+	}
+
+	function addUlasanKeseluruhan()
+	{
+		if(isset($_POST['ringkasan'])){
+			
+			$data = array(
+				'borang_id' => $_POST['borang_id'],
+				'user_id' => $_POST['user_id'],
+				'ringkasan' => $_POST['ringkasan']
+			);
+
+			$add = $this->model->addUlasanKeseluruhan($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'addUlasanKeseluruhan',
+				'action' => 'Tambah ulasan keseluruhan borang '.$_POST['borang_id']
 			);
 			$log->add($data2);
 
@@ -1340,6 +1677,33 @@ class Borang extends Controller {
 		}
 	}
 
+	function updateUlasanKeseluruhan()
+	{
+		if(isset($_POST['ringkasan'])){
+			
+			$data = array(
+				'id' => $_POST['id'],
+				'borang_id' => $_POST['borang_id'],
+				'user_id' => $_POST['user_id'],
+				'ringkasan' => $_POST['ringkasan']
+			);
+
+			$add = $this->model->updateUlasanKeseluruhan($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'updateUlasanKeseluruhan',
+				'action' => 'Kemaskini ulasan keseluruhan borang '.$_POST['borang_id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}
+	}
+
 	function updateUlasanMatlamat()
 	{
 		if(isset($_POST['id'])){
@@ -1366,6 +1730,35 @@ class Borang extends Controller {
 			$log->add($data2);
 
 			return $add;
+		}
+	}
+
+	function updateMatlamatPegawai()
+	{
+		if(isset($_POST['id'])){
+			
+			$data = array(
+				'id' => $_POST['id'],
+				'matlamat_id' => $_POST['matlamat'],
+				'halatuju_id' => $_POST['halatuju'],
+				'tindakan_id' => $_POST['tindakan']
+			);
+
+			$add = $this->model->updateMatlamatPegawai($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'updateMatlamatPegawai',
+				'action' => 'Kemaskini matlamat pegawai #ID '.$_POST['id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}else{
+			echo "failed";
 		}
 	}
 
@@ -1792,6 +2185,23 @@ class Borang extends Controller {
 		$this->model->addBorangMatlamat($dataBorangMatlamat);
 	}
 
+	function addMatlamatPegawai()
+	{
+		if(isset($_POST['borang_id'])){
+			$dataBorangMatlamat = array(
+				'borang_id' => $_POST['borang_id'],
+				'pskl_borang_matlamat_id' => $_POST['pskl_borang_matlamat_id'],
+				'matlamat_id' => $_POST['matlamat'],
+				'halatuju_id' => $_POST['halatuju'],
+				'tindakan_id' => $_POST['tindakan']
+			);
+		}else{
+			#
+		}
+
+		$this->model->addBorangMatlamatPegawai($dataBorangMatlamat);
+	}
+
 	function deleteMatlamat()
 	{
 		return $this->model->deleteMatlamat($_POST['id']);
@@ -1824,6 +2234,43 @@ class Borang extends Controller {
 							        <dd class=\"col-md-9\">".$value['cadangan']."</dd>
 							        <dt class=\"col-md-3\"><span data-tag=\"justifikasi\"></span></dt>
 							        <dd class=\"col-md-9\">".$value['justifikasi']."</dd>
+						       	</dl>
+						        <button type=\"button\" data-id=\"".$value['id']."\" class=\"btn btn-danger btn-sm\" onclick=\"deleteMatlamat(".$value['id'].")\"><i class=\"mdi mdi-close\"></i> Padam</button>
+		                    </div>
+		                </div>
+		            </div>";
+		    	}
+		    }else{
+		    	echo "No response";
+		    }
+		}else{
+			echo "<div class=\"alert alert-info\">Sila simpan dahulu borang ini sebelum menambah komen matlamat.</div>";
+		}
+	}
+
+	function getMatlamatPegawai($borang_id = NULL)
+	{
+		if($borang_id){
+			$matlamat = $this->model->getByID('matlamat_pegawai', $borang_id);
+
+			if(is_array($matlamat)){
+				foreach ($matlamat as $value){
+					echo "<div class=\"card\" id=\"matlamat-".$value['id']."\">
+		                <div class=\"card-header bg-dark py-3 text-white\">
+		                    <div class=\"card-widgets\">
+		                        <a data-toggle=\"collapse\" href=\"#cardCollpase-".$value['id']."\" role=\"button\" aria-controls=\"cardCollpase2\"><i class=\"mdi mdi-minus\"></i></a>
+		                    </div>
+		                    <h5 class=\"card-title mb-0 text-white\">Matlamat #".$value['id']."</h5>
+		                </div>
+		                <div id=\"cardCollpase-".$value['id']."\" class=\"collapse show\">
+		                    <div class=\"card-body\">
+		                        <dl class=\"row\">
+									<dt class=\"col-md-3\">Matlamat</dt>
+									<dd class=\"col-md-9\">".$value['matlamat']."</dd>
+									<dt class=\"col-md-3\">Halatuju</dt>
+									<dd class=\"col-md-9\">".$value['halatuju']."</dd>
+									<dt class=\"col-md-3\">Tindakan</dt>
+									<dd class=\"col-md-9\">".$value['tindakan']."</dd>
 						       	</dl>
 						        <button type=\"button\" data-id=\"".$value['id']."\" class=\"btn btn-danger btn-sm\" onclick=\"deleteMatlamat(".$value['id'].")\"><i class=\"mdi mdi-close\"></i> Padam</button>
 		                    </div>
