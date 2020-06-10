@@ -586,6 +586,13 @@ class Borang extends Controller {
 
 	function papar_pskl($id)
 	{
+		$data = $this->model->getByID('pskl', $id);
+		$matlamat = $this->model->getByID('matlamat', $id);
+		$ulasan = $this->model->getByID('ulasan', $id);
+		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
+		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
+		$matlamatPegawai = $this->model->getByID('matlamat_pegawai', $id);
+
 		$custom_css = "<style>
 		@media print {
 		    .printable {
@@ -684,7 +691,7 @@ class Borang extends Controller {
 		}
 
 		// update ulasan oleh pegawai
-		function updateUlasan(){
+		function updateUlasan(ulasan_id){
 
 			var post_url = '".BASE_URL."borang/updateUlasan';
 
@@ -692,7 +699,7 @@ class Borang extends Controller {
 				type: 'POST',
 				url: post_url,
 				dataType: 'html',
-				data: $('form#ulasan').serialize(),
+				data: $('form#ulasan-'+ulasan_id).serialize(),
 				success:function(response){
 					if(response == 0){
 						Swal.fire({
@@ -882,33 +889,40 @@ class Borang extends Controller {
 		    });
 		}
 
-		// create penilaian
-		function createPenilaian(){
-
-			var post_url = '".BASE_URL."borang/addPenilaian';
-
-			$.ajax({
-				type: 'POST',
-				url: post_url,
-				dataType: 'html',
-				data: $('form#penilaian').serialize(),
-				success:function(response){
-					if(response == 0){
-						Swal.fire({
-							title: 'Ralat',
-							text: 'Terdapat ralat semasa mencipta penilaian ini.',
-							type: 'warning'
-						});
-					}else{
-						Swal.fire({
-							title: 'Berjaya',
-							text: 'Penilaian telah berjaya ditambah.',
-							type: 'success'
-						}).then(function() {
-			                location.reload();
-			            });
-					}
-				}
+		function deleteUlasanMatlamat(id)
+		{
+			var delete_url = '".BASE_URL."borang/deleteAJAX';
+	    
+		    Swal.fire({
+		        title: 'Anda pasti?',
+		        text: 'Ulasan matlamat ini akan dipadam.',
+		        type: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#DD6B55',
+		        confirmButtonText: 'Ya, padam',
+		    }).then(function(result){
+		    	if (result.value) {
+			        $.ajax({
+			            url: delete_url,
+			            dataType: 'html',
+			            data: 'table=ulasan_matlamat&id=' + id,
+			            type: 'POST',
+			            success: function(response) {
+			            	if(parseInt(response) == 1){
+			                	Swal.fire('Berjaya!', 'Rekod ini berjaya dihapus', 'success').then((result) => {
+			                		location.reload();
+			                	});
+		                	}else{
+		                		Swal.fire('Ralat', 'Sila cuba semula', 'error');
+		                	}
+			            },
+			            error: function (xhr, ajaxOptions, thrownError) {
+			                Swal.fire('Ralat!', 'Sila cuba semula', 'error');
+			            }
+			        });
+			    }else if(result.dismiss === Swal.DismissReason.cancel) {
+			    	Swal.fire('Cancelled', 'Tiada maklumat yang dihapus', 'info');	
+			    }
 		    });
 		}
 
@@ -926,16 +940,19 @@ class Borang extends Controller {
 
 		$(document).ready(function(){
 
-			$('button#save-ulasan').bind('click', function (e) {
+			$('button.save-ulasan').bind('click', function (e) {
 				e.preventDefault();
 				$(this).attr('disabled', 'disabled');
 				createUlasan();
 			});
 
-			$('button#update-ulasan').bind('click', function (e) {
-				e.preventDefault();
-				$(this).attr('disabled', 'disabled');
-				updateUlasan();
+			$('button.update-ulasan').each(function() {
+				$(this).bind('click', function (e) {
+					var ulasan_id = $(this).data('ulasan');
+					e.preventDefault();
+					$(this).attr('disabled', 'disabled');
+					updateUlasan(ulasan_id);
+				});
 			});
 
 			$('button#save-ulasan-keseluruhan').bind('click', function (e) {
@@ -974,22 +991,121 @@ class Borang extends Controller {
 				saveSesi();
 			});
 
-			$('button#save-penilaian').bind('click', function (e) {
+			$('select.kriteria').on('change', function(){
+
+				var kriteria = $(this).val();
+
+				if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+					$('.rujukan').slideDown();
+				}else{
+					$('.rujukan').slideUp();
+				}
+			});
+
+			$('.matlamat').each(function(){
+				var id = $(this).data('id');
+				$('#halatuju-'+id).chained('#matlamat-'+id);
+				$('#tindakan-'+id).chained('#halatuju-'+id);
+			});
+
+			$('button.padam-ulasan-matlamat').bind('click', function (e) {
+				var id = $(this).data('ulasan');
 				e.preventDefault();
 				$(this).attr('disabled', 'disabled');
-				createPenilaian();
+				deleteUlasanMatlamat(id);
 			});
 
 		});
 
 		</script>";
 
-		$data = $this->model->getByID('pskl', $id);
-		$matlamat = $this->model->getByID('matlamat', $id);
-		$ulasan = $this->model->getByID('ulasan', $id);
-		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
-		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
-		$matlamatPegawai = $this->model->getByID('matlamat_pegawai', $id);
+		if($ulasan){
+
+			$kriteria = $ulasan[0]['kriteria'];
+
+			$custom_js .= "<script>
+
+				var kriteria = '".$kriteria."';
+
+				if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+					$('.rujukan').show();
+				}else{
+					$('.rujukan').hide();
+				}
+
+				function deleteUlasan(id)
+				{
+					var delete_url = '".BASE_URL."borang/deleteAJAX';
+			    
+				    Swal.fire({
+				        title: 'Anda pasti?',
+				        text: 'Ringkasan dan ulasan bentuk kandungan serta ulasan dan rujukan bagi pandangan ini akan dipadam.',
+				        type: 'warning',
+				        showCancelButton: true,
+				        confirmButtonColor: '#DD6B55',
+				        confirmButtonText: 'Ya, padam',
+				    }).then(function(result){
+				    	if (result.value) {
+					        $.ajax({
+					            url: delete_url,
+					            dataType: 'html',
+					            data: 'table=ulasan&id=' + id,
+					            type: 'POST',
+					            success: function(response) {
+					            	if(parseInt(response) == 1){
+					                	Swal.fire('Berjaya!', 'Rekod ini berjaya dihapus', 'success').then((result) => {
+					                		location.reload();
+					                	});
+				                	}else{
+				                		Swal.fire('Ralat', 'Sila cuba semula', 'error');
+				                	}
+					            },
+					            error: function (xhr, ajaxOptions, thrownError) {
+					                Swal.fire('Ralat!', 'Sila cuba semula', 'error');
+					            }
+					        });
+					    }else if(result.dismiss === Swal.DismissReason.cancel) {
+					    	Swal.fire('Cancelled', 'Tiada maklumat yang dihapus', 'info');	
+					    }
+				    });
+				}
+
+				$('button.padam-ulasan').bind('click', function (e) {
+					var id = $(this).data('ulasan');
+					e.preventDefault();
+					$(this).attr('disabled', 'disabled');
+					deleteUlasan(id);
+				});
+
+			</script>";
+		}
+
+		foreach ($ulasanMatlamat as $value) {
+
+			$id = $value['id'];
+			$kriteriaMatlamat = $value['kriteria'];
+
+			$custom_js .= "<script>
+				var kriteria_".$id." = '".$kriteriaMatlamat."';
+
+				if(kriteria_".$id." == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+					$('#rujukan-".$id."').show();
+				}else{
+					$('#rujukan-".$id."').hide();
+				}
+
+				$('select.kriteria".$id."').on('change', function(){
+
+					var kriteria".$id." = $(this).val();
+
+					if(kriteria".$id." == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+						$('#rujukan-".$id."').show();
+					}else{
+						$('#rujukan-".$id."').hide();
+					}
+				});
+			</script>";
+		}
 
 		$header = $this->loadView('header');
 		$navigation = $this->loadView('topbar');
@@ -1001,13 +1117,21 @@ class Borang extends Controller {
 
 		$template->set('data', $data);
 		$template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $id));
-		$template->set('penilaian', $this->model->checkPenilaianByID('pskl_penilaian', $id));
 		$template->set('matlamat', $matlamat);
 		$template->set('ulasan', $ulasan);
 		$template->set('ulasanOverall', $ulasanOverall);
 		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('helper', $this->loadHelper('upload_helper'));
 		$template->set('dateHelper', $this->loadHelper('date_helper'));
+
+		# dropdown chain select
+    	$matlamat_dd = $this->model->getDropdown('pskl_matlamat');
+    	$halatuju_dd = $this->model->getDropdown('pskl_halatuju');
+    	$tindakan_dd = $this->model->getDropdown('pskl_tindakan');
+
+    	$template->set('matlamat_dd', $matlamat_dd);
+    	$template->set('halatuju_dd', $halatuju_dd);
+    	$template->set('tindakan_dd', $tindakan_dd);
 
 		$footer->set('js', $this->js);
 		$footer->set('custom_js', $custom_js);
@@ -1020,82 +1144,25 @@ class Borang extends Controller {
 
 	function penilaian($id)
 	{
-		$easyCSRF = new EasyCSRF\EasyCSRF($this->session);
+		$data = $this->model->getByID('pskl', $id);
+		$matlamat = $this->model->getByID('matlamat', $id);
+		$ulasan = $this->model->getByID('ulasan', $id);
+		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
+		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
 
-		# generate token
-		$token = $easyCSRF->generate('token');
-
-		$data = $this->model->getPenilaianByID('penilaian', $id);
-		$kriteria = $data[0]['kriteria'];
-
-		$custom_js = "<script>
-
-		var kriteria = '".$kriteria."';
-
-		if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
-			$('#rujukan,#cadangan-box').show();
-		}else{
-			$('#rujukan,#cadangan-box').hide();
-		}
-
-		$('.summernote').summernote({
-		    height: 250,
-		    minHeight: null,
-		    maxHeight: null,
-		    focus: false,
-		    toolbar: [
-				['style', ['bold', 'italic', 'underline', 'clear']],
-				['para', ['ul', 'ol']],
-			]
-		});
-
-		$('.halatuju').chained('.matlamat');
-		$('.tindakan').chained('.halatuju');
-
-		$(document).ready(function(){
-
-			$('select#kriteria').on('change', function(){
-
-				var kriteria = $(this).val();
-
-				if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
-					$('#rujukan,#cadangan-box').slideDown();
-				}else{
-					$('#rujukan,#cadangan-box').slideUp();
-				}
-			});
-
-		});
-
-		</script>";
-
-		$header = $this->loadView('header');
-		$navigation = $this->loadView('topbar');
-		$footer = $this->loadView('footer');
+		$header = $this->loadView('header-print');
+		$footer = $this->loadView('footer-print');
         $template = $this->loadView('borang/penilaian-pskl');
 
-		$header->set('css', $this->css);
-
 		$template->set('data', $data);
+		$template->set('matlamat', $matlamat);
+		$template->set('ulasan', $ulasan);
+		$template->set('ulasanOverall', $ulasanOverall);
+		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('helper', $this->loadHelper('upload_helper'));
 		$template->set('dateHelper', $this->loadHelper('date_helper'));
-		
-		# dropdown chain select
-    	$matlamat = $this->model->getDropdown('pskl_matlamat');
-    	$halatuju = $this->model->getDropdown('pskl_halatuju');
-    	$tindakan = $this->model->getDropdown('pskl_tindakan');
-
-    	$template->set('matlamat', $matlamat);
-    	$template->set('halatuju', $halatuju);
-    	$template->set('tindakan', $tindakan);
-    	
-    	$template->set('token', $token);
-
-		$footer->set('js', $this->js);
-		$footer->set('custom_js', $custom_js);
-		
+ 
 		$header->render();
-		$navigation->render();
 		$template->render();
 		$footer->render();
 	}
@@ -1517,16 +1584,16 @@ class Borang extends Controller {
 			
 			$data = array(
 				'borang_id' => $this->filter->isInt($_POST['borang_id']),
-				'kriteria' => $this->filter->sanitize($_POST['kriteria']),
-				'pandangan' => $this->filter->sanitize($_POST['pandangan']),
+				'kriteria' => $_POST['kriteria'],
+				'pandangan' => $_POST['pandangan'],
 				'matlamat' => $this->filter->isInt($_POST['matlamat']),
 				'halatuju' => $this->filter->isInt($_POST['halatuju']),
 				'tindakan' => $this->filter->isInt($_POST['tindakan']),
 				'muka_surat' => $this->filter->isInt($_POST['muka_surat']),
-				'ulasan_pandangan' => $this->filter->sanitize($_POST['ulasan_pandangan']),
-				'cadangan' => $this->filter->sanitize($_POST['cadangan']),
-				'ulasan_cadangan' => $this->filter->sanitize($_POST['ulasan_cadangan']),
-				'pengesyoran' => $this->filter->sanitize($_POST['pengesyoran']),
+				'ulasan_pandangan' => $_POST['ulasan_pandangan'],
+				'cadangan' => $_POST['cadangan'],
+				'ulasan_cadangan' => $_POST['ulasan_cadangan'],
+				'pengesyoran' => $_POST['pengesyoran'],
 				'sedia_id' => $this->filter->isInt($_POST['sedia_id']),
 				'id' => $this->filter->isInt($_POST['id'])
 			);
@@ -1572,12 +1639,18 @@ class Borang extends Controller {
 
 	function addUlasan()
 	{
-		if(isset($_POST['ringkasan'])){
+		if(isset($_POST['kriteria'])){
 			
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
 				'user_id' => $_POST['user_id'],
-				'ringkasan' => $_POST['ringkasan']
+				'ringkasan' => empty($_POST['ringkasan']) ? NULL : $_POST['ringkasan'],
+				'ulasan' => empty($_POST['ulasan']) ? NULL : $_POST['ulasan'],
+				'kriteria' => $_POST['kriteria'],
+				'matlamat_id' => empty($_POST['matlamat']) ? NULL : $_POST['matlamat'],
+				'halatuju_id' => empty($_POST['halatuju']) ? NULL : $_POST['halatuju'],
+				'tindakan_id' => empty($_POST['tindakan']) ? NULL : $_POST['tindakan'],
+				'muka_surat' => empty($_POST['muka_surat']) ? NULL : $_POST['muka_surat']
 			);
 
 			$add = $this->model->addUlasan($data);
@@ -1603,7 +1676,12 @@ class Borang extends Controller {
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
 				'user_id' => $_POST['user_id'],
-				'ringkasan' => $_POST['ringkasan']
+				'ringkasan' => $_POST['ringkasan'],
+				'kriteria' => $_POST['kriteria'],
+				'matlamat_id' => empty($_POST['matlamat']) ? NULL : $_POST['matlamat'],
+				'halatuju_id' => empty($_POST['halatuju']) ? NULL : $_POST['halatuju'],
+				'tindakan_id' => empty($_POST['tindakan']) ? NULL : $_POST['tindakan'],
+				'muka_surat' => empty($_POST['muka_surat']) ? NULL : $_POST['muka_surat'],
 			);
 
 			$add = $this->model->addUlasanKeseluruhan($data);
@@ -1624,14 +1702,19 @@ class Borang extends Controller {
 
 	function addUlasanMatlamat()
 	{
-		if(isset($_POST['borang_id'])){
+		if(isset($_POST['kriteria'])){
 			
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
 				'borang_matlamat_id' => $_POST['borang_matlamat_id'],
 				'user_id' => $this->session->get('user_id'),
 				'ulasan' => $_POST['ulasan'],
-				'implikasi' => $_POST['implikasi']
+				'implikasi' => $_POST['implikasi'],
+				'kriteria' => $_POST['kriteria'],
+				'matlamat_id' => empty($_POST['matlamat']) ? NULL : $_POST['matlamat'],
+				'halatuju_id' => empty($_POST['halatuju']) ? NULL : $_POST['halatuju'],
+				'tindakan_id' => empty($_POST['tindakan']) ? NULL : $_POST['tindakan'],
+				'muka_surat' => empty($_POST['muka_surat']) ? NULL : $_POST['muka_surat'],
 			);
 
 			$add = $this->model->addUlasanMatlamat($data);
@@ -1652,13 +1735,19 @@ class Borang extends Controller {
 
 	function updateUlasan()
 	{
-		if(isset($_POST['ringkasan'])){
+		if(isset($_POST['kriteria'])){
 			
 			$data = array(
 				'id' => $_POST['id'],
 				'borang_id' => $_POST['borang_id'],
 				'user_id' => $_POST['user_id'],
-				'ringkasan' => $_POST['ringkasan']
+				'ringkasan' => $_POST['ringkasan'],
+				'ulasan' => $_POST['ulasan'],
+				'kriteria' => $_POST['kriteria'],
+				'matlamat_id' => empty($_POST['matlamat']) ? NULL : $_POST['matlamat'],
+				'halatuju_id' => empty($_POST['halatuju']) ? NULL : $_POST['halatuju'],
+				'tindakan_id' => empty($_POST['tindakan']) ? NULL : $_POST['tindakan'],
+				'muka_surat' => empty($_POST['muka_surat']) ? NULL : $_POST['muka_surat'],
 			);
 
 			$add = $this->model->updateUlasan($data);
@@ -1685,7 +1774,12 @@ class Borang extends Controller {
 				'id' => $_POST['id'],
 				'borang_id' => $_POST['borang_id'],
 				'user_id' => $_POST['user_id'],
-				'ringkasan' => $_POST['ringkasan']
+				'ringkasan' => $_POST['ringkasan'],
+				'kriteria' => $_POST['kriteria'],
+				'matlamat_id' => empty($_POST['matlamat']) ? NULL : $_POST['matlamat'],
+				'halatuju_id' => empty($_POST['halatuju']) ? NULL : $_POST['halatuju'],
+				'tindakan_id' => empty($_POST['tindakan']) ? NULL : $_POST['tindakan'],
+				'muka_surat' => empty($_POST['muka_surat']) ? NULL : $_POST['muka_surat'],
 			);
 
 			$add = $this->model->updateUlasanKeseluruhan($data);
@@ -1706,7 +1800,7 @@ class Borang extends Controller {
 
 	function updateUlasanMatlamat()
 	{
-		if(isset($_POST['id'])){
+		if(isset($_POST['kriteria'])){
 			
 			$data = array(
 				'id' => $_POST['id'],
@@ -1714,7 +1808,12 @@ class Borang extends Controller {
 				'borang_matlamat_id' => $_POST['borang_matlamat_id'],
 				'user_id' => $this->session->get('user_id'),
 				'ulasan' => $_POST['ulasan'],
-				'implikasi' => $_POST['implikasi']
+				'implikasi' => $_POST['implikasi'],
+				'kriteria' => $_POST['kriteria'],
+				'matlamat_id' => empty($_POST['matlamat']) ? NULL : $_POST['matlamat'],
+				'halatuju_id' => empty($_POST['halatuju']) ? NULL : $_POST['halatuju'],
+				'tindakan_id' => empty($_POST['tindakan']) ? NULL : $_POST['tindakan'],
+				'muka_surat' => empty($_POST['muka_surat']) ? NULL : $_POST['muka_surat'],
 			);
 
 			$add = $this->model->updateUlasanMatlamat($data);
@@ -1741,7 +1840,9 @@ class Borang extends Controller {
 				'id' => $_POST['id'],
 				'matlamat_id' => $_POST['matlamat'],
 				'halatuju_id' => $_POST['halatuju'],
-				'tindakan_id' => $_POST['tindakan']
+				'tindakan_id' => $_POST['tindakan'],
+				'kriteria' => $_POST['kriteria'],
+				'muka_surat' => $_POST['muka_surat']
 			);
 
 			$add = $this->model->updateMatlamatPegawai($data);
@@ -1857,7 +1958,7 @@ class Borang extends Controller {
 						$this->u_model->updateProfile($dataProfile);
 					}
 
-					$pegawai_id = $this->filter->sanitize($_POST['pegawai']);
+					$pegawai_id = $this->filter->isInt($_POST['pegawai']);
 					$tarikh_key_in = Carbon::now()->toDateString();
 
 					break;
@@ -1870,7 +1971,7 @@ class Borang extends Controller {
 			$dataBorang = array(
 				'kategori' => $this->filter->sanitize($_POST['kategori']),
 				'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
-				'jumlah_nama' => $this->filter->sanitize($_POST['jumlah_nama']),
+				'jumlah_nama' => $this->filter->isInt($_POST['jumlah_nama']),
 				'peta_indeks' => $this->filter->sanitize($_POST['peta_indeks']),
 				'no_lot' => $this->filter->sanitize($_POST['no_lot']),
 				'muka_surat' => $this->filter->sanitize($_POST['muka_surat']),
@@ -2193,7 +2294,9 @@ class Borang extends Controller {
 				'pskl_borang_matlamat_id' => $_POST['pskl_borang_matlamat_id'],
 				'matlamat_id' => $_POST['matlamat'],
 				'halatuju_id' => $_POST['halatuju'],
-				'tindakan_id' => $_POST['tindakan']
+				'tindakan_id' => $_POST['tindakan'],
+				'kriteria' => $_POST['kriteria'],
+				'muka_surat' => $_POST['muka_surat']
 			);
 		}else{
 			#
@@ -2205,6 +2308,15 @@ class Borang extends Controller {
 	function deleteMatlamat()
 	{
 		return $this->model->deleteMatlamat($_POST['id']);
+	}
+
+	function deleteAJAX()
+	{
+		$data = array(
+			'table' => $_POST['table'],
+			'id' => $_POST['id']
+		);
+		return $this->model->deleteAJAX($data);
 	}
 
 	function getMatlamat($borang_id = NULL)
