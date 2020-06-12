@@ -88,6 +88,11 @@
                             <li class="has-submenu"><a href="#"><i class="fe-pie-chart"></i>Laporan</a>
                                 <ul class="submenu">
                                     <li><a href="<?php echo BASE_URL ?>laporan/download"><i class="fe-download-cloud"></i> Muat Turun</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>laporan/matlamat"><i class="fe-pie-chart"></i> Matlamat</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>laporan/kategori"><i class="fe-pie-chart"></i> Kategori</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>laporan/kehadiran"><i class="fe-pie-chart"></i> Kehadiran</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>laporan/attachment"><i class="fe-pie-chart"></i> Lampiran</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>laporan/jenis"><i class="fe-pie-chart"></i> Jenis</a></li>
                                 </ul>
                             </li>
                             <li class="has-submenu"><a href="#"><i class="fe-settings"></i>Log</a>

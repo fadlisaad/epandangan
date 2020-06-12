@@ -44,7 +44,7 @@
 
                                 <?php if($ulasan && $_SESSION['permission'] != 'user'): ?>
                                 <hr>
-                                <h4>Ulasan Bentuk dan Kandungan</h4>
+                                <h4>Ulasan</h4>
 
                                 <?php foreach ($ulasan as $val): ?>
                                 <form id="ulasan-<?php echo $val['id'] ?>" data-parsley-validate method="post">
@@ -118,7 +118,7 @@
                                         <textarea class="form-control summernote" name="ringkasan" rows="10"><?php echo empty($val['ringkasan']) ? "Tiada" : $val['ringkasan'] ?></textarea>
                                     </dd>
 
-                                    <dt class="col-sm-3">Ulasan Bentuk dan Kandungan (<?php echo @$val['id'] ?>)</dt>
+                                    <dt class="col-sm-3">Ulasan (<?php echo @$val['id'] ?>)</dt>
                                     <dd class="col-sm-9">
                                         <textarea class="form-control summernote" name="ulasan" rows="10"><?php echo empty($val['ulasan']) ? "Tiada" : $val['ulasan'] ?></textarea>
                                     </dd>
@@ -143,7 +143,7 @@
 
                                 <?php endif; ?>
                                 <?php if($_SESSION['permission'] != 'user'):?>
-                                <h4>Tambah Ulasan Bentuk dan Kandungan</h4>
+                                <h4>Tambah Ulasan</h4>
                                 <a class="btn btn-primary btn-xs" data-toggle="collapse" href="#addUlasan" role="button" aria-expanded="false" aria-controls="addUlasan"><i class="fa fa-plus"></i> Tambah</a>
                                 <div class="collapse" id="addUlasan">
                                 
@@ -217,7 +217,7 @@
                                         <textarea class="form-control summernote" name="ringkasan" rows="10"></textarea>
                                     </dd>
 
-                                    <dt class="col-sm-3">Ulasan Bentuk dan Kandungan</dt>
+                                    <dt class="col-sm-3">Ulasan</dt>
                                     <dd class="col-sm-9">
                                         <textarea class="form-control summernote" name="ulasan" rows="10"></textarea>
                                     </dd>

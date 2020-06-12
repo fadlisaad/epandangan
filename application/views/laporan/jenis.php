@@ -13,10 +13,10 @@
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>"><?php echo SITE_TITLE ?></a></li>
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Laporan</a></li>
-                                    <li class="breadcrumb-item active">Matlamat vs Borang</li>
+                                    <li class="breadcrumb-item active">Jenis</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">Matlamat vs Borang</h4>
+                            <h4 class="page-title">Senarai Borang Mengikut Jenis</h4>
                         </div>
                     </div>
                 </div>     
@@ -25,39 +25,23 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card-box">
-                            <div id="matlamat"></div>
+                            <div id="jenis"></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card-box">
                             <table class="table table-striped table-bordered">
                                 <thead>
-                                    <th>Nama Matlamat</th>
+                                    <th>Jenis</th>
                                     <th>Jumlah</th>
                                 </thead>
                                 <tr>
-                                    <td>Matlmat 1</td>
-                                    <td><span id="matlamat-1"></span></td>
+                                    <td>Pegawai</td>
+                                    <td><span id="pegawai"></span></td>
                                 </tr>
                                 <tr>
-                                    <td>Matlmat 2</td>
-                                    <td><span id="matlamat-2"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Matlmat 3</td>
-                                    <td><span id="matlamat-3"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Matlmat 4</td>
-                                    <td><span id="matlamat-4"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Matlmat 5</td>
-                                    <td><span id="matlamat-5"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Matlmat 6</td>
-                                    <td><span id="matlamat-6"></span></td>
+                                    <td>Public</td>
+                                    <td><span id="public"></span></td>
                                 </tr>
                             </table>
                         </div>
@@ -71,8 +55,7 @@
 								<thead>
 									<tr>
                                         <th>ID</th>
-										<th>Nama</th>
-                                        <th>Matlamat</th>
+										<th>Nama Penuh</th>
 									</tr>
 								</thead>
 							</table>
