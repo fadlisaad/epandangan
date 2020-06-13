@@ -489,7 +489,8 @@ class Laporan extends Controller {
 			        ],
     				columns: [
 			            { data: 'borang_id' },
-			            { data: 'nama_penuh' }
+			            { data: 'nama_penuh' },
+			            { data: 'jenis' }
 			        ],
 			        language : {
 		                url: lang_url
@@ -504,8 +505,8 @@ class Laporan extends Controller {
     			Morris.Donut({
 			    	element: 'jenis',
 			    	data: [
-						{label: 'Pegawai', value: pegawai, color: '#1abc9c'},
-						{label: 'Public', value: diff, color: '#f1556c' }
+						{label: 'Hardcopy', value: pegawai, color: '#1abc9c'},
+						{label: 'Online', value: diff, color: '#f1556c' }
 			    	],
 			    	formatter: function (y) { return y + \" borang\" }
 			  	});
@@ -676,7 +677,7 @@ class Laporan extends Controller {
 		$datatable = $this->loadHelper('datatable_helper');
 
 		// DB table to use
-		$table = 'view_borang_pskl';
+		$table = 'view_dashboard';
 		 
 		// Table's primary key
 		$primaryKey = 'borang_id';
@@ -689,7 +690,18 @@ class Laporan extends Controller {
             		return "PSKL2040/DRAF/".$d;
         		}
         	),
-		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' )
+		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
+		    array(
+		    	'db' => 'email',
+		    	'dt' => 'jenis',
+		    	'formatter' => function( $d, $row ) {
+		    		if (strpos($d, '@yopmail.com') !== false) {
+					    return "Hardcopy";
+					}else{
+						return "Online";
+					}
+        		}
+        	)
 
 		);
 		 

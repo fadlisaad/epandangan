@@ -36,11 +36,11 @@
                                     <th>Jumlah</th>
                                 </thead>
                                 <tr>
-                                    <td>Pegawai</td>
+                                    <td>Hardcopy</td>
                                     <td><span id="pegawai"></span></td>
                                 </tr>
                                 <tr>
-                                    <td>Public</td>
+                                    <td>Online</td>
                                     <td><span id="public"></span></td>
                                 </tr>
                             </table>
@@ -55,7 +55,8 @@
 								<thead>
 									<tr>
                                         <th>ID</th>
-										<th>Nama Penuh</th>
+                                        <th>Nama Penuh</th>
+										<th>Jenis</th>
 									</tr>
 								</thead>
 							</table>
