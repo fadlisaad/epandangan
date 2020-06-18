@@ -54,10 +54,10 @@
                                     <dd class="col-sm-9">
                                         <select class="form-control kriteria" name="kriteria">
                                             <option value="" data-tag="pilih"></option>
-                                            <option value="Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040" <?php echo $val['kriteria'] == "Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040" ? "selected" : "" ?>>Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040</option>
+                                            <option value="Matlamat, Halatuju dan Tindakan Draf PSKL 2040" <?php echo $val['kriteria'] == "Matlamat, Halatuju dan Tindakan Draf PSKL 2040" ? "selected" : "" ?>>Matlamat, Halatuju dan Tindakan Draf PSKL 2040</option>
                                             <option value="PSKL 2020" <?php echo $val['kriteria'] == "PSKL 2020" ? "selected" : "" ?>>PSKL 2020</option>
                                             <option value="PBRKL 2020" <?php echo $val['kriteria'] == "PBRKL 2020" ? "selected" : "" ?>>PBRKL 2020</option>
-                                            <option value="PTKL 2040" <?php echo $val['kriteria'] == "PTKL 2040" ? "selected" : "" ?>>PTKL 2040</option>
+                                            <option value="Draf PTKL 2040" <?php echo $val['kriteria'] == "Draf PTKL 2040" ? "selected" : "" ?>>Draf PTKL 2040</option>
                                             <option value="Lain-Lain" <?php echo $val['kriteria'] == "Lain-Lain" ? "selected" : "" ?>>Lain-Lain</option>
                                         </select>
                                     </dd>
@@ -153,10 +153,10 @@
                                     <dd class="col-sm-9">
                                         <select class="form-control kriteria" name="kriteria">
                                             <option value="" data-tag="pilih"></option>
-                                            <option value="Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040">Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040</option>
+                                            <option value="Matlamat, Halatuju dan Tindakan Draf PSKL 2040">Matlamat, Halatuju dan Tindakan Draf PSKL 2040</option>
                                             <option value="PSKL 2020">PSKL 2020</option>
                                             <option value="PBRKL 2020">PBRKL 2020</option>
-                                            <option value="PTKL 2040">PTKL 2040</option>
+                                            <option value="PTKL 2040">Draf PTKL 2040</option>
                                             <option value="Lain-Lain">Lain-Lain</option>
                                         </select>
                                     </dd>
@@ -212,7 +212,7 @@
                                         </div>
                                     </dd>
 
-                                    <dt class="col-sm-3">Ringkasan Pandangan dan Cadangan</dt>
+                                    <dt class="col-sm-3">Ringkasan Pandangan / Cadangan</dt>
                                     <dd class="col-sm-9">
                                         <textarea class="form-control summernote" name="ringkasan" rows="10"></textarea>
                                     </dd>
@@ -279,10 +279,10 @@
                                             <dd class="col-sm-9">
                                                 <select class="form-control kriteria<?php echo $value_ulasan['id'] ?>" name="kriteria">
                                                     <option value="" data-tag="pilih"></option>
-                                                    <option value="Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040" <?php echo $value_ulasan['kriteria'] == "Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040" & $value_ulasan['kriteria'] != NULL ? "selected" : "" ?>>Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040</option>
+                                                    <option value="Matlamat, Halatuju dan Tindakan Draf PSKL 2040" <?php echo $value_ulasan['kriteria'] == "Matlamat, Halatuju dan Tindakan Draf PSKL 2040" & $value_ulasan['kriteria'] != NULL ? "selected" : "" ?>>Matlamat, Halatuju dan Tindakan Draf PSKL 2040</option>
                                                     <option value="PSKL 2020" <?php echo $value_ulasan['kriteria'] == "PSKL 2020" ? "selected" : "" ?>>PSKL 2020</option>
                                                     <option value="PBRKL 2020" <?php echo $value_ulasan['kriteria'] == "PBRKL 2020" ? "selected" : "" ?>>PBRKL 2020</option>
-                                                    <option value="PTKL 2040" <?php echo $value_ulasan['kriteria'] == "PTKL 2040" ? "selected" : "" ?>>PTKL 2040</option>
+                                                    <option value="Draf PTKL 2040" <?php echo $value_ulasan['kriteria'] == "Draf PTKL 2040" ? "selected" : "" ?>>Draf PTKL 2040</option>
                                                     <option value="Lain-Lain" <?php echo $value_ulasan['kriteria'] == "Lain-Lain" ? "selected" : "" ?>>Lain-Lain</option>
                                                 </select>
                                             </dd>
@@ -337,14 +337,15 @@
                                                     </div>
                                                 </div>
                                             </dd>
+
+                                            <dt class="col-sm-3">Ringkasan Pandangan / Cadangan</dt>
+                                            <dd class="col-sm-9">
+                                                <textarea class="form-control summernote" name="implikasi" rows="5"><?php echo empty($value_ulasan['implikasi']) ? "Tiada" : $value_ulasan['implikasi'] ?></textarea>
+                                            </dd>
+
                                             <dt class="col-sm-3">Ulasan</dt>
                                             <dd class="col-sm-9">
                                                 <textarea class="form-control summernote" name="ulasan" rows="5"><?php echo empty($value_ulasan['ulasan']) ? "Tiada" : $value_ulasan['ulasan'] ?></textarea>
-                                            </dd>
-
-                                            <dt class="col-sm-3">Implikasi</dt>
-                                            <dd class="col-sm-9">
-                                                <textarea class="form-control summernote" name="implikasi" rows="5"><?php echo empty($value_ulasan['implikasi']) ? "Tiada" : $value_ulasan['implikasi'] ?></textarea>
                                             </dd>
 
                                             <dt class="col-sm-3">Nama Pegawai</dt>
@@ -378,7 +379,7 @@
                                         <dd class="col-sm-9">
                                             <select class="form-control kriteria" name="kriteria" required="">
                                                 <option value="" data-tag="pilih"></option>
-                                                <option value="Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040">Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040</option>
+                                                <option value="Matlamat, Halatuju dan Tindakan Draf PSKL 2040">Matlamat, Halatuju dan Tindakan Draf PSKL 2040</option>
                                                 <option value="PSKL 2020">PSKL 2020</option>
                                                 <option value="PBRKL 2020">PBRKL 2020</option>
                                                 <option value="PTKL 2040">PTKL 2040</option>
@@ -437,14 +438,14 @@
                                             </div>
                                         </dd>
 
+                                        <dt class="col-sm-3">Ringkasan Pandangan / Cadangan</dt>
+                                        <dd class="col-sm-9">
+                                            <textarea class="form-control summernote" name="implikasi" rows="5" required=""></textarea>
+                                        </dd>
+
                                         <dt class="col-sm-3">Ulasan</dt>
                                         <dd class="col-sm-9">
                                             <textarea class="form-control summernote" name="ulasan" rows="5" required=""></textarea>
-                                        </dd>
-
-                                        <dt class="col-sm-3">Implikasi</dt>
-                                        <dd class="col-sm-9">
-                                            <textarea class="form-control summernote" name="implikasi" rows="5" required=""></textarea>
                                         </dd>
 
                                         <input type="hidden" name="borang_id" id="borang-id" value="<?php echo $data[0]['borang_id'] ?>">
@@ -574,7 +575,10 @@
                                 </div> <!-- end card-->
 
                                 <div class="btn-group">
-                                    <button class="btn btn-secondary d-print-none" id="back"><i class="fe-arrow-left"></i> Kembali</button> <a class="btn btn-info d-print-none" href="<?php echo BASE_URL.'borang/cetak_pskl/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Preview</a> <a class="btn btn-primary d-print-none" href="<?php echo BASE_URL.'borang/penilaian/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Laporan Penilaian</a>
+                                    <button class="btn btn-secondary d-print-none" id="back"><i class="fe-arrow-left"></i> Kembali</button>
+                                    <a class="btn btn-info d-print-none" href="<?php echo BASE_URL.'borang/cetak_pskl_pa1/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Borang PA1</a>
+                                    <a class="btn btn-success d-print-none" href="<?php echo BASE_URL.'borang/penilaian/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Borang PA2</a>
+                                    <a class="btn btn-primary d-print-none" href="<?php echo BASE_URL.'borang/penilaian_2/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Borang PA3</a>
                                 </div>
                             </div>
 

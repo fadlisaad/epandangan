@@ -513,10 +513,14 @@ class Borang extends Controller {
 		$footer->render();
 	}
 
-	function cetak_pskl($id)
+	function cetak_pskl_pa1($id)
 	{
 		$custom_css = "<style>
 		@media print {
+			@page {
+			  	size: A4 potrait !important;
+			  	margin: 25mm 18mm 25mm 25mm;
+			}
 		    .printable {
 		        background-color: white;
 		        height: 100%;
@@ -529,6 +533,9 @@ class Borang extends Controller {
 		        font-size: 14px;
 		        line-height: 18px;
 		    }
+		    div.row{
+			    page-break-inside: avoid;
+			}
 		}
 		.square {
 			height: 20px;
@@ -537,6 +544,22 @@ class Borang extends Controller {
 		}
 		.square-check{
 			padding-left: 20px;
+		}
+		.borang_title{
+			float: right;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.borang_id{
+			float: right;
+			border: 1px solid black;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.title-box {
+			border: 1px solid black;
 		}
 		</style>";
 
@@ -556,24 +579,18 @@ class Borang extends Controller {
 
 		$header = $this->loadView('header-print');
 		$footer = $this->loadView('footer-print');
-        $template = $this->loadView('borang/cetak-pskl');
+        $template = $this->loadView('borang/cetak-pskl-pa1');
 
 		$header->set('custom_css', $custom_css);
 
 		$data = $this->model->getByID('pskl', $id);
 		$dataMatlamat = $this->model->getByID('matlamat', $id);
 		$profile = $this->a_model->getUserProfile($data[0]['user_id']);
-		$ulasan = $this->model->getByID('ulasan', $id);
-		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
-		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
 
 		$template->set('profile', $profile);
         $template->set('data', $data);
         $template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $id));
         $template->set('matlamat', $dataMatlamat);
-        $template->set('ulasan', $ulasan);
-        $template->set('ulasanOverall', $ulasanOverall);
-		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('helper', $this->loadHelper('upload_helper'));
 		$template->set('dateHelper', $this->loadHelper('date_helper'));
 
@@ -586,6 +603,7 @@ class Borang extends Controller {
 
 	function papar_pskl($id)
 	{
+		$borang_id = $id;
 		$data = $this->model->getByID('pskl', $id);
 		$matlamat = $this->model->getByID('matlamat', $id);
 		$ulasan = $this->model->getByID('ulasan', $id);
@@ -1116,7 +1134,7 @@ class Borang extends Controller {
 		$header->set('css', $this->css);
 
 		$template->set('data', $data);
-		$template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $id));
+		$template->set('sesi', $this->model->getSesiByID('sesi_pendengaran', $borang_id));
 		$template->set('matlamat', $matlamat);
 		$template->set('ulasan', $ulasan);
 		$template->set('ulasanOverall', $ulasanOverall);
@@ -1144,6 +1162,67 @@ class Borang extends Controller {
 
 	function penilaian($id)
 	{
+		$custom_css = "<style>
+		@media print {
+			@page {
+			  	size: A4 landscape !important;
+			  	margin: 25mm 18mm 25mm 25mm;
+			}
+
+			.table-borderless td,
+			.table-borderless th {
+			    border: 0;
+			    padding: 0;
+			}
+
+			table.table-bordered > thead > tr > th{
+			  	border:1px solid black !important;
+			}
+		}
+		table.table-bordered > thead > tr > th{
+		  	border:1px solid black !important;
+		}
+		table.table-bordered td {
+		  	border:1px solid black !important;
+		}
+		table.table-bordered th {
+    		padding: 15px 5px 0px 5px;
+    	}
+		.borang_title{
+			float: right;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.borang_id{
+			float: right;
+			border: 1px solid black;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.title-box {
+			border: 1px solid black;
+		}
+		.kepala {
+			text-align: center;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.butiran {
+			text-transform: uppercase;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.table-borderless td,
+		.table-borderless th {
+		    border: 0;
+		}
+		.roman{
+			list-style-type: lower-alpha;
+		}
+		</style>";
+
 		$data = $this->model->getByID('pskl', $id);
 		$matlamat = $this->model->getByID('matlamat', $id);
 		$ulasan = $this->model->getByID('ulasan', $id);
@@ -1154,6 +1233,7 @@ class Borang extends Controller {
 		$footer = $this->loadView('footer-print');
         $template = $this->loadView('borang/penilaian-pskl');
 
+		$header->set('custom_css', $custom_css);
 		$template->set('data', $data);
 		$template->set('matlamat', $matlamat);
 		$template->set('ulasan', $ulasan);
@@ -1165,6 +1245,233 @@ class Borang extends Controller {
 		$header->render();
 		$template->render();
 		$footer->render();
+	}
+
+	function penilaian_2($id)
+	{
+		$custom_css = "<style>
+		@media print {
+			@page {
+			  	size: A4 potrait !important;
+			  	margin: 25mm 18mm 25mm 25mm;
+			}
+
+			.table-borderless td,
+			.table-borderless th {
+			    border: 0;
+			}
+			table.table-bordered > thead > tr > th{
+			  	border:1px solid black !important;
+			}
+			select {
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				appearance: none;
+				border: none;
+				background: none;
+			}
+			input {
+			    border: none !important;
+			    box-shadow: none !important;
+			    outline: none !important;
+			}
+			button {
+				display: none !important;
+			}
+		}
+		table.table-bordered > thead > tr > th{
+		  	border:1px solid black !important;
+		}
+		table.table-bordered td {
+		  	border:1px solid black !important;
+		}
+		table.table-bordered th {
+    		padding: 15px 5px 0px 5px;
+    	}
+		.borang_title{
+			float: right;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.borang_id{
+			float: right;
+			border: 1px solid black;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.title-box {
+			border: 1px solid black;
+		}
+		.kepala {
+			text-align: center;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.butiran {
+			text-transform: uppercase;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.table-borderless td,
+		.table-borderless th {
+		    border: 0;
+		}
+		.border-top-2 {
+			
+		}
+		</style>";
+
+		$custom_js = "<script>
+			$('#jawatan_1').chained('#nama_1');
+			$('#jawatan_2').chained('#nama_2');
+			$('#jawatan_3').chained('#nama_3');
+
+			// insert pa3
+			function insertPA3(){
+
+				var post_url = '".BASE_URL."borang/insertPA3';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#add-pa3').serialize(),
+					success:function(response){
+						if(response == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan data ini.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Data telah berjaya disimpan.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+			}
+
+			$('button#save-pa3').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				insertPA3();
+			});
+
+			// update pa3
+			function updatePA3(){
+
+				var post_url = '".BASE_URL."borang/updatePA3';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#add-pa3').serialize(),
+					success:function(response){
+						if(response == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan borang ini.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Data telah berjaya dikemaskini.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+			}
+
+			$('button#update-pa3').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updatePA3();
+			});
+		</script>";
+
+		$data = $this->model->getByID('pskl', $id);
+		$matlamat = $this->model->getByID('matlamat', $id);
+		$ulasan = $this->model->getByID('ulasan', $id);
+		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
+		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
+		$dataPA3 = $this->model->getPA3('pskl_pa3', $id);
+		$jkppa = $this->model->getSesiByID('sesi_pendengaran', $id);
+
+		$header = $this->loadView('header-print');
+		$footer = $this->loadView('footer-print');
+        $template = $this->loadView('borang/penilaian-2-pskl');
+
+		$header->set('css', $this->css);
+		$header->set('custom_css', $custom_css);
+		$template->set('data', $data);
+		$template->set('matlamat', $matlamat);
+		$template->set('ulasan', $ulasan);
+		$template->set('ulasanOverall', $ulasanOverall);
+		$template->set('ulasanMatlamat', $ulasanMatlamat);
+		$template->set('dataPA3', $dataPA3);
+		$template->set('jkppa', $jkppa);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+		$template->set('dateHelper', $this->loadHelper('date_helper'));
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
+ 
+		$header->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function insertPA3()
+	{
+		if(isset($_POST['borang_id'])){
+			
+			$data = array(
+				'borang_id' => $_POST['borang_id'],
+				'nama_1' => $_POST['nama_1'],
+				'nama_2' => $_POST['nama_2'],
+				'nama_3' => $_POST['nama_3'],
+				'jawatan_1' => $_POST['jawatan_1'],
+				'jawatan_2' => $_POST['jawatan_2'],
+				'jawatan_3' => $_POST['jawatan_3'],
+				'tarikh_1' => $_POST['tarikh_1'],
+				'tarikh_2' => $_POST['tarikh_2'],
+				'tarikh_3' => $_POST['tarikh_3']
+			);
+
+			$this->model->addPA3($data);
+		}
+	}
+
+	function updatePA3()
+	{
+		if(isset($_POST['borang_id'])){
+			
+			$data = array(
+				'borang_id' => $_POST['borang_id'],
+				'nama_1' => $_POST['nama_1'],
+				'nama_2' => $_POST['nama_2'],
+				'nama_3' => $_POST['nama_3'],
+				'jawatan_1' => $_POST['jawatan_1'],
+				'jawatan_2' => $_POST['jawatan_2'],
+				'jawatan_3' => $_POST['jawatan_3'],
+				'tarikh_1' => $_POST['tarikh_1'],
+				'tarikh_2' => $_POST['tarikh_2'],
+				'tarikh_3' => $_POST['tarikh_3']
+			);
+
+			$this->model->updatePA3($data);
+		}
 	}
 
 	function pandangan($borang)
@@ -1589,7 +1896,7 @@ class Borang extends Controller {
 				'matlamat' => $this->filter->isInt($_POST['matlamat']),
 				'halatuju' => $this->filter->isInt($_POST['halatuju']),
 				'tindakan' => $this->filter->isInt($_POST['tindakan']),
-				'muka_surat' => $this->filter->isInt($_POST['muka_surat']),
+				'muka_surat' => $_POST['muka_surat'],
 				'ulasan_pandangan' => $_POST['ulasan_pandangan'],
 				'cadangan' => $_POST['cadangan'],
 				'ulasan_cadangan' => $_POST['ulasan_cadangan'],

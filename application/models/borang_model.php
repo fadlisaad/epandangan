@@ -573,4 +573,67 @@ Class Borang_model extends Model {
 			echo "0";
 		}
 	}
+
+	public function addPA3($data)
+	{
+		try{
+			$stm = "INSERT INTO pskl_pa3 (borang_id, nama_1, nama_2, nama_3, jawatan_1, jawatan_2, jawatan_3, tarikh_1, tarikh_2, tarikh_3) VALUES (:borang_id, :nama_1, :nama_2, :nama_3, :jawatan_1, :jawatan_2, :jawatan_3, :tarikh_1, :tarikh_2, :tarikh_3)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'nama_1' => $data['nama_1'],
+				'nama_2' => $data['nama_2'],
+				'nama_3' => $data['nama_3'],
+				'jawatan_1' => $data['jawatan_1'],
+				'jawatan_2' => $data['jawatan_2'],
+				'jawatan_3' => $data['jawatan_3'],
+				'tarikh_1' => $data['tarikh_1'],
+				'tarikh_2' => $data['tarikh_2'],
+				'tarikh_3' => $data['tarikh_3']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
+	public function updatePA3($data)
+	{
+		try{
+			$stm = "UPDATE pskl_pa3 SET nama_1 = :nama_1, nama_2 = :nama_2, nama_3 = :nama_3, jawatan_1 = :jawatan_1, jawatan_2 = :jawatan_2, jawatan_3 = :jawatan_3, tarikh_1 = :tarikh_1, tarikh_2 = :tarikh_2, tarikh_3 = :tarikh_3 WHERE borang_id = :borang_id";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'nama_1' => $data['nama_1'],
+				'nama_2' => $data['nama_2'],
+				'nama_3' => $data['nama_3'],
+				'jawatan_1' => $data['jawatan_1'],
+				'jawatan_2' => $data['jawatan_2'],
+				'jawatan_3' => $data['jawatan_3'],
+				'tarikh_1' => $data['tarikh_1'],
+				'tarikh_2' => $data['tarikh_2'],
+				'tarikh_3' => $data['tarikh_3']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
+	public function getPA3($table, $borang_id)
+	{
+		try{
+			$stm  = "SELECT * FROM view_".$table." WHERE borang_id = :borang_id";
+			$bind = array('borang_id' => $borang_id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
 }

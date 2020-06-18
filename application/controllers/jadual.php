@@ -327,7 +327,7 @@ class Jadual extends Controller {
 			'chairman' => $this->filter->isInt($_POST['chairman']),
 			'ajk_1' => $this->filter->isInt($_POST['ajk_1']),
 			'ajk_2' => $this->filter->isInt($_POST['ajk_2']),
-			'ajk_3' => $this->filter->isInt($_POST['ajk_3']),
+			'ajk_3' => empty($_POST['ajk_3']) ? NULL : $_POST['ajk_3'],
 			'keterangan' => $this->filter->htmlEntity($_POST['keterangan'])
 		);
 
@@ -436,7 +436,7 @@ class Jadual extends Controller {
 				'chairman' => $this->filter->sanitize($_POST['chairman']),
 				'ajk_1' => $this->filter->sanitize($_POST['ajk_1']),
 				'ajk_2' => $this->filter->sanitize($_POST['ajk_2']),
-				'ajk_3' => $this->filter->sanitize($_POST['ajk_3']),
+				'ajk_3' => empty($_POST['ajk_3']) ? NULL : $_POST['ajk_3'],
 				'keterangan' => $this->filter->sanitize($_POST['keterangan'])
 			);
 
@@ -489,6 +489,13 @@ class Jadual extends Controller {
 		# generate token
 		$token = $easyCSRF->generate('token');
 
+		$js_url = array(
+			'https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js'
+		);
+
 		$jadual = $this->model->getByID('sesi_jadual', $jadual_id);
 		$data = $this->model->getByID('sesi_pendengaran', $jadual_id);
 
@@ -496,6 +503,7 @@ class Jadual extends Controller {
 
 			var base_url = '".BASE_URL."jadual/process_sesi_pendengaran/".$jadual_id."';
 			var sesi_id = '".$jadual_id."';
+			var lang_url = '".BASE_URL."languages/dataTables.my.json';
 			
 			$(document).ready(function() {
 
@@ -513,9 +521,41 @@ class Jadual extends Controller {
 			            { data: 'nama_penuh' },
 			            { data: 'ic_passport' },
 			            { data: 'tarikh_terima' },
+			            { data: 'email' },
 			            { data: 'hadir' },
 			            { data: 'action' }
-			        ]
+			        ],
+			        lengthMenu: [
+						[ 10, 25, 50, -1 ],
+						[ '10', '25', '50', 'Semua' ]
+					],
+    				dom: 'Bfltip',
+			        buttons: [
+			            {
+			                extend: 'excel',
+			                exportOptions: {
+			                    columns: [ 0, 1, 2, 4 ]
+			                }
+			            },
+			            {
+			                extend: 'pdf',
+			                exportOptions: {
+			                    columns: ':visible',
+			                    columns: [ 0, 1, 2, 4 ],
+			                    messageTop: 'Senarai Sesi Pendengaran Siri #' + sesi_id
+			                }
+			            },
+			            {
+			                extend: 'print',
+			                exportOptions: {
+			                    columns: [ 0, 1, 2, 4 ],
+			                    messageTop: 'Senarai Sesi Pendengaran Siri #' + sesi_id
+			                }
+			            }
+			        ],
+			        language : {
+		                url: lang_url
+		            }
     			});
     			
     		});
@@ -569,6 +609,7 @@ class Jadual extends Controller {
 		$template->set('data', $data);
 		$footer->set('custom_js', $custom_js);
 		$footer->set('js', $this->js);
+		$footer->set('js_url', $js_url);
 		
 		$header->render();
 		$navigation->render();
@@ -687,6 +728,7 @@ class Jadual extends Controller {
 		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
 		    array( 'db' => 'ic_passport', 'dt' => 'ic_passport' ),
 		    array( 'db' => 'tarikh_terima', 'dt' => 'tarikh_terima' ),
+		    array( 'db' => 'email', 'dt' => 'email' ),
 		    array( 'db' => 'hadir', 'dt' => 'hadir' ),
         	array(
 		    	'db' => 'borang_id',

@@ -67,6 +67,7 @@
                                             <th>Nama Penuh</th>
                                             <th>No. IC/Passport</th>
                                             <th>Tarikh Terima</th>
+                                            <th>E-mail</th>
                                             <th>Hadir</th>
                                             <th>Tindakan</th>
     									</tr>

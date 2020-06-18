@@ -7,9 +7,7 @@
         <title><?php echo SITE_TITLE ?></title>
 
         <link href="<?php echo BASE_URL; ?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="<?php echo BASE_URL; ?>assets/css/icons.min.css" rel="stylesheet" type="text/css">
-        <link href="<?php echo BASE_URL; ?>assets/css/app.min.css" rel="stylesheet" type="text/css">
-
+        <link href="<?php echo BASE_URL; ?>assets/css/print.css" rel="stylesheet" type="text/css" media="print">
         <link rel="shortcut icon" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
 
         <?php
@@ -35,15 +33,6 @@
         <script type="text/javascript">
             var BASE_URL = '<?php echo BASE_URL; ?>';
         </script>
-        <script src="<?php echo BASE_URL; ?>assets/js/translate.js"></script>
-        <script>
-        var currentLng = "my";
-        function load(){
-            var translate = new Translate();
-            var attributeName = 'data-tag';
-            translate.init(attributeName, currentLng);
-            translate.process();
-        }
-        </script>
+
 	</head>
-    <body onload="load()">
+    <body>
