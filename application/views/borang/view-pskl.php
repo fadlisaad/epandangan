@@ -105,7 +105,7 @@
 
                                                     <div class="form-group">
                                                         <label for="muka_surat">Muka Surat</label>
-                                                        <input type="number" name="muka_surat" class="form-control" value="<?php echo empty($val['muka_surat']) ? "" : $val['muka_surat'] ?>">
+                                                        <input type="text" name="muka_surat" class="form-control" value="<?php echo empty($val['muka_surat']) ? "" : $val['muka_surat'] ?>">
                                                     </div>
 
                                                 </div>
@@ -204,7 +204,7 @@
 
                                                     <div class="form-group">
                                                         <label for="muka_surat">Muka Surat</label>
-                                                        <input type="number" name="muka_surat" class="form-control">
+                                                        <input type="text" name="muka_surat" class="form-control">
                                                     </div>
 
                                                 </div>
@@ -330,7 +330,7 @@
 
                                                             <div class="form-group">
                                                                 <label for="muka_surat">Muka Surat</label>
-                                                                <input type="number" name="muka_surat" class="form-control" value="<?php echo empty($value_ulasan['muka_surat']) ? "" : $value_ulasan['muka_surat'] ?>">
+                                                                <input type="text" name="muka_surat" class="form-control" value="<?php echo empty($value_ulasan['muka_surat']) ? "" : $value_ulasan['muka_surat'] ?>">
                                                             </div>
 
                                                         </div>
@@ -430,7 +430,7 @@
 
                                                         <div class="form-group">
                                                             <label for="muka_surat">Muka Surat</label>
-                                                            <input type="number" name="muka_surat" class="form-control">
+                                                            <input type="text" name="muka_surat" class="form-control">
                                                         </div>
 
                                                     </div>
