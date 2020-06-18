@@ -1165,7 +1165,7 @@ class Borang extends Controller {
 		$custom_css = "<style>
 		@media print {
 			@page {
-			  	size: A4 landscape !important;
+			  	size: A4 potrait !important;
 			  	margin: 25mm 18mm 25mm 25mm;
 			}
 
