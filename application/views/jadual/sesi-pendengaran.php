@@ -16,7 +16,7 @@
                                     <li class="breadcrumb-item active">Senarai Borang dalam Sesi Pendengaran</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">Senarai Borang dalam Sesi Pendengaran</h4>
+                            <h4 class="page-title">Senarai Borang dalam Sesi Pendengaran <?php echo html_entity_decode($jadual[0]['keterangan']) ?></h4>
                         </div>
                     </div>
                 </div>     
@@ -27,15 +27,15 @@
                         <div class="card-box">
                             <dl class="row">
                                 <dt class="col-md-3">Jenis</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['jenis'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['jenis'] ?></dd>
                                 <dt class="col-md-3">Lokasi</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['lokasi'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['lokasi'] ?></dd>
                                 <dt class="col-md-3">Tarikh</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['tarikh'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['tarikh'] ?></dd>
                                 <dt class="col-md-3">Slot Masa</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['slot_masa'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['slot_masa'] ?></dd>
                                 <dt class="col-md-3">Keterangan</dt>
-                                <dd class="col-md-9"><?php echo html_entity_decode($data[0]['keterangan']) ?></dd>
+                                <dd class="col-md-9"><?php echo html_entity_decode($jadual[0]['keterangan']) ?></dd>
                             </dl>
                         </div>
                     </div>
@@ -43,13 +43,13 @@
                         <div class="card-box">
                             <dl class="row">
                                 <dt class="col-md-3">Pengerusi</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['chairman'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['chairman'] ?></dd>
                                 <dt class="col-md-3">Panel 1</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['ajk_1'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['ajk_1'] ?></dd>
                                 <dt class="col-md-3">Panel 2</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['ajk_2'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['ajk_2'] ?></dd>
                                 <dt class="col-md-3">Panel 3</dt>
-                                <dd class="col-md-9"><?php echo $data[0]['ajk_3'] ?></dd>
+                                <dd class="col-md-9"><?php echo $jadual[0]['ajk_3'] ?></dd>
                             </dl>
                         </div>
                     </div>

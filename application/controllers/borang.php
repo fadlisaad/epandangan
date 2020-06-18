@@ -1013,7 +1013,7 @@ class Borang extends Controller {
 
 				var kriteria = $(this).val();
 
-				if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+				if(kriteria == 'Matlamat, Halatuju dan Tindakan Draf PSKL 2040'){
 					$('.rujukan').slideDown();
 				}else{
 					$('.rujukan').slideUp();
@@ -1045,7 +1045,7 @@ class Borang extends Controller {
 
 				var kriteria = '".$kriteria."';
 
-				if(kriteria == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+				if(kriteria == 'Matlamat, Halatuju dan Tindakan Draf PSKL 2040'){
 					$('.rujukan').show();
 				}else{
 					$('.rujukan').hide();
@@ -1106,7 +1106,7 @@ class Borang extends Controller {
 			$custom_js .= "<script>
 				var kriteria_".$id." = '".$kriteriaMatlamat."';
 
-				if(kriteria_".$id." == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+				if(kriteria_".$id." == 'Matlamat, Halatuju dan Tindakan Draf PSKL 2040'){
 					$('#rujukan-".$id."').show();
 				}else{
 					$('#rujukan-".$id."').hide();
@@ -1116,7 +1116,7 @@ class Borang extends Controller {
 
 					var kriteria".$id." = $(this).val();
 
-					if(kriteria".$id." == 'Berkaitan Matlamat, Halatuju dan Tindakan di dalam Draf PSKL 2040'){
+					if(kriteria".$id." == 'Matlamat, Halatuju dan Tindakan Draf PSKL 2040'){
 						$('#rujukan-".$id."').show();
 					}else{
 						$('#rujukan-".$id."').hide();

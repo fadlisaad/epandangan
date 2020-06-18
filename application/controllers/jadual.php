@@ -711,11 +711,13 @@ class Jadual extends Controller {
 		print_r($data);
 	}
 
-	public function process_sesi_pendengaran()
+	public function process_sesi_pendengaran($jadual_id)
 	{
 		$table = 'view_sesi_pendengaran';
 		 
 		$primaryKey = 'id';
+
+		$where = 'id = '.$jadual_id;
 
 		$columns = array(
 		    array(
@@ -749,7 +751,7 @@ class Jadual extends Controller {
 		$datatable = $this->loadHelper('datatable_helper');
 		 
 		$data = json_encode(
-		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+		    $datatable::complex( $_POST, $sql_details, $table, $primaryKey, $columns, $where )
 		);
 		print_r($data);
 	}
