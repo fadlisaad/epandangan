@@ -257,6 +257,18 @@ class Jadual extends Controller {
 					['para', ['ul', 'ol']],
 				]
 			});
+
+			$('#padam_ajk1').on('click', function(){
+				$('#ajk_1').empty();
+			});
+
+			$('#padam_ajk2').on('click', function(){
+				$('#ajk_2').empty();
+			});
+
+			$('#padam_ajk3').on('click', function(){
+				$('#ajk_3').empty();
+			});
 		});
 
 		// update jadual
@@ -273,7 +285,7 @@ class Jadual extends Controller {
 					if(parseInt(response) == 0){
 						Swal.fire({
 							title: 'Ralat',
-							text: 'Terdapat ruangan wajib tidak lengkap. Sila isi dengan betul.',
+							text: 'Terdapat ralat semasa menyimpan maklumat ini. Sila semak dan cuba semula',
 							type: 'warning'
 						});
 					}else{
@@ -291,9 +303,20 @@ class Jadual extends Controller {
 		}
 
 		$('button#save-jadual').bind('click', function (e) {
-			e.preventDefault();
-			$(this).attr('disabled', 'disabled');
-			updateJadual();
+			
+			var valid = this.form.checkValidity();
+
+			if (valid) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updateJadual();
+			}else{
+				Swal.fire({
+					title: 'Ralat',
+					text: 'Terdapat ruangan wajib tidak lengkap. Sila isi dengan betul.',
+					type: 'warning'
+				});
+			}
 		});
 		</script>";
 		
@@ -580,7 +603,7 @@ class Jadual extends Controller {
 				            type: 'POST',
 				            success: function(response) {
 				            	if(parseInt(response) == 1){
-				                	Swal.fire('berjaya!', 'Borang ini telah dikeluarkan dari sesi ini', 'success');
+				                	Swal.fire('berjaya!', 'Borang ini telah dikeluarkan dari siri ini', 'success');
 				                	location.reload();
 			                	}else{
 			                		Swal.fire('Ralat', 'Sila cuba semula. Error: '+response, 'error');
@@ -691,7 +714,7 @@ class Jadual extends Controller {
 		    	'db' => 'id',
 		    	'dt' => 'action',
 		    	'formatter' => function( $d, $row ) {
-            		return "<a href=\"".BASE_URL."jadual/editJadual/".$d."\" class=\"btn btn-primary btn-xs\"><i class=\"fe-scissors\"></i> Edit</a> <a href=\"".BASE_URL."jadual/sesiPendengaran/".$d."\" class=\"btn btn-info btn-xs\"><i class=\"fe-glass\"></i> Papar Sesi</a> <button class=\"btn btn-xs btn-danger\" onclick=\"deleteJadual('".$d."')\"> <i class=\"mdi mdi-delete\"></i> Padam</button>";
+            		return "<a href=\"".BASE_URL."jadual/editJadual/".$d."\" class=\"btn btn-primary btn-xs\"><i class=\"fe-scissors\"></i> Edit</a> <a href=\"".BASE_URL."jadual/sesiPendengaran/".$d."\" class=\"btn btn-info btn-xs\"><i class=\"fe-glass\"></i> Papar Siri</a> <button class=\"btn btn-xs btn-danger\" onclick=\"deleteJadual('".$d."')\"> <i class=\"mdi mdi-delete\"></i> Padam</button>";
         		}
         	)
 		);

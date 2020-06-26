@@ -60,31 +60,34 @@
                                 <a href="<?php echo BASE_URL."jadual/sesiPendengaran/".$data[0]['id'] ?>" class="btn btn-primary waves-effect waves-light m-b-5">Lihat Senarai Borang</a>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="card-box">
                                 <div class="form-group">
                                     <label for="chairman">Pengerusi</label>
-                                    <select class="form-control" name="chairman" id="chairman">
+                                    <select class="form-control" name="chairman" id="chairman" required="">
                                         <option value="<?php echo $data[0]['chairman_id'] ?>" <?php echo ($data[0]['chairman']) ? "selected" : '' ?>><?php echo $data[0]['chairman'] ?></option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="ajk1">AJK 1</label>
-                                    <select class="form-control" name="ajk_1" id="ajk_1">
+                                    <select class="form-control" name="ajk_1" id="ajk_1" required="">
                                         <option value="<?php echo $data[0]['ajk_1_id'] ?>" <?php echo ($data[0]['ajk_1']) ? "selected" : '' ?>><?php echo $data[0]['ajk_1'] ?></option>
                                     </select>
+                                    <button id="padam_ajk1" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <div class="form-group">
                                     <label for="ajk2">AJK 2</label>
-                                    <select class="form-control" name="ajk_2" id="ajk_2">
+                                    <select class="form-control" name="ajk_2" id="ajk_2" required="">
                                         <option value="<?php echo $data[0]['ajk_2_id'] ?>" <?php echo ($data[0]['ajk_2']) ? "selected" : '' ?>><?php echo $data[0]['ajk_2'] ?></option>
                                     </select>
+                                    <button id="padam_ajk2" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <div class="form-group">
                                     <label for="ajk3">AJK 3</label>
                                     <select class="form-control" name="ajk_3" id="ajk_3">
                                         <option value="<?php echo $data[0]['ajk_3_id'] ?>" <?php echo ($data[0]['ajk_3']) ? "selected" : '' ?>><?php echo $data[0]['ajk_3'] ?></option>
                                     </select>
+                                    <button id="padam_ajk3" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <input type="hidden" name="id" value="<?php echo $data[0]['id'] ?>">
 								<button type="button" class="btn btn-info waves-effect waves-light m-b-5" id="save-jadual">Kemaskini</button>
@@ -92,12 +95,12 @@
 								<a href="<?php echo BASE_URL ?>jadual/senarai" class="btn btn-primary waves-effect waves-light m-b-5">Kembali ke Senarai</a>
 							</form>
                         </div>
-                    </div>
-                    <div class="col-2">
                         <div class="card-box">
                             <h4>Nota</h4>
                             <p>Jika tiada lokasi yang hendak dipilih, sila masukkan terlebih dahulu senarai lokasi di menu Tetapan > Lokasi</p>
                             <p>Sekiranya ingin menukar maklumat berkenaan nama Ahli Panel, sila ubah terlebih dahulu di menu Tetapan > Ahli Panel.</p>
+                            <p>Jika anda ingin padam nama AJK, pilih butang padam.</p>
+                            <p>Minimum 1 Pengerusi dan 2 orang AJK</p>
                         </div>
                     </div>
 

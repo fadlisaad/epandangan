@@ -1323,7 +1323,10 @@ class Borang extends Controller {
 		}
 		</style>";
 
+		$dataPA3 = $this->model->getPA3('pskl_pa3', $id);
+
 		$custom_js = "<script>
+
 			$('#jawatan_1').chained('#nama_1');
 			$('#jawatan_2').chained('#nama_2');
 			$('#jawatan_3').chained('#nama_3');
@@ -1399,14 +1402,34 @@ class Borang extends Controller {
 				$(this).attr('disabled', 'disabled');
 				updatePA3();
 			});
+
 		</script>";
+
+		if($dataPA3):
+
+			$custom_js .= "<script>
+
+			var pa3 = '".$dataPA3[0]['nama_1']."';
+			
+			if(pa3){
+				$('select#nama_1, select#nama_2, select#nama_3, select#jawatan_1, select#jawatan_2, select#jawatan_3, input#tarikh_1, input#tarikh_2, input#tarikh_3, button#update-pa3').hide();
+			}
+
+			$('button#ubah-pa3').bind('click', function (e) {
+				
+				$('select#nama_1, select#nama_2, select#nama_3, select#jawatan_1, select#jawatan_2, select#jawatan_3, input#tarikh_1, input#tarikh_2, input#tarikh_3, button#update-pa3').show();
+				$(this).attr('disabled', 'disabled');
+				$('.dataPA3').hide();
+				
+			});
+			</script>";
+		endif;
 
 		$data = $this->model->getByID('pskl', $id);
 		$matlamat = $this->model->getByID('matlamat', $id);
 		$ulasan = $this->model->getByID('ulasan', $id);
 		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
 		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
-		$dataPA3 = $this->model->getPA3('pskl_pa3', $id);
 		$jkppa = $this->model->getSesiByID('sesi_pendengaran', $id);
 
 		$header = $this->loadView('header-print');
@@ -1422,6 +1445,202 @@ class Borang extends Controller {
 		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('dataPA3', $dataPA3);
 		$template->set('jkppa', $jkppa);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+		$template->set('dateHelper', $this->loadHelper('date_helper'));
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
+ 
+		$header->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function catatan($id)
+	{
+		$custom_css = "<style>
+		@media print {
+			@page {
+			  	size: A4 potrait !important;
+			  	margin: 25mm 18mm 25mm 25mm;
+			}
+
+			.table-borderless td,
+			.table-borderless th {
+			    border: 0;
+			}
+			table.table-bordered > thead > tr > th{
+			  	border:1px solid black !important;
+			}
+			select {
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				appearance: none;
+				border: none;
+				background: none;
+			}
+			input {
+			    border: none !important;
+			    box-shadow: none !important;
+			    outline: none !important;
+			}
+			button {
+				display: none !important;
+			}
+		}
+		table.table-bordered > thead > tr > th{
+		  	border:1px solid black !important;
+		}
+		table.table-bordered td {
+		  	border:1px solid black !important;
+		}
+		table.table-bordered th {
+    		padding: 15px 5px 0px 5px;
+    	}
+		.borang_title{
+			float: right;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.borang_id{
+			float: right;
+			border: 1px solid black;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.title-box {
+			border: 1px solid black;
+		}
+		.kepala {
+			text-align: center;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.butiran {
+			text-transform: uppercase;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.table-borderless td,
+		.table-borderless th {
+		    border: 0;
+		}
+		.border-top-2 {
+			
+		}
+		</style>";
+
+		$ulasanPanel = $this->model->checkPenilaianByID('ulasan_panel', $id);
+
+		$custom_js = "<script>
+
+			// insert ulasanPanel
+			function insertUlasanPanel(){
+
+				var post_url = '".BASE_URL."borang/addUlasanPanel';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#add-ulasan-panel').serialize(),
+					success:function(response){
+						if(response == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan data ini.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Data telah berjaya disimpan.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+			}
+
+			$('button#save-ulasan-panel').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				insertUlasanPanel();
+			});
+
+			// update ulasanPanel
+			function updateUlasanPanel(){
+
+				var post_url = '".BASE_URL."borang/updateUlasanPanel';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#add-ulasan-panel').serialize(),
+					success:function(response){
+						if(response == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan borang ini.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Data telah berjaya dikemaskini.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+			}
+
+			$('button#update-ulasanPanel').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updateUlasanPanel();
+			});
+		</script>";
+
+		if($ulasanPanel):
+
+			$custom_js .= "<script>
+
+			var ulasanPanel = '".$ulasanPanel[0]['penilaian']."';
+			
+			if(ulasanPanel){
+				$('button#update-ulasan-panel, .hidePanel').hide();
+			}
+
+			$('button#ubah-ulasan-panel').bind('click', function (e) {
+				
+				$('.hidePanel, button#update-ulasan-panel').show();
+				$(this).attr('disabled', 'disabled');
+				$('.ulasanPanel').hide();
+				
+			});
+			</script>";
+		endif;
+
+		$data = $this->model->getByID('pskl', $id);
+		$matlamat = $this->model->getByID('matlamat', $id);
+		$jkppa = $this->model->getSesiByID('sesi_pendengaran', $id);
+
+		$header = $this->loadView('header-print');
+		$footer = $this->loadView('footer-print');
+        $template = $this->loadView('borang/catatan');
+
+		$header->set('css', $this->css);
+		$header->set('custom_css', $custom_css);
+		$template->set('data', $data);
+		$template->set('jkppa', $jkppa);
+		$template->set('ulasanPanel', $ulasanPanel);
 		$template->set('helper', $this->loadHelper('upload_helper'));
 		$template->set('dateHelper', $this->loadHelper('date_helper'));
 		$footer->set('js', $this->js);
@@ -1846,80 +2065,50 @@ class Borang extends Controller {
 		}
 	}
 
-	function addPenilaian()
+	function addUlasanPanel()
 	{
 		if(isset($_POST['borang_id'])){
 			
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
-				'kriteria' => $_POST['kriteria']
+				'penilaian' => serialize($_POST['penilaian']),
+				'catatan' => $_POST['catatan'],
+				'pengesyoran' => $_POST['pengesyoran'],
+				'justifikasi' => $_POST['justifikasi']
 			);
 
-			$add = $this->model->addPenilaian($data);
+			$add = $this->model->addUlasanPanel($data);
 
 			# log user action
 			$log = $this->loadHelper('log_helper');
 			$data2 = array(
 				'user_id' => $this->session->get('user_id'),
 				'controller' => 'Borang',
-				'function' => 'addPenilaian',
-				'action' => 'Add borang_id '.$_POST['borang_id'].' into addPenilaian'
+				'function' => 'addUlasanPanel',
+				'action' => 'Add borang_id '.$_POST['borang_id'].' into Ulasan Panel'
 			);
 			$log->add($data2);
 			return $add;
 		}
 	}
 
-	function updatePenilaian()
+	function updateUlasanPanel()
 	{
-		$easyCSRF = new EasyCSRF\EasyCSRF($this->session);
-
-		try{
-			$easyCSRF->check('token', $_POST['token']);
-		}catch(Exception $e){
-			$msg = array(
-				'error_msg' => $e->getMessage(),
-				'error_url' => BASE_URL.'borang/penilaian/'.$_POST['borang_id'],
-				'error_type' => 'danger',
-				'error_title' => 'Security Error!'
-			);
-		}
-
 		if(isset($_POST['borang_id'])){
-
-			$this->filter = $this->loadHelper('Filter_helper');
 			
 			$data = array(
-				'borang_id' => $this->filter->isInt($_POST['borang_id']),
-				'kriteria' => $_POST['kriteria'],
-				'pandangan' => $_POST['pandangan'],
-				'matlamat' => $this->filter->isInt($_POST['matlamat']),
-				'halatuju' => $this->filter->isInt($_POST['halatuju']),
-				'tindakan' => $this->filter->isInt($_POST['tindakan']),
-				'muka_surat' => $_POST['muka_surat'],
-				'ulasan_pandangan' => $_POST['ulasan_pandangan'],
-				'cadangan' => $_POST['cadangan'],
-				'ulasan_cadangan' => $_POST['ulasan_cadangan'],
+				'borang_id' => $_POST['borang_id'],
+				'penilaian' => serialize($_POST['penilaian']),
+				'catatan' => $_POST['catatan'],
 				'pengesyoran' => $_POST['pengesyoran'],
-				'sedia_id' => $this->filter->isInt($_POST['sedia_id']),
-				'id' => $this->filter->isInt($_POST['id'])
+				'justifikasi' => $_POST['justifikasi'],
+				'id' => $_POST['id']
 			);
 
 			try{
-				$this->model->updatePenilaian($data);
-				$msg = array(
-					'error_msg' => 'Maklumat penilaian borang pandangan awam ini telah berjaya disimpan.',
-					'error_url' => BASE_URL.'borang/penilaian/'.$_POST['id'],
-					'error_type' => 'success',
-					'error_title' => 'Laporan berjaya disimpan'
-				);
+				$this->model->updateUlasanPanel($data);
 			}catch(Exception $e){
-				$msg = array(
-					'error_msg' => 'Tiada maklumat laporan pandangan awam diterima. Sila cuba semula. Error:'.$e,
-					'error_url' => BASE_URL.'borang/penilaian/'.$_POST['id'],
-					'error_type' => 'danger',
-					'error_title' => 'Tiada maklumat disimpan'
-				);
+
 			}
 
 			# log user action
@@ -1927,21 +2116,12 @@ class Borang extends Controller {
 			$data2 = array(
 				'user_id' => $this->session->get('user_id'),
 				'controller' => 'Borang',
-				'function' => 'updatePenilaian',
-				'action' => 'Update borang penilaian #'.$_POST['id'].''
+				'function' => 'updateUlasanPanel',
+				'action' => 'Update borang ulasan panel #'.$_POST['id'].''
 			);
 
 			$log->add($data2);
 		}
-
-		$header = $this->loadView('auth-header');
-		$footer = $this->loadView('auth-footer');
-        $template = $this->loadView('error/notification');
-		$template->set('data', $msg);
-
-		$header->render();
-		$template->render();
-		$footer->render();
 	}
 
 	function addUlasan()

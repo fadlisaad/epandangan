@@ -579,6 +579,7 @@
                                     <a class="btn btn-info d-print-none" href="<?php echo BASE_URL.'borang/cetak_pskl_pa1/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Borang PA1</a>
                                     <a class="btn btn-success d-print-none" href="<?php echo BASE_URL.'borang/penilaian/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Borang PA2</a>
                                     <a class="btn btn-primary d-print-none" href="<?php echo BASE_URL.'borang/penilaian_2/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Borang PA3</a>
+                                    <a class="btn btn-warning d-print-none" href="<?php echo BASE_URL.'borang/catatan/'.$data[0]['borang_id'] ?>"><i class="fe-printer"></i> Borang Catatan</a>
                                 </div>
                             </div>
 

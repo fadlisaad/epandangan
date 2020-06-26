@@ -35,7 +35,7 @@
                                 <table id="datatable" class="table table-striped dt-responsive nowrap">
     								<thead>
     									<tr>
-                                            <th>Sesi</th>
+                                            <th>Siri</th>
                                             <th>Lokasi</th>
     										<th>Jenis</th>
                                             <th>Tarikh</th>

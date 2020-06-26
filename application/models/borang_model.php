@@ -340,13 +340,16 @@ Class Borang_model extends Model {
 		}
 	}
 
-	public function addPenilaian($data)
+	public function addUlasanPanel($data)
 	{
 		try{
-			$stm  = "INSERT INTO pskl_penilaian (borang_id, kriteria) VALUES (:borang_id, :kriteria)";
+			$stm  = "INSERT INTO ulasan_panel (borang_id, penilaian, catatan, pengesyoran, justifikasi) VALUES (:borang_id, :penilaian, :catatan, :pengesyoran, :justifikasi)";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
-				'kriteria' => $data['kriteria']
+				'penilaian' => $data['penilaian'],
+				'catatan' => $data['catatan'],
+				'pengesyoran' => $data['pengesyoran'],
+				'justifikasi' => $data['justifikasi']
 			);
 			
 			$this->pdo->fetchAffected($stm, $bind);
@@ -358,23 +361,15 @@ Class Borang_model extends Model {
 		}
 	}
 
-	public function updatePenilaian($data)
+	public function updateUlasanPanel($data)
 	{
 		try{
-			$stm  = "UPDATE pskl_penilaian SET borang_id = :borang_id, kriteria = :kriteria, pandangan = :pandangan, matlamat_id = :matlamat, halatuju_id = :halatuju, tindakan_id = :tindakan, muka_surat = :muka_surat, ulasan_pandangan = :ulasan_pandangan, cadangan = :cadangan, ulasan_cadangan = :ulasan_cadangan, pengesyoran = :pengesyoran, sedia_id = :sedia_id WHERE id = :id";
+			$stm  = "UPDATE ulasan_panel SET borang_id = :borang_id, penilaian = :penilaian, catatan = :catatan, pengesyoran = :pengesyoran, justifikasi = :justifikasi WHERE id = :id";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
-				'kriteria' => $data['kriteria'],
-				'pandangan' => $data['pandangan'],
-				'matlamat' => $data['matlamat'],
-				'halatuju' => $data['halatuju'],
-				'tindakan' => $data['tindakan'],
-				'muka_surat' => $data['muka_surat'],
-				'ulasan_pandangan' => $data['ulasan_pandangan'],
-				'cadangan' => $data['cadangan'],
-				'ulasan_cadangan' => $data['ulasan_cadangan'],
+				'penilaian' => $data['penilaian'],
+				'catatan' => $data['catatan'],
 				'pengesyoran' => $data['pengesyoran'],
-				'sedia_id' => $data['sedia_id'],
 				'id' => $data['id']
 			);
 			
