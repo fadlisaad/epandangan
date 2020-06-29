@@ -1969,6 +1969,12 @@ class Borang extends Controller {
 					$profile = $this->a_model->getUserProfile($data[0]['user_id']);
 					$this->session->set('user_email', $profile[0]['email']);
 
+					if($data[0]['kategori'] == 'Organisasi'){
+						$custom_js .= "<script>
+							$('#row-organisasi').show();
+						</script>";
+					}
+
 				}else{
 
 					$profile = NULL;

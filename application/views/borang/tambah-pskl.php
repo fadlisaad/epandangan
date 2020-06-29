@@ -57,16 +57,15 @@
                                     <input type="text" id="ic_passport" class="form-control" name="ic_passport" required="" data-parsley-type="alphanum" data-parsley-maxlength="12" data-parsley-minlength="6" data-parsley-trigger="change" value="<?php echo @$profile[0]['ic_passport'] ?>" form="borang-pskl">
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <p><span data-tag="kategori"></span> <span class="text-danger">*</span></p>
 
                                 <div class="radio mb-1 radio-info form-check-inline">
-                                    <input type="radio" name="kategori" id="individu" value="Individu" required="" checked="checked" form="borang-pskl">
+                                    <input type="radio" name="kategori" id="individu" value="Individu" required="" <?php if(@$data[0]['kategori'] == 'Individu') echo "checked"; ?> form="borang-pskl">
                                     <label for="individu" data-tag="individu"></label>
                                 </div>
                                 <div class="radio radio-info form-check-inline">
-                                    <input type="radio" name="kategori" id="organisasi" value="Organisasi" form="borang-pskl">
+                                    <input type="radio" name="kategori" id="organisasi" value="Organisasi" form="borang-pskl" <?php if(@$data[0]['kategori'] == 'Organisasi') echo "checked"; ?>>
                                     <label for="organisasi" data-tag="organisasi"></label>
                                 </div>
                             </div>
@@ -74,11 +73,11 @@
                             <div class="form-row hidden" id="row-organisasi">
                                 <div class="form-group col-md-9">
                                     <label for="nama_organisasi" data-tag="nama-organisasi"></label>
-                                    <input type="text" class="form-control" name="nama_organisasi" id="nama_organisasi" form="borang-pskl">
+                                    <input type="text" class="form-control" name="nama_organisasi" id="nama_organisasi" form="borang-pskl" value="<?php echo @$data[0]['nama_organisasi'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="jumlah_nama" data-tag="jumlah-nama"></label>
-                                    <input type="number" id="jumlah_nama" class="form-control" name="jumlah_nama" data-parsley-type="number" value="1" form="borang-pskl">
+                                    <input type="number" id="jumlah_nama" class="form-control" name="jumlah_nama" data-parsley-type="number" form="borang-pskl" value="<?php echo @$data[0]['jumlah_nama'] ?>">
                                 </div>
                             </div>
 
