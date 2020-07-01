@@ -343,13 +343,22 @@ Class Borang_model extends Model {
 	public function addUlasanPanel($data)
 	{
 		try{
-			$stm  = "INSERT INTO ulasan_panel (borang_id, penilaian, catatan, pengesyoran, justifikasi) VALUES (:borang_id, :penilaian, :catatan, :pengesyoran, :justifikasi)";
+			$stm  = "INSERT INTO ulasan_panel (borang_id, penilaian, catatan, pengesyoran, justifikasi, cadangan, tarikh_panel, tarikh_disahkan_1, tarikh_disahkan_2, tarikh_disahkan_3, tarikh_disahkan_4, pegawai_1, pegawai_2, tarikh_urusetia) VALUES (:borang_id, :penilaian, :catatan, :pengesyoran, :justifikasi, :cadangan, :tarikh_panel, :tarikh_disahkan_1, :tarikh_disahkan_2, :tarikh_disahkan_3, :tarikh_disahkan_4, :pegawai_1, :pegawai_2, :tarikh_urusetia)";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
 				'penilaian' => $data['penilaian'],
 				'catatan' => $data['catatan'],
 				'pengesyoran' => $data['pengesyoran'],
-				'justifikasi' => $data['justifikasi']
+				'justifikasi' => $data['justifikasi'],
+				'cadangan' => $data['cadangan'],
+				'tarikh_panel' => $data['tarikh_panel'],
+				'tarikh_disahkan_1' => $data['tarikh_disahkan_1'],
+				'tarikh_disahkan_2' => $data['tarikh_disahkan_2'],
+				'tarikh_disahkan_3' => $data['tarikh_disahkan_3'],
+				'tarikh_disahkan_4' => $data['tarikh_disahkan_4'],
+				'pegawai_1' => $data['pegawai_1'],
+				'pegawai_2' => $data['pegawai_2'],
+				'tarikh_urusetia' => $data['tarikh_urusetia']
 			);
 			
 			$this->pdo->fetchAffected($stm, $bind);
@@ -364,12 +373,22 @@ Class Borang_model extends Model {
 	public function updateUlasanPanel($data)
 	{
 		try{
-			$stm  = "UPDATE ulasan_panel SET borang_id = :borang_id, penilaian = :penilaian, catatan = :catatan, pengesyoran = :pengesyoran, justifikasi = :justifikasi WHERE id = :id";
+			$stm  = "UPDATE ulasan_panel SET borang_id = :borang_id, penilaian = :penilaian, catatan = :catatan, pengesyoran = :pengesyoran, justifikasi = :justifikasi, cadangan = :cadangan, tarikh_panel = :tarikh_panel, tarikh_disahkan_1 = :tarikh_disahkan_1, tarikh_disahkan_2 = :tarikh_disahkan_2, tarikh_disahkan_3 = :tarikh_disahkan_3, tarikh_disahkan_4 = :tarikh_disahkan_4, pegawai_1 = :pegawai_1, pegawai_2 = :pegawai_2, tarikh_urusetia = :tarikh_urusetia WHERE id = :id";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
 				'penilaian' => $data['penilaian'],
 				'catatan' => $data['catatan'],
 				'pengesyoran' => $data['pengesyoran'],
+				'justifikasi' => $data['justifikasi'],
+				'cadangan' => $data['cadangan'],
+				'tarikh_panel' => $data['tarikh_panel'],
+				'tarikh_disahkan_1' => $data['tarikh_disahkan_1'],
+				'tarikh_disahkan_2' => $data['tarikh_disahkan_2'],
+				'tarikh_disahkan_3' => $data['tarikh_disahkan_3'],
+				'tarikh_disahkan_4' => $data['tarikh_disahkan_4'],
+				'pegawai_1' => $data['pegawai_1'],
+				'pegawai_2' => $data['pegawai_2'],
+				'tarikh_urusetia' => $data['tarikh_urusetia'],
 				'id' => $data['id']
 			);
 			

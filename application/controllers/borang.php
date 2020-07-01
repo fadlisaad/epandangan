@@ -1425,6 +1425,103 @@ class Borang extends Controller {
 			</script>";
 		endif;
 
+		$ulasanPanel = $this->model->checkPenilaianByID('ulasan_panel', $id);
+
+		$custom_js .= "<script>
+
+			// insert ulasanPanel
+			function insertUlasanPanel(){
+
+				var post_url = '".BASE_URL."borang/addUlasanPanel';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#add-ulasan-panel').serialize(),
+					success:function(response){
+						if(response == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan data ini.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Data telah berjaya disimpan.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+			}
+
+			$('button#save-ulasan-panel').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				insertUlasanPanel();
+			});
+
+			// update ulasanPanel
+			function updateUlasanPanel(){
+
+				var post_url = '".BASE_URL."borang/updateUlasanPanel';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#add-ulasan-panel').serialize(),
+					success:function(response){
+						if(response == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan borang ini.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Data telah berjaya dikemaskini.',
+								type: 'success'
+							}).then(function() {
+				                location.reload();
+				            });
+						}
+					}
+			    });
+			}
+
+			$('button#update-ulasan-panel').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				updateUlasanPanel();
+			});
+		</script>";
+
+		if($ulasanPanel):
+
+			$custom_js .= "<script>
+
+			var ulasanPanel = '".$ulasanPanel[0]['penilaian']."';
+			
+			if(ulasanPanel){
+				$('button#update-ulasan-panel, .hidePanel').hide();
+			}
+
+			$('button#ubah-ulasan-panel').bind('click', function (e) {
+				
+				$('.hidePanel, button#update-ulasan-panel').show();
+				$(this).attr('disabled', 'disabled');
+				$('.ulasanPanel, .d-none').hide();
+				
+			});
+			</script>";
+		endif;
+
 		$data = $this->model->getByID('pskl', $id);
 		$matlamat = $this->model->getByID('matlamat', $id);
 		$ulasan = $this->model->getByID('ulasan', $id);
@@ -1441,6 +1538,7 @@ class Borang extends Controller {
 		$template->set('data', $data);
 		$template->set('matlamat', $matlamat);
 		$template->set('ulasan', $ulasan);
+		$template->set('ulasanPanel', $ulasanPanel);
 		$template->set('ulasanOverall', $ulasanOverall);
 		$template->set('ulasanMatlamat', $ulasanMatlamat);
 		$template->set('dataPA3', $dataPA3);
@@ -2080,7 +2178,16 @@ class Borang extends Controller {
 				'penilaian' => serialize($_POST['penilaian']),
 				'catatan' => $_POST['catatan'],
 				'pengesyoran' => $_POST['pengesyoran'],
-				'justifikasi' => $_POST['justifikasi']
+				'justifikasi' => $_POST['justifikasi'],
+				'cadangan' => $_POST['cadangan'],
+				'tarikh_panel' => $_POST['tarikh_panel'],
+				'tarikh_disahkan_1' => $_POST['tarikh_disahkan_1'],
+				'tarikh_disahkan_2' => $_POST['tarikh_disahkan_2'],
+				'tarikh_disahkan_3' => $_POST['tarikh_disahkan_3'],
+				'tarikh_disahkan_4' => $_POST['tarikh_disahkan_4'],
+				'pegawai_1' => $_POST['pegawai_1'],
+				'pegawai_2' => $_POST['pegawai_2'],
+				'tarikh_urusetia' => $_POST['tarikh_urusetia']
 			);
 
 			$add = $this->model->addUlasanPanel($data);
@@ -2106,8 +2213,17 @@ class Borang extends Controller {
 				'borang_id' => $_POST['borang_id'],
 				'penilaian' => serialize($_POST['penilaian']),
 				'catatan' => $_POST['catatan'],
-				'pengesyoran' => $_POST['pengesyoran'],
 				'justifikasi' => $_POST['justifikasi'],
+				'pengesyoran' => $_POST['pengesyoran'],
+				'cadangan' => $_POST['cadangan'],
+				'tarikh_panel' => $_POST['tarikh_panel'],
+				'tarikh_disahkan_1' => $_POST['tarikh_disahkan_1'],
+				'tarikh_disahkan_2' => $_POST['tarikh_disahkan_2'],
+				'tarikh_disahkan_3' => $_POST['tarikh_disahkan_3'],
+				'tarikh_disahkan_4' => $_POST['tarikh_disahkan_4'],
+				'pegawai_1' => $_POST['pegawai_1'],
+				'pegawai_2' => $_POST['pegawai_2'],
+				'tarikh_urusetia' => $_POST['tarikh_urusetia'],
 				'id' => $_POST['id']
 			);
 

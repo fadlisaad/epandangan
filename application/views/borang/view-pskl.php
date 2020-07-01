@@ -673,13 +673,13 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Tambah Sesi Pendengaran</h4>
+                        <h4 class="modal-title">Tambah Siri Pendengaran</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                     </div>
                     <div class="modal-body p-4">
                         <form id="sesi-pendengaran" method="post">
                             <div class="form-group row">
-                                <label for="topik" class="control-label col-md-4">Sesi Pendengaran</label>
+                                <label for="topik" class="control-label col-md-4">Siri Pendengaran</label>
                                 <select class="col-md-8" name="sesi_id" id="sesi"></select>
                             </div>
                             <input type="hidden" id="borang_id" name="borang_id" value="<?php echo $data[0]['borang_id'] ?>">

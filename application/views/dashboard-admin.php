@@ -123,25 +123,6 @@
 
                     </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <table id="datatable" class="table table-striped dt-responsive nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Nama</th>
-                                                <th>Kehadiran</th>
-                                                <th>Jumlah Matlamat</th>
-                                                <th>Tindakan</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div> <!-- container -->
 
             </div>
