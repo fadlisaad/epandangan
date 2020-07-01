@@ -44,17 +44,14 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th width="5px" class="text-center text-uppercase align-middle">
+                            <th width="5%" class="text-center text-uppercase align-middle">
                                 <p><strong>NO</strong></p>
                             </th>
-                            <th width="15%" class="text-center text-uppercase align-middle">
-                                <p><strong>KRITERIA</strong></p>
-                            </th>
-                            <th width="30%" class="text-center text-uppercase align-middle">
-                                <p><strong>RINGKASAN PANDANGAN/CADANGAN</strong></p>
+                            <th width="45%" class="text-center text-uppercase align-middle">
+                                <p><strong>RINGKASAN PANDANGAN PEMBERI PANDANGAN</strong></p>
                             </th>
                             <th width="50%" class="text-center text-uppercase align-middle">
-                                <p><strong>ULASAN</strong></p>
+                                <p><strong>ULASAN URUSETIA</strong></p>
                             </th>
                         </tr>
                     </thead>
@@ -66,6 +63,11 @@
                                 <p><strong><?php echo $count ?></strong></p>
                             </td>
                             <td class="align-top">
+                                <?php echo $dataUlasan['ringkasan'] ?>
+                            </td>
+                            
+                            <td class="align-top" style="max-width: 200px;">
+                                <?php if($dataUlasan['matlamat']): ?>
                                 <p><strong><?php echo $dataUlasan['kriteria'] ?></strong></p>
                                 <?php if($dataUlasan['kriteria'] == 'Lain-Lain'): ?>
                                 <p>Pandangan kepada Kementerian/Agensi/DBKL berkaitan;</p>
@@ -77,13 +79,6 @@
                                     <li>Lain-lain</li>
                                 </ul>
                                 <?php endif; ?>
-                            </td>
-                            <td class="align-top">
-                                <?php echo $dataUlasan['ringkasan'] ?>
-                            </td>
-                            
-                            <td class="align-top">
-                                <?php if($dataUlasan['matlamat']): ?>
                                 <table>
                                     <tr>
                                         <td colspan="2">RUJUKAN DALAM DRAF PSKL 2040</td>
@@ -127,6 +122,10 @@
                                 <p><strong><?php echo $countMatlamat ?></strong></p>
                             </td>
                             <td class="align-top">
+                                <?php echo $dataUlasanMatlamat['implikasi'] ?>
+                            </td>
+                            <td class="align-top" style="max-width: 200px;">
+                                <?php if($dataUlasanMatlamat['matlamat']): ?>
                                 <p><strong><?php echo $dataUlasanMatlamat['kriteria'] ?></strong></p>
                                 <?php if($dataUlasanMatlamat['kriteria'] == 'Lain-Lain'): ?>
                                 <p>Pandangan kepada Kementerian/Agensi/DBKL berkaitan;</p>
@@ -138,12 +137,6 @@
                                     <li>Lain-lain</li>
                                 </ul>
                                 <?php endif; ?>
-                            </td>
-                            <td class="align-top">
-                                <?php echo $dataUlasanMatlamat['implikasi'] ?>
-                            </td>
-                            <td class="align-top" style="max-width: 200px;">
-                                <?php if($dataUlasanMatlamat['matlamat']): ?>
                                 <table>
                                     <tr>
                                         <td colspan="2">RUJUKAN DALAM DRAF PSKL 2040</td>
