@@ -258,87 +258,92 @@
                             <?php if(isset($ulasanPanel[0]['penilaian'])): $penilaian = unserialize($ulasanPanel[0]['penilaian']); foreach ($penilaian as $value):
                                 switch ($value) {
                                     case 'Berkaitan Draf PSKL2040':
-                                        $option1 = 'd-none';
+                                        $checkbox_id_01 = 'checked';
                                         break;
 
                                     case 'Tidak Berkaitan Draf PSKL2040':
-                                        $option2 = 'd-none';
+                                        $checkbox_id_02 = 'checked';
                                         break;
 
                                     case 'Aspek Pengurusan':
-                                        $option3 = 'd-none';
+                                        $checkbox_id_03 = 'checked';
                                         break;
 
                                     case 'Aspek Perundangan':
-                                        $option4 = 'd-none';
+                                        $checkbox_id_04 = 'checked';
                                         break;
 
                                     case 'Aspek Penguatkuasaan':
-                                        $option5 = 'd-none';
+                                        $checkbox_id_05 = 'checked';
                                         break;
 
                                     case 'Lain-lain':
-                                        $option6 = 'd-none';
+                                        $checkbox_id_06 = 'checked';
                                         break;
                                 }
                             ?>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" name="penilaian[]" value="<?php echo $value ?>" checked>
-                                    <label class="custom-control-label"><?php echo $value ?></label>
-                                </div>
                             <?php endforeach; ?>
-                                <div class="custom-control custom-checkbox <?php echo @$option1 ?>">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-01" value="Berkaitan Draf PSKL2040" name="penilaian[]">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-01" value="Berkaitan Draf PSKL2040" name="penilaian[]" <?php echo @$checkbox_id_01 ?>>
                                     <label class="custom-control-label" for="penilaian-01">Berkaitan Draf PSKL2040</label>
                                 </div>
-                                <div class="custom-control custom-checkbox <?php echo @$option2 ?>">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-02" value="Tidak Berkaitan Draf PSKL2040" name="penilaian[]">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-02" value="Tidak Berkaitan Draf PSKL2040" name="penilaian[]" <?php echo @$checkbox_id_02 ?>>
                                     <label class="custom-control-label" for="penilaian-02">Tidak Berkaitan Draf PSKL2040</label>
                                 </div>
-                                <div class="custom-control custom-checkbox <?php echo @$option3 ?>">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-03" value="Aspek Pengurusan" name="penilaian[]">
+                                <label style="padding-left: 24px;">Lain-lain</label>
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-03" value="Aspek Pengurusan" name="penilaian[]" <?php echo @$checkbox_id_03 ?>>
                                     <label class="custom-control-label" for="penilaian-03">Aspek Pengurusan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox <?php echo @$option4 ?>">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-04" value="Aspek Perundangan" name="penilaian[]">
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-04" value="Aspek Perundangan" name="penilaian[]" <?php echo @$checkbox_id_04 ?>>
                                     <label class="custom-control-label" for="penilaian-04">Aspek Perundangan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox <?php echo @$option5 ?>">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-05" value="Aspek Penguatkuasaan" name="penilaian[]">
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-05" value="Aspek Penguatkuasaan" name="penilaian[]" <?php echo @$checkbox_id_05 ?>>
                                     <label class="custom-control-label" for="penilaian-05">Aspek Penguatkuasaan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox <?php echo @$option6 ?>">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-06" value="Lain-lain" name="penilaian[]">
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-06" value="Lain-lain" name="penilaian[]" <?php echo @$checkbox_id_06 ?>>
                                     <label class="custom-control-label" for="penilaian-06">Lain-lain</label>
+                                </div>
+                                <div style="padding-left: 48px;width:50%;display:none;" id="penilaian-other">
+                                    <input type="text" class="form-control" name="penilaian-other" id="penilaian-other-input" value="<?php echo @$ulasanPanel[0]['penilaian_other'] ?>">
                                 </div>
                             <?php else: ?>
                             <div class="showPanel">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-01" value="Berkaitan Draf PSKL2040" name="penilaian[]">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="penilaian-01" value="Berkaitan Draf PSKL2040" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-01">Berkaitan Draf PSKL2040</label>
                                 </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-02" value="Tidak Berkaitan Draf PSKL2040" name="penilaian[]">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="penilaian-02" value="Tidak Berkaitan Draf PSKL2040" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-02">Tidak Berkaitan Draf PSKL2040</label>
                                 </div>
-                                <div class="custom-control custom-checkbox">
+                                <label style="padding-left: 24px;">Lain-lain</label>
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-03" value="Aspek Pengurusan" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-03">Aspek Pengurusan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox">
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-04" value="Aspek Perundangan" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-04">Aspek Perundangan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox">
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-05" value="Aspek Penguatkuasaan" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-05">Aspek Penguatkuasaan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox">
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-06" value="Lain-lain" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-06">Lain-lain</label>
                                 </div>
+                                <div style="padding-left: 48px;width:50%;display:none;" id="penilaian-other">
+                                    <input type="text" class="form-control" name="penilaian-other" id="penilaian-other-input">
+                                </div>
                             </div>
                             <?php endif; ?>
+                            <p class="text-small">NOTA: Pandangan yang tidak berkaitan dengan Draf PSKL 2040 akan dipanjangkan ke Agensi/jabatan berkaitan</p>
                         </td>
                     </tr>
                     <tr>
@@ -356,10 +361,6 @@
                                 <label class="custom-control-label" for="pengesyoran-ditolak">Ditolak</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="pengesyoran-tidak-berkaitan" name="pengesyoran" class="custom-control-input hidePanel" value="Tidak Berkaitan" <?php echo $ulasanPanel[0]['pengesyoran'] == 'Tidak Berkaitan' ? "checked" : "" ?>>
-                                <label class="custom-control-label" for="pengesyoran-tidak-berkaitan">Tidak Berkaitan</label>
-                            </div>
-                            <div class="custom-control custom-radio">
                                 <input type="radio" id="pengesyoran-ambil-maklum" name="pengesyoran" class="custom-control-input hidePanel" value="Ambil Maklum" <?php echo $ulasanPanel[0]['pengesyoran'] == 'Ambil Maklum' ? "checked" : "" ?>>
                                 <label class="custom-control-label" for="pengesyoran-ambil-maklum">Ambil Maklum</label>
                             </div>
@@ -372,10 +373,6 @@
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="pengesyoran-ditolak" name="pengesyoran" class="custom-control-input" value="Ditolak">
                                     <label class="custom-control-label" for="pengesyoran-ditolak">Ditolak</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="pengesyoran-tidak-berkaitan" name="pengesyoran" class="custom-control-input" value="Tidak Berkaitan">
-                                    <label class="custom-control-label" for="pengesyoran-tidak-berkaitan">Tidak Berkaitan</label>
                                 </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="pengesyoran-ambil-maklum" name="pengesyoran" class="custom-control-input" value="Ambil Maklum">
@@ -399,7 +396,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><strong>5. Cadangan Bagi Penambahbaikan Laporan Draf PSKL2040</strong></td>
+                        <td><strong>5. Cadangan Bagi Penambahbaikan Draf PSKL2040</strong></td>
                     </tr>
                     <tr>
                         <td>

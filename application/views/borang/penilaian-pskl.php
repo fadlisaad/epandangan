@@ -48,7 +48,7 @@
                                 <p><strong>NO</strong></p>
                             </th>
                             <th width="45%" class="text-center text-uppercase align-middle">
-                                <p><strong>RINGKASAN PANDANGAN PEMBERI PANDANGAN</strong></p>
+                                <p><strong>RINGKASAN PANDANGAN/PANDANGAN AWAM</strong></p>
                             </th>
                             <th width="50%" class="text-center text-uppercase align-middle">
                                 <p><strong>ULASAN URUSETIA</strong></p>

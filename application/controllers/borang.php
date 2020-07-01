@@ -1500,6 +1500,33 @@ class Borang extends Controller {
 				$(this).attr('disabled', 'disabled');
 				updateUlasanPanel();
 			});
+
+			$('#penilaian-06').bind('click', function(){
+
+				if($(this).prop('checked', true)){
+					$('#penilaian-other').show()
+				}else{
+					$('#penilaian-other').hide()
+				}
+				
+			});
+
+			$('#penilaian-01, #penilaian-02, #penilaian-03, #penilaian-04, #penilaian-05').bind('click', function() {
+		        $('#penilaian-06').prop('checked', false);
+		        $('#penilaian-other-input').val('');
+		        $('#penilaian-other').hide();
+		    });
+
+		    $('#penilaian-01, #penilaian-02').bind('click', function() {
+		        $('#penilaian-03, #penilaian-04, #penilaian-05, #penilaian-06').prop('checked', false);
+		        $('#penilaian-other-input').val('');
+		        $('#penilaian-other').hide();
+		    });
+
+		    $('#penilaian-03, #penilaian-04, #penilaian-05, #penilaian-06').bind('click', function() {
+		        $('#penilaian-01, #penilaian-02').prop('checked', false);
+		    });
+
 		</script>";
 
 		if($ulasanPanel):
@@ -1519,6 +1546,12 @@ class Borang extends Controller {
 				$('.ulasanPanel, .d-none').hide();
 				
 			});
+
+			var penilaianText = '".$ulasanPanel[0]['penilaian_other']."';
+
+			if(penilaianText){
+				$('#penilaian-other').show()
+			}
 			</script>";
 		endif;
 
@@ -1531,7 +1564,8 @@ class Borang extends Controller {
 
 		$header = $this->loadView('header-print');
 		$footer = $this->loadView('footer-print');
-        $template = $this->loadView('borang/penilaian-2-pskl');
+        #$template = $this->loadView('borang/penilaian-2-pskl');
+        $template = $this->loadView('borang/penilaian-2-pskl-v2');
 
 		$header->set('css', $this->css);
 		$header->set('custom_css', $custom_css);
@@ -2175,19 +2209,20 @@ class Borang extends Controller {
 			
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
-				'penilaian' => serialize($_POST['penilaian']),
-				'catatan' => $_POST['catatan'],
-				'pengesyoran' => $_POST['pengesyoran'],
-				'justifikasi' => $_POST['justifikasi'],
-				'cadangan' => $_POST['cadangan'],
-				'tarikh_panel' => $_POST['tarikh_panel'],
-				'tarikh_disahkan_1' => $_POST['tarikh_disahkan_1'],
-				'tarikh_disahkan_2' => $_POST['tarikh_disahkan_2'],
-				'tarikh_disahkan_3' => $_POST['tarikh_disahkan_3'],
-				'tarikh_disahkan_4' => $_POST['tarikh_disahkan_4'],
-				'pegawai_1' => $_POST['pegawai_1'],
-				'pegawai_2' => $_POST['pegawai_2'],
-				'tarikh_urusetia' => $_POST['tarikh_urusetia']
+				'penilaian' => empty($_POST['penilaian']) ? NULL : serialize($_POST['penilaian']),
+				'penilaian_other' => empty($_POST['penilaian-other']) ? NULL : $_POST['penilaian-other'],
+				'catatan' => empty($_POST['catatan']) ? NULL : $_POST['catatan'],
+				'pengesyoran' => empty($_POST['pengesyoran']) ? NULL : $_POST['pengesyoran'],
+				'justifikasi' => empty($_POST['justifikasi']) ? NULL : $_POST['justifikasi'],
+				'cadangan' => empty($_POST['cadangan']) ? NULL : $_POST['cadangan'],
+				'tarikh_panel' => empty($_POST['tarikh_panel']) ? NULL : $_POST['tarikh_panel'],
+				'tarikh_disahkan_1' => empty($_POST['tarikh_disahkan_1']) ? NULL : $_POST['tarikh_disahkan_1'],
+				'tarikh_disahkan_2' => empty($_POST['tarikh_disahkan_2']) ? NULL : $_POST['tarikh_disahkan_2'],
+				'tarikh_disahkan_3' => empty($_POST['tarikh_disahkan_3']) ? NULL : $_POST['tarikh_disahkan_3'],
+				'tarikh_disahkan_4' => empty($_POST['tarikh_disahkan_4']) ? NULL : $_POST['tarikh_disahkan_4'],
+				'pegawai_1' => empty($_POST['pegawai_1']) ? NULL : $_POST['pegawai_1'],
+				'pegawai_2' => empty($_POST['pegawai_2']) ? NULL : $_POST['pegawai_2'],
+				'tarikh_urusetia' => empty($_POST['tarikh_urusetia']) ? NULL : $_POST['tarikh_urusetia']
 			);
 
 			$add = $this->model->addUlasanPanel($data);
@@ -2211,19 +2246,20 @@ class Borang extends Controller {
 			
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
-				'penilaian' => serialize($_POST['penilaian']),
-				'catatan' => $_POST['catatan'],
-				'justifikasi' => $_POST['justifikasi'],
-				'pengesyoran' => $_POST['pengesyoran'],
-				'cadangan' => $_POST['cadangan'],
-				'tarikh_panel' => $_POST['tarikh_panel'],
-				'tarikh_disahkan_1' => $_POST['tarikh_disahkan_1'],
-				'tarikh_disahkan_2' => $_POST['tarikh_disahkan_2'],
-				'tarikh_disahkan_3' => $_POST['tarikh_disahkan_3'],
-				'tarikh_disahkan_4' => $_POST['tarikh_disahkan_4'],
-				'pegawai_1' => $_POST['pegawai_1'],
-				'pegawai_2' => $_POST['pegawai_2'],
-				'tarikh_urusetia' => $_POST['tarikh_urusetia'],
+				'penilaian' => empty($_POST['penilaian']) ? NULL : serialize($_POST['penilaian']),
+				'penilaian_other' => empty($_POST['penilaian-other']) ? NULL : $_POST['penilaian-other'],
+				'catatan' => empty($_POST['catatan']) ? NULL : $_POST['catatan'],
+				'pengesyoran' => empty($_POST['pengesyoran']) ? NULL : $_POST['pengesyoran'],
+				'justifikasi' => empty($_POST['justifikasi']) ? NULL : $_POST['justifikasi'],
+				'cadangan' => empty($_POST['cadangan']) ? NULL : $_POST['cadangan'],
+				'tarikh_panel' => empty($_POST['tarikh_panel']) ? NULL : $_POST['tarikh_panel'],
+				'tarikh_disahkan_1' => empty($_POST['tarikh_disahkan_1']) ? NULL : $_POST['tarikh_disahkan_1'],
+				'tarikh_disahkan_2' => empty($_POST['tarikh_disahkan_2']) ? NULL : $_POST['tarikh_disahkan_2'],
+				'tarikh_disahkan_3' => empty($_POST['tarikh_disahkan_3']) ? NULL : $_POST['tarikh_disahkan_3'],
+				'tarikh_disahkan_4' => empty($_POST['tarikh_disahkan_4']) ? NULL : $_POST['tarikh_disahkan_4'],
+				'pegawai_1' => empty($_POST['pegawai_1']) ? NULL : $_POST['pegawai_1'],
+				'pegawai_2' => empty($_POST['pegawai_2']) ? NULL : $_POST['pegawai_2'],
+				'tarikh_urusetia' => empty($_POST['tarikh_urusetia']) ? NULL : $_POST['tarikh_urusetia'],
 				'id' => $_POST['id']
 			);
 
