@@ -26,6 +26,19 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function getPTKL3ByID($id)
+	{
+		try{
+			$stm = "SELECT * FROM borang_ptkl_3 WHERE id = :id";
+			$bind = array('id' => $id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function getSesiByID($table, $borang_id)
 	{
 		try{
@@ -131,6 +144,47 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function addPTKL3($data)
+	{
+		try{
+			$stm = "INSERT INTO ptkl_perubahan (perubahan_3_id, pandangan_zon, pandangan_intensiti, cadangan, borang_id) VALUES (:perubahan_3_id, :pandangan_zon, :pandangan_intensiti, :cadangan, :borang_id)";
+			$bind = array(
+				'perubahan_3_id' => $data['perubahan_3_id'],
+				'pandangan_zon' => $data['pandangan_zon'],
+				'pandangan_intensiti' => $data['pandangan_intensiti'],
+				'cadangan' => $data['cadangan'],
+				'borang_id' => $data['borang_id']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			return $this->pdo->lastInsertId();
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
+	public function updatePTKL3($data)
+	{
+		try{
+			$stm = "UPDATE ptkl_perubahan SET perubahan_3_id = :perubahan_3_id, pandangan_zon = :pandangan_zon, pandangan_intensiti = :pandangan_intensiti, pandangan_awam = ".$data['pandangan_awam'].", cadangan = ".$data['cadangan'].", cadangan = :cadangan, borang_id = :borang_id WHERE id = :id";
+			$bind = array(
+				'perubahan_3_id' => $data['perubahan_3_id'],
+				'pandangan_zon' => $data['pandangan_zon'],
+				'pandangan_intensiti' => $data['pandangan_intensiti'],
+				'pandangan_awam' => $data['pandangan_awam'],
+				'cadangan' => $data['cadangan'],
+				'borang_id' => $data['borang_id'],
+				'id' => $data['id']
+			);
+			
+			return $this->pdo->fetchAffected($stm, $bind);
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
 	public function addBorangPSKL($data)
 	{
 		try{
@@ -169,6 +223,29 @@ Class Borang_model extends Model {
 				'nama_organisasi' => $data['nama_organisasi'],
 				'jumlah_nama' => $data['jumlah_nama'],
 				'user_id' => $data['user_id']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
+	public function updateBorangPTKL($data)
+	{
+		try{
+			$stm = "UPDATE borang_ptkl_3 SET user_id = :user_id, pegawai_id = :pegawai_id, tarikh_terima = :tarikh_terima, tarikh_key_in = :tarikh_key_in, hadir = :hadir, kategori = :kategori, nama_organisasi = :nama_organisasi, jumlah_nama = :jumlah_nama WHERE id = :id";
+			$bind = array(
+				'id' => $data['id'],
+				'user_id' => $data['user_id'],
+				'pegawai_id' => $data['pegawai_id'],
+				'tarikh_terima' => $data['pegawai_id'],
+				'tarikh_key_in' => $data['tarikh_key_in'],
+				'hadir' => $data['hadir'],
+				'kategori' => $data['kategori'],
+				'nama_organisasi' => $data['nama_organisasi'],
+				'jumlah_nama' => $data['jumlah_nama']
 			);
 			
 			$this->pdo->fetchAffected($stm, $bind);
@@ -343,11 +420,11 @@ Class Borang_model extends Model {
 	public function addUlasanPanel($data)
 	{
 		try{
-			$stm  = "INSERT INTO ulasan_panel (borang_id, penilaian, penilaian_other, catatan, pengesyoran, justifikasi, cadangan, tarikh_panel, tarikh_disahkan_1, tarikh_disahkan_2, tarikh_disahkan_3, tarikh_disahkan_4, pegawai_1, pegawai_2, tarikh_urusetia) VALUES (:borang_id, :penilaian, :penilaian_other, :catatan, :pengesyoran, :justifikasi, :cadangan, :tarikh_panel, :tarikh_disahkan_1, :tarikh_disahkan_2, :tarikh_disahkan_3, :tarikh_disahkan_4, :pegawai_1, :pegawai_2, :tarikh_urusetia)";
+			$stm  = "INSERT INTO ulasan_panel (borang_id, penilaian, pengesyoran_diterima, catatan, pengesyoran, justifikasi, cadangan, tarikh_panel, tarikh_disahkan_1, tarikh_disahkan_2, tarikh_disahkan_3, tarikh_disahkan_4, pegawai_1, pegawai_2, tarikh_urusetia) VALUES (:borang_id, :penilaian, :pengesyoran_diterima, :catatan, :pengesyoran, :justifikasi, :cadangan, :tarikh_panel, :tarikh_disahkan_1, :tarikh_disahkan_2, :tarikh_disahkan_3, :tarikh_disahkan_4, :pegawai_1, :pegawai_2, :tarikh_urusetia)";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
 				'penilaian' => $data['penilaian'],
-				'penilaian_other' => $data['penilaian_other'],
+				'pengesyoran_diterima' => $data['pengesyoran_diterima'],
 				'catatan' => $data['catatan'],
 				'pengesyoran' => $data['pengesyoran'],
 				'justifikasi' => $data['justifikasi'],
@@ -374,11 +451,11 @@ Class Borang_model extends Model {
 	public function updateUlasanPanel($data)
 	{
 		try{
-			$stm  = "UPDATE ulasan_panel SET borang_id = :borang_id, penilaian = :penilaian, penilaian_other = :penilaian_other, catatan = :catatan, pengesyoran = :pengesyoran, justifikasi = :justifikasi, cadangan = :cadangan, tarikh_panel = :tarikh_panel, tarikh_disahkan_1 = :tarikh_disahkan_1, tarikh_disahkan_2 = :tarikh_disahkan_2, tarikh_disahkan_3 = :tarikh_disahkan_3, tarikh_disahkan_4 = :tarikh_disahkan_4, pegawai_1 = :pegawai_1, pegawai_2 = :pegawai_2, tarikh_urusetia = :tarikh_urusetia WHERE id = :id";
+			$stm  = "UPDATE ulasan_panel SET borang_id = :borang_id, penilaian = :penilaian, pengesyoran_diterima = :pengesyoran_diterima, catatan = :catatan, pengesyoran = :pengesyoran, justifikasi = :justifikasi, cadangan = :cadangan, tarikh_panel = :tarikh_panel, tarikh_disahkan_1 = :tarikh_disahkan_1, tarikh_disahkan_2 = :tarikh_disahkan_2, tarikh_disahkan_3 = :tarikh_disahkan_3, tarikh_disahkan_4 = :tarikh_disahkan_4, pegawai_1 = :pegawai_1, pegawai_2 = :pegawai_2, tarikh_urusetia = :tarikh_urusetia WHERE id = :id";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
 				'penilaian' => $data['penilaian'],
-				'penilaian_other' => $data['penilaian_other'],
+				'pengesyoran_diterima' => $data['pengesyoran_diterima'],
 				'catatan' => $data['catatan'],
 				'pengesyoran' => $data['pengesyoran'],
 				'justifikasi' => $data['justifikasi'],

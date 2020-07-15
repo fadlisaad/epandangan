@@ -259,11 +259,11 @@ class Auth extends Controller {
 		$session = new EasyCSRF\NativeSessionProvider();
 		$easyCSRF = new EasyCSRF\EasyCSRF($session);
 
-		// try{
-		// 	$easyCSRF->check('token', $_POST['token']);
-		// }catch(Exception $e){
-		// 	echo $e->getMessage();
-		// }
+		try{
+			$easyCSRF->check('token', $_POST['token']);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
 
 		if(isset($_POST['submit'])){
 			
@@ -305,8 +305,21 @@ class Auth extends Controller {
 				$session->set('last_ip', $_SERVER['REMOTE_ADDR']);
 
 				if($user[0]['permission'] == 'user'){
+
 					$source = $session->get('source');
-					$this->redirect('borang/pandangan/'.$source);
+
+					if(empty($source)){
+						// login to dashboard
+						$this->redirect('dashboard');
+					}else{
+						if(is_numeric($source)){
+							// Perubahan 3 sahaja
+							$this->redirect('borang/pandangan/ptkl-3?tapak='.$source);
+						}else{
+							// Perubahan 1 dan 2, PSKL
+							$this->redirect('borang/pandangan/'.$source);
+						}
+					}
 				}else{
 					$this->redirect('dashboard/admin');
 				}

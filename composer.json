@@ -1,7 +1,7 @@
 {
     "require": {
     	"gilbitron/easycsrf": "~1.0",
-        "phpmailer/phpmailer": "~5.2",
+        "phpmailer/phpmailer": "6.1.6",
         "vlucas/phpdotenv": "^2.4",
         "aura/sql": "^3.0",
         "dolondro/google-authenticator": "^2.0",

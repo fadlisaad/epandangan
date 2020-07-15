@@ -227,10 +227,10 @@
         </div>
 
         <?php if($dataPA3): ?>
-        <button class="btn btn-success" id="ubah-pa3">Ubah</button>
-        <button class="btn btn-primary" id="update-pa3">Kemaskini</button>
+        <button class="btn btn-success" id="ubah-pa3">Ubah Bahagian E</button>
+        <button class="btn btn-primary" id="update-pa3">Kemaskini Bahagian E</button>
         <?php else: ?>
-        <button class="btn btn-primary" id="save-pa3">Simpan</button>
+        <button class="btn btn-primary" id="save-pa3">Simpan Bahagian E</button>
         <?php endif; ?>
 
         <div class="row">
@@ -242,11 +242,8 @@
                         <td><strong>1. Catatan maklumbalas oleh ahli panel Jawatankuasa Pendengaran Pandangan Awam (JKKPA)</strong></td>
                     </tr>
                     <tr>
-                        <td><?php if(isset($ulasanPanel[0]['catatan'])): ?>
-                            <p class="ulasanPanel"><?php echo $ulasanPanel[0]['catatan'] ?></p>
-                            <textarea class="form-control hidePanel" rows="10" name="catatan"><?php echo $ulasanPanel[0]['catatan'] ?></textarea>
-                            <?php else: ?>
-                            <textarea class="form-control showPanel" rows="10" name="catatan"></textarea>
+                        <td><?php if(isset($ulasanPanel[0]['catatan'])) : ?>
+                            <div class="ulasanPanel"><?php echo empty($ulasanPanel[0]['catatan']) ? "Tiada" : $ulasanPanel[0]['catatan'] ?></div>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -291,55 +288,39 @@
                                     <input type="checkbox" class="custom-control-input" id="penilaian-02" value="Tidak Berkaitan Draf PSKL2040" name="penilaian[]" <?php echo @$checkbox_id_02 ?>>
                                     <label class="custom-control-label" for="penilaian-02">Tidak Berkaitan Draf PSKL2040</label>
                                 </div>
-                                <label style="padding-left: 24px;">Lain-lain</label>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-03" value="Aspek Pengurusan" name="penilaian[]" <?php echo @$checkbox_id_03 ?>>
                                     <label class="custom-control-label" for="penilaian-03">Aspek Pengurusan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-04" value="Aspek Perundangan" name="penilaian[]" <?php echo @$checkbox_id_04 ?>>
                                     <label class="custom-control-label" for="penilaian-04">Aspek Perundangan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-05" value="Aspek Penguatkuasaan" name="penilaian[]" <?php echo @$checkbox_id_05 ?>>
                                     <label class="custom-control-label" for="penilaian-05">Aspek Penguatkuasaan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-06" value="Lain-lain" name="penilaian[]" <?php echo @$checkbox_id_06 ?>>
-                                    <label class="custom-control-label" for="penilaian-06">Lain-lain</label>
-                                </div>
-                                <div style="padding-left: 48px;width:50%;display:none;" id="penilaian-other">
-                                    <input type="text" class="form-control" name="penilaian-other" id="penilaian-other-input" value="<?php echo @$ulasanPanel[0]['penilaian_other'] ?>">
-                                </div>
                             <?php else: ?>
                             <div class="showPanel">
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="penilaian-01" value="Berkaitan Draf PSKL2040" name="penilaian[]">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-01" value="Berkaitan Draf PSKL2040" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-01">Berkaitan Draf PSKL2040</label>
                                 </div>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="penilaian-02" value="Tidak Berkaitan Draf PSKL2040" name="penilaian[]">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="penilaian-02" value="Tidak Berkaitan Draf PSKL2040" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-02">Tidak Berkaitan Draf PSKL2040</label>
                                 </div>
-                                <label style="padding-left: 24px;">Lain-lain</label>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-03" value="Aspek Pengurusan" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-03">Aspek Pengurusan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-04" value="Aspek Perundangan" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-04">Aspek Perundangan</label>
                                 </div>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="penilaian-05" value="Aspek Penguatkuasaan" name="penilaian[]">
                                     <label class="custom-control-label" for="penilaian-05">Aspek Penguatkuasaan</label>
-                                </div>
-                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
-                                    <input type="checkbox" class="custom-control-input" id="penilaian-06" value="Lain-lain" name="penilaian[]">
-                                    <label class="custom-control-label" for="penilaian-06">Lain-lain</label>
-                                </div>
-                                <div style="padding-left: 48px;width:50%;display:none;" id="penilaian-other">
-                                    <input type="text" class="form-control" name="penilaian-other" id="penilaian-other-input">
                                 </div>
                             </div>
                             <?php endif; ?>
@@ -347,22 +328,46 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><strong>3. Pengesyoran Panel Dan Justifikasi (Isu-isu di bawah adalah sama dengan yang disenaraikan dalam perkara 1)</strong></td>
+                        <td><strong>3. Pengesyoran Panel dan Justifikasi (Isu-isu di bawah adalah sama dengan yang disenaraikan dalam perkara 1)</strong></td>
                     </tr>
                     <tr>
                         <td>
-                            <?php if(isset($ulasanPanel[0]['pengesyoran'])): ?>
+                            <?php if(isset($ulasanPanel[0]['pengesyoran_diterima'])): ?>
+                            <?php $pengesyoran = unserialize($ulasanPanel[0]['pengesyoran_diterima']); foreach ($pengesyoran as $value):
+                                switch ($value) {
+                                    case 'Penambahbaikan PSKL 2040':
+                                        $checkbox_id_07 = 'checked';
+                                        break;
+
+                                    case 'Perincian PTKL 2040':
+                                        $checkbox_id_08 = 'checked';
+                                        break;
+
+                                    case 'Garis panduan / kajian terperinci':
+                                        $checkbox_id_09 = 'checked';
+                                        break;
+                                }
+                            ?>
+                            <?php endforeach; ?>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="pengesyoran-diterima" name="pengesyoran" class="custom-control-input hidePanel" value="Diterima" <?php echo $ulasanPanel[0]['pengesyoran'] == 'Diterima' ? "checked" : "" ?>>
                                 <label class="custom-control-label" for="pengesyoran-diterima">Diterima</label>
                             </div>
+                            <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <input type="checkbox" id="pengesyoran-diterima-01" name="pengesyoran-diterima[]" class="custom-control-input hidePanel" value="Penambahbaikan PSKL 2040" <?php echo @$checkbox_id_07 ?>>
+                                <label class="custom-control-label" for="pengesyoran-diterima-01">Penambahbaikan PSKL 2040</label>
+                            </div>
+                            <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <input type="checkbox" id="pengesyoran-diterima-02" name="pengesyoran-diterima[]" class="custom-control-input hidePanel" value="Perincian PTKL 2040" <?php echo @$checkbox_id_08 ?>>
+                                <label class="custom-control-label" for="pengesyoran-diterima-02">Perincian PTKL 2040</label>
+                            </div>
+                            <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <input type="checkbox" id="pengesyoran-diterima-03" name="pengesyoran-diterima[]" class="custom-control-input hidePanel" value="Garis panduan / kajian terperinci" <?php echo @$checkbox_id_09 ?>>
+                                <label class="custom-control-label" for="pengesyoran-diterima-03">Garis panduan / kajian terperinci</label>
+                            </div>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="pengesyoran-ditolak" name="pengesyoran" class="custom-control-input hidePanel" value="Ditolak" <?php echo $ulasanPanel[0]['pengesyoran'] == 'Ditolak' ? "checked" : "" ?>>
                                 <label class="custom-control-label" for="pengesyoran-ditolak">Ditolak</label>
-                            </div>
-                            <div class="custom-control custom-radio">
-                                <input type="radio" id="pengesyoran-ambil-maklum" name="pengesyoran" class="custom-control-input hidePanel" value="Ambil Maklum" <?php echo $ulasanPanel[0]['pengesyoran'] == 'Ambil Maklum' ? "checked" : "" ?>>
-                                <label class="custom-control-label" for="pengesyoran-ambil-maklum">Ambil Maklum</label>
                             </div>
                             <?php else: ?>
                             <div class="showPanel">
@@ -370,13 +375,21 @@
                                     <input type="radio" id="pengesyoran-diterima" name="pengesyoran" class="custom-control-input" value="Diterima">
                                     <label class="custom-control-label" for="pengesyoran-diterima">Diterima</label>
                                 </div>
+                                <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <input type="checkbox" id="pengesyoran-diterima-01" name="pengesyoran-diterima[]" class="custom-control-input hidePanel" value="Penambahbaikan PSKL 2040">
+                                <label class="custom-control-label" for="pengesyoran-diterima-01">Penambahbaikan PSKL 2040</label>
+                            </div>
+                            <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <input type="checkbox" id="pengesyoran-diterima-02" name="pengesyoran-diterima[]" class="custom-control-input hidePanel" value="Perincian PTKL 2040">
+                                <label class="custom-control-label" for="pengesyoran-diterima-02">Perincian PTKL 2040</label>
+                            </div>
+                            <div class="custom-control custom-checkbox" style="padding-left: 48px;">
+                                <input type="checkbox" id="pengesyoran-diterima-03" name="pengesyoran-diterima[]" class="custom-control-input hidePanel" value="Garis panduan / kajian terperinci">
+                                <label class="custom-control-label" for="pengesyoran-diterima-03">Garis panduan / kajian terperinci</label>
+                            </div>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="pengesyoran-ditolak" name="pengesyoran" class="custom-control-input" value="Ditolak">
                                     <label class="custom-control-label" for="pengesyoran-ditolak">Ditolak</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="pengesyoran-ambil-maklum" name="pengesyoran" class="custom-control-input" value="Ambil Maklum">
-                                    <label class="custom-control-label" for="pengesyoran-ambil-maklum">Ambil Maklum</label>
                                 </div>
                             </div>
                             <?php endif; ?>
@@ -388,10 +401,7 @@
                     <tr>
                         <td>
                             <?php if(isset($ulasanPanel[0]['justifikasi'])): ?>
-                            <p class="ulasanPanel"><?php echo empty($ulasanPanel[0]['justifikasi']) ? "Tiada" : $ulasanPanel[0]['justifikasi'] ?></p>
-                            <textarea class="form-control hidePanel" rows="10" name="justifikasi"><?php echo empty($ulasanPanel[0]['justifikasi']) ? "Tiada" : $ulasanPanel[0]['justifikasi'] ?></textarea>
-                            <?php else: ?>
-                            <textarea class="form-control showPanel" rows="10" name="justifikasi"></textarea>
+                            <div class="ulasanPanel"><?php echo empty($ulasanPanel[0]['justifikasi']) ? "Tiada" : $ulasanPanel[0]['justifikasi'] ?></div>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -401,10 +411,7 @@
                     <tr>
                         <td>
                             <?php if(isset($ulasanPanel[0]['cadangan'])): ?>
-                            <p class="ulasanPanel"><?php echo empty($ulasanPanel[0]['cadangan']) ? "Tiada" : $ulasanPanel[0]['cadangan'] ?></p>
-                            <textarea class="form-control hidePanel" rows="10" name="cadangan"><?php echo empty($ulasanPanel[0]['cadangan']) ? "Tiada" : $ulasanPanel[0]['cadangan'] ?></textarea>
-                            <?php else: ?>
-                            <textarea class="form-control showPanel" rows="10" name="cadangan"></textarea>
+                            <div class="ulasanPanel"><?php echo empty($ulasanPanel[0]['cadangan']) ? "Tiada" : $ulasanPanel[0]['cadangan'] ?></div>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -448,13 +455,13 @@
                                     <div class="ulasanPanel">Tarikh: <?php echo @$dateHelper->convertDate($ulasanPanel[0]['tarikh_disahkan_1']) ?></div>
                                     <input type="date" id="tarikh_disahkan_1" name="tarikh_disahkan_1" value="<?php echo @$ulasanPanel[0]['tarikh_disahkan_1'] ?>" class="hidePanel">
                                     <?php else: ?>
-                                    <input type="date" id="tarikh_disahkan_1" name="tarikh_disahkan_1">
+                                    Tarikh: <span class="date-border" style="display: none;">____________</span><input type="date" id="tarikh_disahkan_1" name="tarikh_disahkan_1" class="date">
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <?php if($jkppa[0]['ajk_3'] != NULL){
+                            <?php if(isset($jkppa[0]['ajk_3']) && ($jkppa[0]['ajk_3'] != NULL)){
                                 $col = 4;
                             }else{
                                 $col = 6;
@@ -468,7 +475,7 @@
                                     <div class="ulasanPanel">Tarikh: <?php echo @$dateHelper->convertDate($ulasanPanel[0]['tarikh_disahkan_2']) ?></div>
                                     <input type="date" id="tarikh_disahkan_2" name="tarikh_disahkan_2" value="<?php echo @$ulasanPanel[0]['tarikh_disahkan_2'] ?>" class="hidePanel">
                                     <?php else: ?>
-                                    <input type="date" id="tarikh_disahkan_2" name="tarikh_disahkan_2">
+                                    Tarikh: <span class="date-border" style="display: none;">____________</span><input type="date" id="tarikh_disahkan_2" name="tarikh_disahkan_2" class="date">
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -481,11 +488,11 @@
                                     <div class="ulasanPanel">Tarikh: <?php echo @$dateHelper->convertDate($ulasanPanel[0]['tarikh_disahkan_3']) ?></div>
                                     <input type="date" id="tarikh_disahkan_3" name="tarikh_disahkan_3" value="<?php echo @$ulasanPanel[0]['tarikh_disahkan_3'] ?>" class="hidePanel">
                                     <?php else: ?>
-                                    <input type="date" id="tarikh_disahkan_3" name="tarikh_disahkan_3">
+                                    Tarikh: <span class="date-border" style="display: none;">____________</span><input type="date" id="tarikh_disahkan_3" name="tarikh_disahkan_3" class="date">
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <?php if($jkppa[0]['ajk_3'] != NULL): ?>
+                            <?php if(isset($jkppa[0]['ajk_3']) && ($jkppa[0]['ajk_3'] != NULL)): ?>
                             <div class="col-md-4 col-sm-4">
                                 <div class="text-center mt-5">
                                     <div class="border-top-2 text-center">---------------------------------------</div>
@@ -495,7 +502,7 @@
                                     <div class="ulasanPanel">Tarikh: <?php echo @$dateHelper->convertDate($ulasanPanel[0]['tarikh_disahkan_4']) ?></div>
                                     <input type="date" id="tarikh_disahkan_4" name="tarikh_disahkan_4" value="<?php echo @$ulasanPanel[0]['tarikh_disahkan_4'] ?>" class="hidePanel">
                                     <?php else: ?>
-                                    <input type="date" id="tarikh_disahkan_4" name="tarikh_disahkan_4">
+                                    Tarikh: <span class="date-border" style="display: none;">____________</span><input type="date" id="tarikh_disahkan_4" name="tarikh_disahkan_4" class="date">
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -624,11 +631,42 @@
             </div>
         </div>
 
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Tambah Ulasan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="cadangan"> 1. Catatan maklumbalas oleh ahli panel Jawatankuasa Pendengaran Pandangan Awam (JKKPA)<span class="text-danger">*</span></label>
+                            <textarea class="form-control summernote" rows="5" name="catatan" form="add-ulasan-panel"><?php echo @$ulasanPanel[0]['catatan'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="justifikasi">4. Justifikasi Pengesyoran <span class="text-danger">*</span></label>
+                            <textarea class="form-control summernote" name="justifikasi" rows="5" form="add-ulasan-panel"><?php echo @$ulasanPanel[0]['justifikasi'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="justifikasi">5. Cadangan Bagi Penambahbaikan Draf PSKL2040</label>
+                            <textarea class="form-control summernote" name="cadangan" rows="5" form="add-ulasan-panel"><?php echo @$ulasanPanel[0]['cadangan'] ?></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light waves-effect" data-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-info update-ulasan-panel btn-sm" data-dismiss="modal"><i class="fas fa-plus-circle"></i> Simpan/Kemaskini Bahagian F (1,4,5)</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
         <?php if($ulasanPanel): ?>
-        <button class="btn btn-success" id="ubah-ulasan-panel">Ubah</button>
-        <button class="btn btn-primary" id="update-ulasan-panel">Kemaskini</button>
+        <button class="btn btn-success" type="button" id="ubah-ulasan-panel">Ubah Bahagian F dan Urus Setia</button>
+        <button class="btn btn-primary update-ulasan-panel" id="update-ulasan-panel">Kemaskini</button>
+        <button type="button" class="btn btn-primary waves-effect waves-light show-ubah-button" data-toggle="modal" data-target="#myModal">Ubah Bahagian F (1,4,5)</button>
         <?php else: ?>
-        <button class="btn btn-primary" id="save-ulasan-panel">Simpan</button>
+        <button class="btn btn-info" id="save-ulasan-panel">Simpan Bahagian F dan Urus Setia</button>
+        <button type="button" class="btn btn-primary waves-effect waves-light show-ubah-button" data-toggle="modal" data-target="#myModal">Tambah Bahagian F (1,4,5)</button>
         <?php endif; ?>
         </form>
 

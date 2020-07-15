@@ -68,6 +68,7 @@
                                     <div class="modal-body">
                                         <h3>Makluman Gangguan Capaian Portal PPKL2040/E-Pandangan</h3>
                                         <p>Adalah dimaklumkan bahawa akan berlaku gangguan capaian ke portal PPKL2040/E-Pandangan bermula jam 7.00 malam, 6 Mac 2020 (Jumaat) dan dijangka akan beroperasi semula pada jam 7.00 malam, 8 Mac 2020 (Ahad) disebabkan oleh kerja-kerja menaiktaraf rangkaian DBKL. Segala kesulitan amatlah dikesali</p>
+                                        <pre><?php var_dump($_SESSION) ?></pre>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">Tutup</button>

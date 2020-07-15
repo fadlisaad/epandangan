@@ -8,6 +8,7 @@ class Borang extends Controller {
 		$this->model = $this->loadModel('Borang_model');
 		$this->a_model = $this->loadModel('Auth_model');
 		$this->u_model = $this->loadModel('Pengguna_model');
+		$this->p_model = $this->loadModel('Perubahan_model');
 
 		$this->css = array(
 			'assets/libs/datatables/dataTables.bootstrap4.css',
@@ -198,6 +199,88 @@ class Borang extends Controller {
 		$navigation = $this->loadView('topbar');
 		$footer = $this->loadView('footer');
         $template = $this->loadView('borang/index-ptkl-2');
+
+		$header->set('css', $this->css);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function ptkl_3()
+	{
+		$custom_js = "<script type=\"text/javascript\">
+
+			var base_url = '".BASE_URL."borang/process/borang_ptkl_3';
+			
+			$(document).ready(function() {
+
+    			$('#datatable').DataTable({
+    				serverSide : true,
+    				processing : true,
+    				ajax : {
+    					url : base_url,
+    					type : 'POST'
+    				},
+    				deferRender : true,
+    				error : true,
+    				columns: [
+			            { data: 'id' },
+			            { data: 'nama_penuh' },
+			            { data: 'ic_passport' },
+			            { data: 'tarikh_terima' },
+			            { data: 'action' }
+			        ],
+			        columnDefs: [
+					    { width: '5%', 'targets': 0 },
+					    { width: '12%', 'targets': 2 },
+					    { width: '12%', 'targets': 3 },
+					    { width: '10%', 'targets': 4 }
+					]
+    			});
+
+    			// create entry
+				function create(){
+
+					var post_url = '".BASE_URL."borang/addPTKL3';
+
+					$.ajax({
+						type: 'POST',
+						url: post_url,
+						dataType: 'html',
+						data: $('form#ptkl').serialize(),
+						success:function(response){
+							if(parseInt(response) == 0){
+								Swal.fire({
+									title: 'Ralat',
+									text: 'Ruangan nama adalah kosong. Sila isi dengan betul.',
+									type: 'warning'
+								});
+							}else{
+								Swal.fire({
+									title: 'Berjaya',
+									text: 'Maklumat telah berjaya ditambah.',
+									type: 'success'
+								}).then(function() {
+					                location.reload();
+					            });
+							}
+						}
+				    });
+
+				}
+    			
+    		});
+
+		</script>";
+		
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('borang/index-ptkl-3');
 
 		$header->set('css', $this->css);
 		$footer->set('custom_js', $custom_js);
@@ -469,6 +552,68 @@ class Borang extends Controller {
 		$header->set('css', $this->css);
 		$template->set('data', $data);
 		$template->set('tindakan', $tindakan);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function papar_ptkl_3($id)
+	{
+		$custom_css = "<style>
+		@media print {
+		    .printable {
+		        background-color: white;
+		        height: 100%;
+		        width: 100%;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        margin: 0;
+		        padding: 15px;
+		        font-size: 14px;
+		        line-height: 18px;
+		    }
+		}
+		</style>";
+
+		$custom_js = "<script>
+
+			var select_sesi = '".BASE_URL."search.php?table=sesi_jadual';
+
+			$('#sesi').select2({
+				placeholder: 'Pilih sesi pendengaran',
+			    ajax: {
+			        url: select_sesi,
+			        dataType: 'json',
+			        processResults: function (data) {
+			            return {
+			            	results: data
+			            };
+			        }
+			    },
+			    cache: true
+			});
+		</script>";
+
+		$data = $this->model->getPTKL3ByID($id);
+        $perubahan = $this->p_model->getPerubahanByID($data[0]['id']);
+        $profile = $this->a_model->getUserProfile($data[0]['user_id']);
+
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('borang/view-ptkl-3');
+
+		$header->set('custom_css', $custom_css);
+		$header->set('css', $this->css);
+		$template->set('data', $data);
+		$template->set('perubahan', $perubahan);
+		$template->set('profile', $profile);
 		$template->set('helper', $this->loadHelper('upload_helper'));
 		$footer->set('js', $this->js);
 		$footer->set('custom_js', $custom_js);
@@ -1231,7 +1376,7 @@ class Borang extends Controller {
 
 		$header = $this->loadView('header-print');
 		$footer = $this->loadView('footer-print');
-        $template = $this->loadView('borang/penilaian-pskl');
+        $template = $this->loadView('borang/penilaian-pskl-v2');
 
 		$header->set('custom_css', $custom_css);
 		$template->set('data', $data);
@@ -1269,6 +1414,12 @@ class Borang extends Controller {
 				appearance: none;
 				border: none;
 				background: none;
+			}
+			.date {
+			    display:none;
+			}
+			.date-border {
+				display:inline-block !important;
 			}
 			input {
 			    border: none !important;
@@ -1429,6 +1580,23 @@ class Borang extends Controller {
 
 		$custom_js .= "<script>
 
+			Swal.fire({
+				title: 'Nota',
+				text: 'Sila ikut urutan ini bagi menyimpan Borang PA3: 1) Isi Bahagian F (2 dan 3) dan tekan butang Simpan Bahagian F dan Urus Setia. 2) Untuk menambah atau mengubah Bahagian F (1, 4 dan 5), sila tekan butang Tambah/Kemaskini Bahagian F (1,4,5), isikan dan tekan butang Simpan/Kemaskini Bahagian F (1,4,5)',
+				type: 'info'
+			});
+
+			$('.summernote').summernote({
+			    height: 250,
+			    minHeight: null,
+			    maxHeight: null,
+			    focus: false,
+			    toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+					['para', ['ul', 'ol']],
+				]
+			});
+
 			// insert ulasanPanel
 			function insertUlasanPanel(){
 
@@ -1495,36 +1663,19 @@ class Borang extends Controller {
 			    });
 			}
 
-			$('button#update-ulasan-panel').bind('click', function (e) {
+			$('button.update-ulasan-panel').bind('click', function (e) {
 				e.preventDefault();
 				$(this).attr('disabled', 'disabled');
 				updateUlasanPanel();
 			});
 
-			$('#penilaian-06').bind('click', function(){
-
-				if($(this).prop('checked', true)){
-					$('#penilaian-other').show()
-				}else{
-					$('#penilaian-other').hide()
-				}
-				
-			});
-
-			$('#penilaian-01, #penilaian-02, #penilaian-03, #penilaian-04, #penilaian-05').bind('click', function() {
-		        $('#penilaian-06').prop('checked', false);
-		        $('#penilaian-other-input').val('');
-		        $('#penilaian-other').hide();
+			$('#pengesyoran-ditolak').bind('click', function() {
+		        $('#pengesyoran-diterima-01, #pengesyoran-diterima-02, #pengesyoran-diterima-03').prop('checked', false);
 		    });
 
-		    $('#penilaian-01, #penilaian-02').bind('click', function() {
-		        $('#penilaian-03, #penilaian-04, #penilaian-05, #penilaian-06').prop('checked', false);
-		        $('#penilaian-other-input').val('');
-		        $('#penilaian-other').hide();
-		    });
-
-		    $('#penilaian-03, #penilaian-04, #penilaian-05, #penilaian-06').bind('click', function() {
-		        $('#penilaian-01, #penilaian-02').prop('checked', false);
+		    $('#pengesyoran-diterima-01, #pengesyoran-diterima-02, #pengesyoran-diterima-03').bind('click', function() {
+		    	$('#pengesyoran-ditolak').prop('checked', false);
+		    	$('#pengesyoran-diterima').prop('checked', true);
 		    });
 
 		</script>";
@@ -1532,26 +1683,16 @@ class Borang extends Controller {
 		if($ulasanPanel):
 
 			$custom_js .= "<script>
-
-			var ulasanPanel = '".$ulasanPanel[0]['penilaian']."';
 			
-			if(ulasanPanel){
-				$('button#update-ulasan-panel, .hidePanel').hide();
-			}
+			$('button#update-ulasan-panel,.hidePanel').hide();
 
 			$('button#ubah-ulasan-panel').bind('click', function (e) {
 				
-				$('.hidePanel, button#update-ulasan-panel').show();
+				$('.hidePanel, button.update-ulasan-panel').show();
 				$(this).attr('disabled', 'disabled');
 				$('.ulasanPanel, .d-none').hide();
 				
 			});
-
-			var penilaianText = '".$ulasanPanel[0]['penilaian_other']."';
-
-			if(penilaianText){
-				$('#penilaian-other').show()
-			}
 			</script>";
 		endif;
 
@@ -1564,6 +1705,7 @@ class Borang extends Controller {
 
 		$header = $this->loadView('header-print');
 		$footer = $this->loadView('footer-print');
+        #$template = $this->loadView('borang/penilaian-2');
         #$template = $this->loadView('borang/penilaian-2-pskl');
         $template = $this->loadView('borang/penilaian-2-pskl-v2');
 
@@ -1837,7 +1979,7 @@ class Borang extends Controller {
 		var borang_type = '".$borang."';
 
 		$(function () {
-			$('#borang-ptkl, #borang-ptkl-2, #borang-pskl').parsley().on('field:validated', function() {
+			$('#borang-ptkl, #borang-ptkl-2, #borang-pskl, #borang-ptkl-3').parsley().on('field:validated', function() {
 				var ok = $('.parsley-error').length === 0;
 				$('#alert-warning').toggleClass('d-none', ok);
 			}).on('form:submit', function() {
@@ -1868,7 +2010,7 @@ class Borang extends Controller {
 
 		$('#row-organisasi').hide();
 
-		if(borang_type == 'ptkl'){
+		if(borang_type == 'ptkl' || borang_type == 'ptkl-2'){
 			Swal.fire({
 				title: msg1_title,
 				text: msg1_text,
@@ -1881,13 +2023,6 @@ class Borang extends Controller {
 				type: 'info'
 			});
 		}
-
-		$('[data-countdown]').each(function () {
-			finalDate = $(this).data('countdown');
-			$(this).countdown(finalDate, function (event) {
-				$(this).html(event.strftime('' + '%D hari %H jam %M minit %S s'));
-			});
-		});
 
 		$(\"input[name='kategori']\").on('click', function(){
 		    $('#row-organisasi').toggle(this.value === 'Organisasi' && this.checked);
@@ -2132,12 +2267,117 @@ class Borang extends Controller {
         	$template->set('select_halatuju', $halatuju);
         	$template->set('select_tindakan', $tindakan);
 
+        //}else if($borang == 'ptkl' || $borang == 'ptkl-2' || $borang == 'ptkl-3'){
         }else if($borang == 'ptkl' || $borang == 'ptkl-2'){
 
+        	if($this->session->get('permission') == 'officer')
+			{
+				if($this->session->get('borang_id') != NULL){
+
+					$data = $this->model->getByID($borang, $borang_id);
+					$profile = $this->a_model->getUserProfile($data[0]['user_id']);
+					$this->session->set('user_email', $profile[0]['email']);
+
+					if($data[0]['kategori'] == 'Organisasi'){
+						$custom_js .= "<script>
+							$('#row-organisasi').show();
+						</script>";
+					}
+
+				}else{
+
+					$profile = NULL;
+					$data = NULL;
+					$dataMatlamat = NULL;
+				}
+			}
+			else
+			{
+				$profile = $this->a_model->getUserProfile($this->session->get('user_id'));
+				$data = $this->model->getByUserID($borang, $this->session->get('user_id'));
+				$dataMatlamat = NULL;
+			}
+
         	$template = $this->loadView('borang/tambah-'.$borang);
-        	$data = NULL;
-        	$dataMatlamat = NULL;
-        	$profile = NULL;
+        
+        }else{
+
+        	$custom_js .= "<script>
+        		
+				function deletePerubahan(id)
+				{
+					var delete_url = '".BASE_URL."perubahan/delete';
+			    
+				    Swal.fire({
+				        title: 'Anda pasti?',
+				        text: 'Maklumat ini tidak akan disimpan.',
+				        type: 'warning',
+				        showCancelButton: true,
+				        confirmButtonColor: '#DD6B55',
+				        confirmButtonText: 'Ya, hapuskan!',
+				    }).then(function(result){
+				    	if (result.value) {
+					        $.ajax({
+					            url: delete_url,
+					            dataType: 'html',
+					            data: 'id=' + id,
+					            type: 'POST',
+					            success: function(response) {
+				                	Swal.fire('berjaya!', 'Maklumat ini berjaya dihapus', 'success');
+				                	$('#perubahan-'+ id).slideUp();
+					            },
+					            error: function (xhr, ajaxOptions, thrownError) {
+					                Swal.fire('Ralat!', 'Sila cuba semula', 'error');
+					            }
+					        });
+					    }else if(result.dismiss === Swal.DismissReason.cancel) {
+					    	Swal.fire('Cancelled', 'Tiada maklumat yang dihapus', 'info');	
+					    }
+				    });
+				}
+
+        	</script>";
+
+        	if($this->session->get('permission') == 'officer')
+			{
+				if($this->session->get('borang_id') != NULL){
+
+					$data = $this->model->getByID('ptkl_3', $borang_id);
+					$profile = $this->a_model->getUserProfile($data[0]['user_id']);
+					$this->session->set('user_email', $profile[0]['email']);
+
+					if($data[0]['kategori'] == 'Organisasi'){
+						$custom_js .= "<script>
+							$('#row-organisasi').show();
+						</script>";
+					}
+
+				}else{
+
+					$profile = NULL;
+					$data = NULL;
+					$dataMatlamat = NULL;
+				}
+			}
+			else
+			{
+				$profile = $this->a_model->getUserProfile($this->session->get('user_id'));
+				$data = $this->p_model->getBorang($this->session->get('user_id'));
+				$dataMatlamat = NULL;
+			}
+
+        	$template = $this->loadView('borang/tambah-ptkl-3');
+        	# PTKL 3
+        	parse_str($borang, $output);
+        	$perubahan_id = $output['ptkl-3?tapak'];
+        	if(is_numeric($perubahan_id)){
+        		$ptkl_3 = $this->p_model->getByID('perubahan_3', $perubahan_id);
+        	}else{
+        		$ptkl_3 = NULL;
+        	}
+        	$perubahan = $this->p_model->getPerubahanByID($data[0]['id']);
+        	$template->set('ptkl_3', $ptkl_3);
+        	$template->set('perubahan', $perubahan);
         }
 
         $header->set('css', $this->css);
@@ -2210,7 +2450,7 @@ class Borang extends Controller {
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
 				'penilaian' => empty($_POST['penilaian']) ? NULL : serialize($_POST['penilaian']),
-				'penilaian_other' => empty($_POST['penilaian-other']) ? NULL : $_POST['penilaian-other'],
+				'pengesyoran_diterima' => empty($_POST['pengesyoran-diterima']) ? NULL : serialize($_POST['pengesyoran-diterima']),
 				'catatan' => empty($_POST['catatan']) ? NULL : $_POST['catatan'],
 				'pengesyoran' => empty($_POST['pengesyoran']) ? NULL : $_POST['pengesyoran'],
 				'justifikasi' => empty($_POST['justifikasi']) ? NULL : $_POST['justifikasi'],
@@ -2247,7 +2487,7 @@ class Borang extends Controller {
 			$data = array(
 				'borang_id' => $_POST['borang_id'],
 				'penilaian' => empty($_POST['penilaian']) ? NULL : serialize($_POST['penilaian']),
-				'penilaian_other' => empty($_POST['penilaian-other']) ? NULL : $_POST['penilaian-other'],
+				'pengesyoran_diterima' => empty($_POST['pengesyoran-diterima']) ? NULL : serialize($_POST['pengesyoran-diterima']),
 				'catatan' => empty($_POST['catatan']) ? NULL : $_POST['catatan'],
 				'pengesyoran' => empty($_POST['pengesyoran']) ? NULL : $_POST['pengesyoran'],
 				'justifikasi' => empty($_POST['justifikasi']) ? NULL : $_POST['justifikasi'],
@@ -2549,7 +2789,7 @@ class Borang extends Controller {
 				case 'super':
 
 					# create user
-					$username = 'pbrkl2020-draf2-'.rand(0,9999).'@yopmail.com';
+					$username = 'pbrkl2020-draf3-'.rand(0,9999).'@yopmail.com';
 					$dataUser = array(
 						'username' => $username,
 						'password' => '12345678'
@@ -2613,32 +2853,76 @@ class Borang extends Controller {
 					break;
 			}
 
-			$dataBorang = array(
-				'kategori' => $this->filter->sanitize($_POST['kategori']),
-				'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
-				'jumlah_nama' => $this->filter->isInt($_POST['jumlah_nama']),
-				'peta_indeks' => $this->filter->sanitize($_POST['peta_indeks']),
-				'no_lot' => $this->filter->sanitize($_POST['no_lot']),
-				'muka_surat' => $this->filter->sanitize($_POST['muka_surat']),
-				'pandangan_awam' => $this->filter->sanitize($_POST['pandangan_awam']),
-				'cadangan' => $this->filter->sanitize($_POST['cadangan']),
-				'user_id' => $user_id,
-				'pegawai_id' => $pegawai_id,
-				'tarikh_terima' => Carbon::now()->toDateString(),
-				'tarikh_key_in' => $tarikh_key_in,
-				'hadir' => $this->filter->sanitize($_POST['hadir'])
-			);
+			if($table == 'ptkl_3'){
 
-			$insert = $this->model->addPTKL($dataBorang, $table);
+				$dataBorang = array(
+					'kategori' => $this->filter->sanitize($_POST['kategori']),
+					'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
+					'jumlah_nama' => $this->filter->isInt($_POST['jumlah_nama']),
+					'user_id' => $user_id,
+					'pegawai_id' => $pegawai_id,
+					'tarikh_terima' => Carbon::now()->toDateString(),
+					'tarikh_key_in' => $tarikh_key_in,
+					'hadir' => $this->filter->sanitize($_POST['hadir']),
+					'id' => $this->filter->isInt($_POST['borang_id'])
+				);
 
-			# TODO: hantar notifikasi email
+				$this->updateBorangPTKL($dataBorang);
 
-			$msg = array(
-				'error_msg' => 'Maklumat borang pandangan awam ini telah berjaya dihantar.',
-				'error_url' => BASE_URL.'dashboard',
-				'error_type' => 'success',
-				'error_title' => 'Borang berjaya dihantar'
-			);
+				$dataPTKL3 = array(
+					'pandangan_intensiti' => $this->filter->sanitize($_POST['pandangan_intensiti']),
+					'perubahan_3_id' => $this->filter->isInt($_POST['perubahan_3_id']),
+					'pandangan_zon' => $this->filter->sanitize($_POST['pandangan_zon']),
+					'cadangan' => $this->filter->sanitize($_POST['cadangan']),
+					'borang_id' => $this->filter->isInt($_POST['borang_id']),
+				);
+
+				$insert = $this->model->addPTKL3($dataPTKL3);
+				$return_url = BASE_URL.'borang/pandangan/ptkl_3?tapak='.$_POST['perubahan_3_id'];
+
+			}else{
+
+				$dataBorang = array(
+					'kategori' => $this->filter->sanitize($_POST['kategori']),
+					'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
+					'jumlah_nama' => $this->filter->isInt($_POST['jumlah_nama']),
+					'peta_indeks' => $this->filter->sanitize($_POST['peta_indeks']),
+					'no_lot' => $this->filter->sanitize($_POST['no_lot']),
+					'muka_surat' => $this->filter->sanitize($_POST['muka_surat']),
+					'pandangan_awam' => $this->filter->sanitize($_POST['pandangan_awam']),
+					'cadangan' => $this->filter->sanitize($_POST['cadangan']),
+					'user_id' => $user_id,
+					'pegawai_id' => $pegawai_id,
+					'tarikh_terima' => Carbon::now()->toDateString(),
+					'tarikh_key_in' => $tarikh_key_in,
+					'hadir' => $this->filter->sanitize($_POST['hadir'])
+				);
+
+				$insert = $this->model->addPTKL($dataBorang, $table);
+				$return_url = BASE_URL.'borang/pandangan/'.$borang;
+
+			}
+
+			if($insert){
+
+				# TODO: hantar notifikasi email
+
+				$msg = array(
+					'error_msg' => 'Maklumat borang pandangan awam ini telah berjaya dihantar.',
+					'error_url' => BASE_URL.'dashboard',
+					'error_type' => 'success',
+					'error_title' => 'Borang berjaya dihantar'
+				);
+
+			}else{
+
+				$msg = array(
+					'error_msg' => 'Tiada maklumat pandangan awam diterima. Sila cuba semula.',
+					'error_url' => $url,
+					'error_type' => 'danger',
+					'error_title' => 'Tiada maklumat'
+				);
+			}
 
 			if($this->filter->isInt($insert)){
 
@@ -2650,7 +2934,7 @@ class Borang extends Controller {
 
 						$lampiran_a = array(
 							'files' => $_FILES['lampiran_a'],
-							'file_id' => $insert
+							'file_id' => $insert.'-a'
 						);
 
 						$this->upload->add($lampiran_a);
@@ -2660,31 +2944,14 @@ class Borang extends Controller {
 
 						$lampiran_c = array(
 							'files' => $_FILES['lampiran_c'],
-							'file_id' => $insert
+							'file_id' => $insert.'-c'
 						);
 
 						$this->upload->add($lampiran_c);
 					}
 				}
 
-			}else{
-				$msg = array(
-					'error_msg' => 'Tiada maklumat pandangan awam diterima. Sila cuba semula.',
-					'error_url' => BASE_URL.'borang/pandangan/ptkl',
-					'error_type' => 'danger',
-					'error_title' => 'Tiada maklumat'
-				);
 			}
-
-			# log user action
-			$log = $this->loadHelper('log_helper');
-			$data2 = array(
-				'user_id' => $user_id,
-				'controller' => 'Borang',
-				'function' => 'add',
-				'action' => 'Add new PTKL form'
-			);
-			$log->add($data2);
 
 			$header = $this->loadView('auth-header');
 			$footer = $this->loadView('auth-footer');
@@ -2695,6 +2962,33 @@ class Borang extends Controller {
 			$template->render();
 			$footer->render();
 		}
+	}
+
+	private function updateBorangPTKL($data)
+	{
+		$data = array(
+			'id' => $data['id'],
+			'user_id' => $data['user_id'],
+			'pegawai_id' => $data['pegawai_id'],
+			'tarikh_terima' => Carbon::now()->toDateString(),
+			'tarikh_key_in' => $data['tarikh_key_in'],
+			'hadir' => $this->filter->sanitize($data['hadir']),
+			'kategori' => empty($data['kategori']) ? 'Individu' : $data['kategori'],
+			'nama_organisasi' => empty($data['nama_organisasi']) ? NULL : $data['nama_organisasi'],
+			'jumlah_nama' => empty($data['jumlah_nama']) ? '1' : $data['jumlah_nama'],
+		);
+
+		$this->model->updateBorangPTKL($data);
+
+		# log user action
+		$log = $this->loadHelper('log_helper');
+		$data2 = array(
+			'user_id' => $this->session->get('user_id'),
+			'controller' => 'Borang',
+			'function' => 'updateBorangPTKL',
+			'action' => 'Kemaskini borang PTKL 3 borang '.$_POST['borang_id']
+		);
+		$log->add($data2);
 	}
 
 	function add_pskl()
