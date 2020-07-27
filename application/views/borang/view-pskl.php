@@ -640,13 +640,15 @@
                                         </dl>
                                         <dl>
                                             <dt>Pengerusi</dt>
-                                            <dd><?php echo $sesi[0]['chairman'] ?></dd>
+                                            <dd><?php echo @$sesi[0]['chairman'] ?></dd>
                                             <dt>Panel 1</dt>
-                                            <dd><?php echo $sesi[0]['ajk_1'] ?></dd>
+                                            <dd><?php echo @$sesi[0]['ajk_1'] ?></dd>
                                             <dt>Panel 2</dt>
-                                            <dd><?php echo $sesi[0]['ajk_2'] ?></dd>
+                                            <dd><?php echo @$sesi[0]['ajk_2'] ?></dd>
                                             <dt>Panel 3</dt>
-                                            <dd><?php echo $sesi[0]['ajk_3'] ?></dd>
+                                            <dd><?php echo @$sesi[0]['ajk_3'] ?></dd>
+                                            <dt>Panel 4</dt>
+                                            <dd><?php echo @$sesi[0]['ajk_4'] ?></dd>
                                         </dl>
                                         <a class="btn btn-info" href="<?php echo BASE_URL."jadual/sesiPendengaran/".$sesi[0]['id'] ?>">Ubah</a>
                                         <?php else: ?>

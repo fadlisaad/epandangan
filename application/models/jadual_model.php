@@ -29,7 +29,7 @@ Class Jadual_model extends Model {
 	public function addSesi($data)
 	{
 		try{
-			$stm  = "INSERT INTO sesi_jadual (lokasi_id, jenis, tarikh, slot_masa, chairman, ajk_1, ajk_2, ajk_3, keterangan) VALUES (:lokasi_id, :jenis, :tarikh, :slot_masa, :chairman, :ajk_1, :ajk_2, :ajk_3, :keterangan)";
+			$stm  = "INSERT INTO sesi_jadual (lokasi_id, jenis, tarikh, slot_masa, chairman, ajk_1, ajk_2, ajk_3, ajk_4, keterangan) VALUES (:lokasi_id, :jenis, :tarikh, :slot_masa, :chairman, :ajk_1, :ajk_2, :ajk_3, :ajk_4, :keterangan)";
 			$bind = array(
 				'lokasi_id' => $data['lokasi_id'],
 				'jenis' => $data['jenis'],
@@ -39,6 +39,7 @@ Class Jadual_model extends Model {
 				'ajk_1' => $data['ajk_1'],
 				'ajk_2' => $data['ajk_2'],
 				'ajk_3' => $data['ajk_3'],
+				'ajk_4' => $data['ajk_4'],
 				'keterangan' => $data['keterangan']
 			);
 			
@@ -53,7 +54,7 @@ Class Jadual_model extends Model {
 	public function updateJadual($data)
 	{
 		try{
-			$stm  = "UPDATE sesi_jadual SET lokasi_id = :lokasi_id, jenis = :jenis, tarikh = :tarikh, slot_masa = :slot_masa, chairman = :chairman, ajk_1 = :ajk_1, ajk_2 = :ajk_2, ajk_3 = :ajk_3, keterangan = :keterangan WHERE id = :id";
+			$stm  = "UPDATE sesi_jadual SET lokasi_id = :lokasi_id, jenis = :jenis, tarikh = :tarikh, slot_masa = :slot_masa, chairman = :chairman, ajk_1 = :ajk_1, ajk_2 = :ajk_2, ajk_3 = :ajk_3, ajk_4 = :ajk_4, keterangan = :keterangan WHERE id = :id";
 			$bind = array(
 				'lokasi_id' => $data['lokasi_id'],
 				'jenis' => $data['jenis'],
@@ -63,6 +64,7 @@ Class Jadual_model extends Model {
 				'ajk_1' => $data['ajk_1'],
 				'ajk_2' => $data['ajk_2'],
 				'ajk_3' => $data['ajk_3'],
+				'ajk_4' => $data['ajk_4'],
 				'keterangan' => $data['keterangan'],
 				'id' => $data['id'],
 			);

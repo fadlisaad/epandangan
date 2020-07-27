@@ -13,7 +13,8 @@ class Perubahan extends Controller {
 			'assets/libs/datatables/buttons.bootstrap4.css',
 			'assets/libs/datatables/select.bootstrap4.css',
 			'assets/libs/sweetalert2/sweetalert2.min.css',
-			'assets/libs/select2/select2.min.css'
+			'assets/libs/select2/select2.min.css',
+			'assets/libs/magnific-popup/magnific-popup.min.css'
 		);
 
 		$this->js = array(
@@ -29,7 +30,8 @@ class Perubahan extends Controller {
 			'assets/libs/sweetalert2/sweetalert2.min.js',
 			'assets/js/pages/sweet-alerts.init.js',
 			'assets/libs/parsleyjs/parsleyjs.min.js',
-			'assets/libs/select2/select2.min.js'
+			'assets/libs/select2/select2.min.js',
+			'assets/libs/magnific-popup/magnific-popup.min.js'
 		);
 
 		if(empty($this->session->get('loggedin'))){
@@ -178,8 +180,33 @@ class Perubahan extends Controller {
 	{
 		$custom_js = "<script type='text/javascript'>
 		$(document).ready(function() {
+
 			// clear session cache
 			sessionStorage.removeItem('tapak');
+
+			$('.image-popup').magnificPopup({
+			    type: 'image',
+			    closeOnContentClick: false,
+			    closeBtnInside: false,
+			    mainClass: 'mfp-with-zoom mfp-img-mobile',
+			    image: {
+			      	verticalFit: false,
+			      	titleSrc: function titleSrc(item) {
+			        	return item.el.attr('title');
+			      	}
+			    },
+			    gallery: {
+			      	enabled: false
+			    },
+			    zoom: {
+			      	enabled: true,
+			      	duration: 300,
+			      	// don't foget to change the duration also in CSS
+			      	opener: function opener(element) {
+			        	return element.find('img');
+			      	}
+			    }
+		  	});
 		});
 		</script>";
 		

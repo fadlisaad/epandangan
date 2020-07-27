@@ -40,9 +40,54 @@
                                         <dt>Perkara</dt>
                                         <dd><?php echo $value['perkara'] ?></dd>
                                     </dl>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <img src="<?php echo BASE_URL ?>assets/images/perubahan-3/<?php echo $value['bil'] ?>.png" class="img-fluid">
+                                    <?php
+                                        $active_tanah = '';
+                                        $active_intensiti = '';
+                                        $arrow = '';
+
+                                        if(file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-gunatanah.jpg') && file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-intensiti.jpg')){
+                                            $active_tanah = 'active';
+                                            $active_intensiti = '';
+                                            $arrow = '';
+                                        }
+
+                                        if(file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-gunatanah.jpg') && !file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-intensiti.jpg')){
+                                            $active_tanah = 'active';
+                                            $active_intensiti = '';
+                                            $arrow = 'd-none';
+                                        }
+                                        if(file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-intensiti.jpg') && !file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-gunatanah.jpg')){
+                                            $active_tanah = '';
+                                            $active_intensiti = 'active';
+                                            $arrow = 'd-none';
+                                        }
+                                    ?>
+                                    <div class="carousel slide" data-ride="carousel" id="slider-<?php echo $value['perubahan_id'] ?>">
+                                        <div class="carousel-inner">
+                                            <?php if(file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-gunatanah.jpg')): ?>
+                                            <div class="carousel-item <?php echo $active_tanah ?>">
+                                                <a href="<?php echo BASE_URL ?>assets/images/perubahan-3/<?php echo $value['bil'] ?>-gunatanah.jpg" class="image-popup" title="<?php echo $value['rujukan'] ?> : <?php echo $value['perkara'] ?>">
+                                                    <img src="<?php echo BASE_URL ?>assets/images/perubahan-3/<?php echo $value['bil'] ?>-gunatanah.jpg" class="d-block w-100" alt="Peta Zon Guna Tanah">
+                                                </a>
+                                            </div>
+                                            <?php endif; ?>
+                                            <?php if(file_exists(getenv('ASSET_FOLDER').'/images/perubahan-3/'.$value['bil'].'-intensiti.jpg')): ?>
+                                            <div class="carousel-item <?php echo $active_intensiti ?>">
+                                                <a href="<?php echo BASE_URL ?>assets/images/perubahan-3/<?php echo $value['bil'] ?>-intensiti.jpg" class="image-popup" title="<?php echo $value['rujukan'] ?> : <?php echo $value['perkara'] ?>">
+                                                    <img src="<?php echo BASE_URL ?>assets/images/perubahan-3/<?php echo $value['bil'] ?>-intensiti.jpg" class="d-block w-100" alt="Peta Intensiti">
+                                                </a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div id="arrow" class="<?php echo $arrow ?>">
+                                            <a class="carousel-control-prev" href="#slider-<?php echo $value['perubahan_id'] ?>" role="button" data-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#slider-<?php echo $value['perubahan_id'] ?>" role="button" data-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
                                         </div>
                                     </div>
                                     <dl>
@@ -87,9 +132,12 @@
                                     <dt class="col-sm-3">No. Telefon Bimbit</dt>
                                     <dd class="col-sm-9"><?php echo ($profile[0]['telefon_bimbit']) ? $profile[0]['telefon_bimbit']: '-' ?></dd>
                                 </dl>
-                                <button class="btn btn-secondary" id="back">Kembali</button>
 
                             </div> <!-- end card body-->
+                            <div class="card-footer">
+                                <button class="btn btn-secondary" id="back">Kembali</button>
+                                <a href="<?php echo BASE_URL ?>borang/pandangan/ptkl_3" class="btn btn-primary">Kemaskini</a>
+                            </div>
                         </div> <!-- end card -->
                     </div><!-- end col-->
                     <div class="col-lg-3">
@@ -110,10 +158,15 @@
                             <div class="card-body">
                                 <h5 class="card-title">Lampiran A & C</h5>
 
-                                <?php $upload = array('id' => $data[0]['id']); 
+                                <?php $upload = array('id' => $data[0]['id'].'-a'); 
                                 $get = $helper->get($upload);
-                                if($get) echo "<div class=\"button-list\"><a href=\"".BASE_URL."files/".$get[0]['file']."\" class=\"btn btn-blue\"><span class=\"btn-label\"><i class=\"fas fa-file-pdf\"></i></span>Lampiran #</a></div>";
-                                else echo "Tiada lampiran."; ?>
+                                if($get) echo "<div class=\"button-list\"><a href=\"".BASE_URL."files/".$get[0]['file']."\" class=\"btn btn-blue\"><span class=\"btn-label\"><i class=\"fas fa-file-pdf\"></i></span>Memorandum</a></div>";
+                                else echo "Tiada lampiran memorandum."; ?>
+
+                                <?php $upload = array('id' => $data[0]['id'].'-c'); 
+                                $get = $helper->get($upload);
+                                if($get) echo "<div class=\"button-list\"><a href=\"".BASE_URL."files/".$get[0]['file']."\" class=\"btn btn-blue\"><span class=\"btn-label\"><i class=\"fas fa-file-pdf\"></i></span>Lampiran</a></div>";
+                                else echo "Tiada lampiran berkaitan pandangan awam."; ?>
 
                             </div>
                         </div> <!-- end card-->

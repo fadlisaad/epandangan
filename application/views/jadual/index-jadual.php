@@ -44,6 +44,7 @@
                                             <th>AJK 1</th>
                                             <th>AJK 2</th>
                                             <th>AJK 3</th>
+                                            <th>AJK 4</th>
                                             <th>Tindakan</th>
     									</tr>
     								</thead>

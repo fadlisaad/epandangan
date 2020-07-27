@@ -28,7 +28,7 @@
                             <div class="col-md-4">
                                 <div class="card-box">
                                     <p>Zon Strategik <?php echo $zone['nama'] ?></p>
-                                    <img src="<?php echo BASE_URL ?>assets/images/zon/zon-<?php echo $zone['id'] ?>.png" class="img-fluid img-centered" style="max-height:280px;">
+                                    <img src="<?php echo BASE_URL ?>assets/images/zon/zon-<?php echo $zone['id'] ?>.jpg" class="img-fluid">
                                     <p><a href="<?php echo BASE_URL ?>perubahan/pilih_tapak/<?php echo $zone['id'] ?>" class="btn btn-primary">Pilih</a></p>
                                 </div>
                             </div>

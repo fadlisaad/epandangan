@@ -63,16 +63,20 @@
                                     <select class="form-control" name="chairman" id="chairman"></select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ajk1">AJK 1</label>
+                                    <label for="ajk1">Panel 1</label>
                                     <select class="form-control" name="ajk_1" id="ajk_1"></select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ajk2">AJK 2</label>
+                                    <label for="ajk2">Panel 2</label>
                                     <select class="form-control" name="ajk_2" id="ajk_2"></select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ajk3">AJK 3</label>
+                                    <label for="ajk3">Panel 3</label>
                                     <select class="form-control" name="ajk_3" id="ajk_3"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ajk3">Panel 4</label>
+                                    <select class="form-control" name="ajk_4" id="ajk_4"></select>
                                 </div>
                                 <input type="hidden" name="token" value="<?php echo $token ?>">
 								<button type="submit" class="btn btn-info waves-effect waves-light m-b-5" name="submit">Simpan</button>

@@ -49,7 +49,9 @@
                                 <dt class="col-md-3">Panel 2</dt>
                                 <dd class="col-md-9"><?php echo $jadual[0]['ajk_2'] ?></dd>
                                 <dt class="col-md-3">Panel 3</dt>
-                                <dd class="col-md-9"><?php echo $jadual[0]['ajk_3'] ?></dd>
+                                <dd class="col-md-9"><?php echo @$jadual[0]['ajk_3'] ?></dd>
+                                <dt class="col-md-3">Panel 4</dt>
+                                <dd class="col-md-9"><?php echo @$jadual[0]['ajk_4'] ?></dd>
                             </dl>
                         </div>
                     </div>

@@ -18,7 +18,9 @@ class Borang extends Controller {
 			'assets/libs/custombox/custombox.min.css',
 			'assets/libs/sweetalert2/sweetalert2.min.css',
 			'assets/libs/select2/select2.min.css',
-			'assets/libs/summernote/summernote.min.css'
+			'assets/libs/summernote/summernote.min.css',
+			'assets/libs/magnific-popup/magnific-popup.min.css'
+
 		);
 
 		$this->js = array(
@@ -38,7 +40,8 @@ class Borang extends Controller {
 			'assets/libs/parsleyjs/il8n/ms.js',
 			'assets/js/jquery.chained.js',
 			'assets/libs/select2/select2.min.js',
-			'assets/libs/summernote/summernote.min.js'
+			'assets/libs/summernote/summernote.min.js',
+			'assets/libs/magnific-popup/magnific-popup.min.js'
 		);
 
 		if(empty($this->session->get('loggedin'))){
@@ -598,6 +601,30 @@ class Borang extends Controller {
 			    },
 			    cache: true
 			});
+
+			$('.image-popup').magnificPopup({
+			    type: 'image',
+			    closeOnContentClick: false,
+			    closeBtnInside: false,
+			    mainClass: 'mfp-with-zoom mfp-img-mobile',
+			    image: {
+			      	verticalFit: false,
+			      	titleSrc: function titleSrc(item) {
+			        	return item.el.attr('title');
+			      	}
+			    },
+			    gallery: {
+			      	enabled: false
+			    },
+			    zoom: {
+			      	enabled: true,
+			      	duration: 300,
+			      	// don't foget to change the duration also in CSS
+			      	opener: function opener(element) {
+			        	return element.find('img');
+			      	}
+			    }
+		  	});
 		</script>";
 
 		$data = $this->model->getPTKL3ByID($id);
@@ -2303,38 +2330,65 @@ class Borang extends Controller {
         }else{
 
         	$custom_js .= "<script>
+
+        	$(document).ready(function() {
+
+        		$('.image-popup').magnificPopup({
+				    type: 'image',
+				    closeOnContentClick: false,
+				    closeBtnInside: false,
+				    mainClass: 'mfp-with-zoom mfp-img-mobile',
+				    image: {
+				      	verticalFit: false,
+				      	titleSrc: function titleSrc(item) {
+				        	return item.el.attr('title');
+				      	}
+				    },
+				    gallery: {
+				      	enabled: false
+				    },
+				    zoom: {
+				      	enabled: true,
+				      	duration: 300,
+				      	// don't foget to change the duration also in CSS
+				      	opener: function opener(element) {
+				        	return element.find('img');
+				      	}
+				    }
+			  	});
+			});
         		
-				function deletePerubahan(id)
-				{
-					var delete_url = '".BASE_URL."perubahan/delete';
-			    
-				    Swal.fire({
-				        title: 'Anda pasti?',
-				        text: 'Maklumat ini tidak akan disimpan.',
-				        type: 'warning',
-				        showCancelButton: true,
-				        confirmButtonColor: '#DD6B55',
-				        confirmButtonText: 'Ya, hapuskan!',
-				    }).then(function(result){
-				    	if (result.value) {
-					        $.ajax({
-					            url: delete_url,
-					            dataType: 'html',
-					            data: 'id=' + id,
-					            type: 'POST',
-					            success: function(response) {
-				                	Swal.fire('berjaya!', 'Maklumat ini berjaya dihapus', 'success');
-				                	$('#perubahan-'+ id).slideUp();
-					            },
-					            error: function (xhr, ajaxOptions, thrownError) {
-					                Swal.fire('Ralat!', 'Sila cuba semula', 'error');
-					            }
-					        });
-					    }else if(result.dismiss === Swal.DismissReason.cancel) {
-					    	Swal.fire('Cancelled', 'Tiada maklumat yang dihapus', 'info');	
-					    }
-				    });
-				}
+			function deletePerubahan(id)
+			{
+				var delete_url = '".BASE_URL."perubahan/delete';
+		    
+			    Swal.fire({
+			        title: 'Anda pasti?',
+			        text: 'Maklumat ini tidak akan disimpan.',
+			        type: 'warning',
+			        showCancelButton: true,
+			        confirmButtonColor: '#DD6B55',
+			        confirmButtonText: 'Ya, hapuskan!',
+			    }).then(function(result){
+			    	if (result.value) {
+				        $.ajax({
+				            url: delete_url,
+				            dataType: 'html',
+				            data: 'id=' + id,
+				            type: 'POST',
+				            success: function(response) {
+			                	Swal.fire('berjaya!', 'Maklumat ini berjaya dihapus', 'success');
+			                	$('#perubahan-'+ id).slideUp();
+				            },
+				            error: function (xhr, ajaxOptions, thrownError) {
+				                Swal.fire('Ralat!', 'Sila cuba semula', 'error');
+				            }
+				        });
+				    }else if(result.dismiss === Swal.DismissReason.cancel) {
+				    	Swal.fire('Cancelled', 'Tiada maklumat yang dihapus', 'info');	
+				    }
+			    });
+			}
 
         	</script>";
 
@@ -2370,14 +2424,15 @@ class Borang extends Controller {
         	# PTKL 3
         	parse_str($borang, $output);
         	$perubahan_id = $output['ptkl-3?tapak'];
-        	if(is_numeric($perubahan_id)){
-        		$ptkl_3 = $this->p_model->getByID('perubahan_3', $perubahan_id);
-        	}else{
-        		$ptkl_3 = NULL;
-        	}
-        	$perubahan = $this->p_model->getPerubahanByID($data[0]['id']);
+        	$ptkl_3 = $this->p_model->getByID('perubahan_3', $perubahan_id);
         	$template->set('ptkl_3', $ptkl_3);
-        	$template->set('perubahan', $perubahan);
+
+        	if($data){
+	        	$perubahan = $this->p_model->getPerubahanByID($data[0]['id']);
+		        $template->set('perubahan', $perubahan);
+		    }else{
+		        $template->set('perubahan', NULL);
+		    }
         }
 
         $header->set('css', $this->css);
@@ -2460,6 +2515,7 @@ class Borang extends Controller {
 				'tarikh_disahkan_2' => empty($_POST['tarikh_disahkan_2']) ? NULL : $_POST['tarikh_disahkan_2'],
 				'tarikh_disahkan_3' => empty($_POST['tarikh_disahkan_3']) ? NULL : $_POST['tarikh_disahkan_3'],
 				'tarikh_disahkan_4' => empty($_POST['tarikh_disahkan_4']) ? NULL : $_POST['tarikh_disahkan_4'],
+				'tarikh_disahkan_5' => empty($_POST['tarikh_disahkan_5']) ? NULL : $_POST['tarikh_disahkan_5'],
 				'pegawai_1' => empty($_POST['pegawai_1']) ? NULL : $_POST['pegawai_1'],
 				'pegawai_2' => empty($_POST['pegawai_2']) ? NULL : $_POST['pegawai_2'],
 				'tarikh_urusetia' => empty($_POST['tarikh_urusetia']) ? NULL : $_POST['tarikh_urusetia']
@@ -2497,6 +2553,7 @@ class Borang extends Controller {
 				'tarikh_disahkan_2' => empty($_POST['tarikh_disahkan_2']) ? NULL : $_POST['tarikh_disahkan_2'],
 				'tarikh_disahkan_3' => empty($_POST['tarikh_disahkan_3']) ? NULL : $_POST['tarikh_disahkan_3'],
 				'tarikh_disahkan_4' => empty($_POST['tarikh_disahkan_4']) ? NULL : $_POST['tarikh_disahkan_4'],
+				'tarikh_disahkan_5' => empty($_POST['tarikh_disahkan_5']) ? NULL : $_POST['tarikh_disahkan_5'],
 				'pegawai_1' => empty($_POST['pegawai_1']) ? NULL : $_POST['pegawai_1'],
 				'pegawai_2' => empty($_POST['pegawai_2']) ? NULL : $_POST['pegawai_2'],
 				'tarikh_urusetia' => empty($_POST['tarikh_urusetia']) ? NULL : $_POST['tarikh_urusetia'],
@@ -2855,29 +2912,63 @@ class Borang extends Controller {
 
 			if($table == 'ptkl_3'){
 
-				$dataBorang = array(
-					'kategori' => $this->filter->sanitize($_POST['kategori']),
-					'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
-					'jumlah_nama' => $this->filter->isInt($_POST['jumlah_nama']),
-					'user_id' => $user_id,
-					'pegawai_id' => $pegawai_id,
-					'tarikh_terima' => Carbon::now()->toDateString(),
-					'tarikh_key_in' => $tarikh_key_in,
-					'hadir' => $this->filter->sanitize($_POST['hadir']),
-					'id' => $this->filter->isInt($_POST['borang_id'])
-				);
+				# check if borang exist
+				$exist = $this->model->getPTKL3ByUserID($user_id);
+				
+				if($exist == NULL){
 
-				$this->updateBorangPTKL($dataBorang);
+					# new borang
+					$dataBorang = array(
+						'kategori' => $this->filter->sanitize($_POST['kategori']),
+						'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
+						'jumlah_nama' => $this->filter->isInt($_POST['jumlah_nama']),
+						'user_id' => $user_id,
+						'pegawai_id' => $pegawai_id,
+						'tarikh_terima' => Carbon::now()->toDateString(),
+						'tarikh_key_in' => $tarikh_key_in,
+						'hadir' => $this->filter->sanitize($_POST['hadir']),
+					);
 
-				$dataPTKL3 = array(
-					'pandangan_intensiti' => $this->filter->sanitize($_POST['pandangan_intensiti']),
-					'perubahan_3_id' => $this->filter->isInt($_POST['perubahan_3_id']),
-					'pandangan_zon' => $this->filter->sanitize($_POST['pandangan_zon']),
-					'cadangan' => $this->filter->sanitize($_POST['cadangan']),
-					'borang_id' => $this->filter->isInt($_POST['borang_id']),
-				);
+					$insert = $this->model->addNewPTKL3($dataBorang);
 
-				$insert = $this->model->addPTKL3($dataPTKL3);
+					$dataPTKL3 = array(
+						'pandangan_intensiti' => $this->filter->sanitize($_POST['pandangan_intensiti']),
+						'perubahan_3_id' => $this->filter->isInt($_POST['perubahan_3_id']),
+						'pandangan_zon' => $this->filter->sanitize($_POST['pandangan_zon']),
+						'cadangan' => $this->filter->sanitize($_POST['cadangan']),
+						'borang_id' => $this->filter->isInt($insert),
+					);
+					
+				}else{
+
+					# borang exist
+					$dataBorang = array(
+						'kategori' => $this->filter->sanitize($_POST['kategori']),
+						'nama_organisasi' => $this->filter->sanitize($_POST['nama_organisasi']),
+						'jumlah_nama' => $this->filter->isInt($_POST['jumlah_nama']),
+						'user_id' => $user_id,
+						'pegawai_id' => $pegawai_id,
+						'tarikh_terima' => Carbon::now()->toDateString(),
+						'tarikh_key_in' => $tarikh_key_in,
+						'hadir' => $this->filter->sanitize($_POST['hadir']),
+						'id' => $this->filter->isInt($_POST['borang_id'])
+					);
+
+					$this->updateBorangPTKL($dataBorang);
+
+					$dataPTKL3 = array(
+						'pandangan_intensiti' => $this->filter->sanitize($_POST['pandangan_intensiti']),
+						'perubahan_3_id' => $this->filter->isInt($_POST['perubahan_3_id']),
+						'pandangan_zon' => $this->filter->sanitize($_POST['pandangan_zon']),
+						'cadangan' => $this->filter->sanitize($_POST['cadangan']),
+						'borang_id' => $this->filter->isInt($_POST['borang_id']),
+					);
+
+					$insert = NULL;
+				}
+
+				$this->model->addPTKL3($dataPTKL3);
+
 				$return_url = BASE_URL.'borang/pandangan/ptkl_3?tapak='.$_POST['perubahan_3_id'];
 
 			}else{
@@ -2905,10 +2996,49 @@ class Borang extends Controller {
 
 			if($insert){
 
-				# TODO: hantar notifikasi email
+				/** Email start *****************************/
+
+				# send receipt email
+				$email = $this->loadHelper('Email_helper');
+					
+				# choose email template
+				$e_model = $this->loadModel('Mailer_model');
+				$template = $e_model->getByID(5);
+				$body = $template[0]['body'];
+				$subject = $template[0]['subject'];
+
+				$details = "<ul>
+					<li>ID Pandangan: PBRKL2020/DRAF/3/".$insert."</li>
+					<li>Nama: ".$_POST['nama_penuh']."</li>
+					<li>E-mail: ".$this->session->get('email')."</li>
+					<li>No. Telefon: ".$_POST['telefon_bimbit']."</li>
+				</ul>";
+
+				$url = BASE_URL.'auth';
+
+				# prepare the variable for email
+				$vars = array(
+					"{{EMAIL}}" => $this->session->get('email'),
+					"{{DETAILS}}" => $details,
+					"{{BUTTON}}" => '<tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+					<td class="content-block aligncenter" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="'.$url.'" class="login">Semak</a></td></tr>'
+				);
+
+				$content = strtr($body, $vars);
+
+				$email_data = array(
+					'email' => $this->session->get('email'), 
+					'subject' => $subject, 
+					'content' => $content 
+				);
+
+				# send the email
+				$send = $email->send($email_data);
+
+				/** email end ******************************/
 
 				$msg = array(
-					'error_msg' => 'Maklumat borang pandangan awam ini telah berjaya dihantar.',
+					'error_msg' => 'Maklumat borang pandangan awam ini telah berjaya dihantar. Satu email pengesahan telah dihantar bagi rujukan anda.',
 					'error_url' => BASE_URL.'dashboard',
 					'error_type' => 'success',
 					'error_title' => 'Borang berjaya dihantar'
@@ -2917,40 +3047,42 @@ class Borang extends Controller {
 			}else{
 
 				$msg = array(
-					'error_msg' => 'Tiada maklumat pandangan awam diterima. Sila cuba semula.',
-					'error_url' => $url,
-					'error_type' => 'danger',
-					'error_title' => 'Tiada maklumat'
+					'error_msg' => 'Maklumat borang pandangan awam ini telah berjaya dihantar.',
+					'error_url' => BASE_URL.'dashboard',
+					'error_type' => 'success',
+					'error_title' => 'Borang berjaya dihantar'
 				);
 			}
 
-			if($this->filter->isInt($insert)){
+			if(isset($_FILES)){
 
-				if(isset($_FILES)){
+				$this->upload = $this->loadHelper('upload_helper');
 
-					$this->upload = $this->loadHelper('upload_helper');
-
-					if(isset($_FILES['lampiran_a'])){
-
-						$lampiran_a = array(
-							'files' => $_FILES['lampiran_a'],
-							'file_id' => $insert.'-a'
-						);
-
-						$this->upload->add($lampiran_a);
-					}
-
-					if(isset($_FILES['lampiran_c'])){
-
-						$lampiran_c = array(
-							'files' => $_FILES['lampiran_c'],
-							'file_id' => $insert.'-c'
-						);
-
-						$this->upload->add($lampiran_c);
-					}
+				if($this->filter->isInt($insert)){
+					$fail_id = $insert;
+				}else{
+					$fail_id = $_POST['borang_id'];
 				}
 
+				if(isset($_FILES['lampiran_a'])){
+
+					$lampiran_a = array(
+						'files' => $_FILES['lampiran_a'],
+						'file_id' => $fail_id.'-a'
+					);
+
+					$this->upload->add($lampiran_a);
+				}
+
+				if(isset($_FILES['lampiran_c'])){
+
+					$lampiran_c = array(
+						'files' => $_FILES['lampiran_c'],
+						'file_id' => $fail_id.'-c'
+					);
+
+					$this->upload->add($lampiran_c);
+				}
 			}
 
 			$header = $this->loadView('auth-header');
@@ -2979,16 +3111,6 @@ class Borang extends Controller {
 		);
 
 		$this->model->updateBorangPTKL($data);
-
-		# log user action
-		$log = $this->loadHelper('log_helper');
-		$data2 = array(
-			'user_id' => $this->session->get('user_id'),
-			'controller' => 'Borang',
-			'function' => 'updateBorangPTKL',
-			'action' => 'Kemaskini borang PTKL 3 borang '.$_POST['borang_id']
-		);
-		$log->add($data2);
 	}
 
 	function add_pskl()

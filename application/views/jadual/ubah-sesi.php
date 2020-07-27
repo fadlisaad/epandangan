@@ -69,25 +69,32 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ajk1">AJK 1</label>
+                                    <label for="ajk1">Panel 1</label>
                                     <select class="form-control" name="ajk_1" id="ajk_1" required="">
                                         <option value="<?php echo $data[0]['ajk_1_id'] ?>" <?php echo ($data[0]['ajk_1']) ? "selected" : '' ?>><?php echo $data[0]['ajk_1'] ?></option>
                                     </select>
                                     <button id="padam_ajk1" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ajk2">AJK 2</label>
+                                    <label for="ajk2">Panel 2</label>
                                     <select class="form-control" name="ajk_2" id="ajk_2" required="">
                                         <option value="<?php echo $data[0]['ajk_2_id'] ?>" <?php echo ($data[0]['ajk_2']) ? "selected" : '' ?>><?php echo $data[0]['ajk_2'] ?></option>
                                     </select>
                                     <button id="padam_ajk2" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ajk3">AJK 3</label>
+                                    <label for="ajk3">Panel 3</label>
                                     <select class="form-control" name="ajk_3" id="ajk_3">
                                         <option value="<?php echo $data[0]['ajk_3_id'] ?>" <?php echo ($data[0]['ajk_3']) ? "selected" : '' ?>><?php echo $data[0]['ajk_3'] ?></option>
                                     </select>
                                     <button id="padam_ajk3" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ajk4">Panel 4</label>
+                                    <select class="form-control" name="ajk_4" id="ajk_4">
+                                        <option value="<?php echo $data[0]['ajk_4_id'] ?>" <?php echo ($data[0]['ajk_4']) ? "selected" : '' ?>><?php echo $data[0]['ajk_4'] ?></option>
+                                    </select>
+                                    <button id="padam_ajk4" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <input type="hidden" name="id" value="<?php echo $data[0]['id'] ?>">
 								<button type="button" class="btn btn-info waves-effect waves-light m-b-5" id="save-jadual">Kemaskini</button>

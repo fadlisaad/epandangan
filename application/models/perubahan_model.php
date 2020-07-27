@@ -131,10 +131,12 @@ class Perubahan_model extends Model {
 				'id' => $data['id']
 			);
 			
-			return $this->pdo->fetchAffected($stm, $bind);
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
 		}
 		catch(Exception $e){
-			return $e->getMessage();
+			$e->getMessage();
+			echo "0";
 		}
 	}
 	

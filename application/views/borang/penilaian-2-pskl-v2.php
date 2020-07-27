@@ -461,8 +461,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <?php if(isset($jkppa[0]['ajk_3']) && ($jkppa[0]['ajk_3'] != NULL)){
+                            <?php if(isset($jkppa[0]['ajk_3']) && ($jkppa[0]['ajk_3'] != NULL) && $jkppa[0]['ajk_4'] == NULL){
                                 $col = 4;
+                            }elseif(isset($jkppa[0]['ajk_4']) && ($jkppa[0]['ajk_4'] != NULL)){
+                                $col = 3;
                             }else{
                                 $col = 6;
                             } ?>
@@ -493,7 +495,7 @@
                                 </div>
                             </div>
                             <?php if(isset($jkppa[0]['ajk_3']) && ($jkppa[0]['ajk_3'] != NULL)): ?>
-                            <div class="col-md-4 col-sm-4">
+                            <div class="col-md-<?php echo $col ?> col-sm-<?php echo $col ?>">
                                 <div class="text-center mt-5">
                                     <div class="border-top-2 text-center">---------------------------------------</div>
                                     <p>Ahli Panel 4</p>
@@ -503,6 +505,21 @@
                                     <input type="date" id="tarikh_disahkan_4" name="tarikh_disahkan_4" value="<?php echo @$ulasanPanel[0]['tarikh_disahkan_4'] ?>" class="hidePanel">
                                     <?php else: ?>
                                     Tarikh: <span class="date-border" style="display: none;">____________</span><input type="date" id="tarikh_disahkan_4" name="tarikh_disahkan_4" class="date">
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                            <?php if(isset($jkppa[0]['ajk_4']) && ($jkppa[0]['ajk_4'] != NULL)): ?>
+                            <div class="col-md-3 col-sm-3">
+                                <div class="text-center mt-5">
+                                    <div class="border-top-2 text-center">---------------------------------------</div>
+                                    <p>Ahli Panel 5</p>
+                                    <p class="font-weight-bold"><?php echo @$jkppa[0]['ajk_4'] ?></p>
+                                    <?php if(isset($ulasanPanel[0]['tarikh_disahkan_5'])): ?>
+                                    <div class="ulasanPanel">Tarikh: <?php echo @$dateHelper->convertDate($ulasanPanel[0]['tarikh_disahkan_5']) ?></div>
+                                    <input type="date" id="tarikh_disahkan_5" name="tarikh_disahkan_5" value="<?php echo @$ulasanPanel[0]['tarikh_disahkan_5'] ?>" class="hidePanel">
+                                    <?php else: ?>
+                                    Tarikh: <span class="date-border" style="display: none;">____________</span><input type="date" id="tarikh_disahkan_5" name="tarikh_disahkan_5" class="date">
                                     <?php endif; ?>
                                 </div>
                             </div>

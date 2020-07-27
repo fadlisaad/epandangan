@@ -6,13 +6,14 @@
 *  Website: https://fadli.my
 */
 use Aura\Sql\ExtendedPdo;
+use PHPMailer\PHPMailer\PHPMailer;
 Class Email_helper extends Controller {
 
 	protected $mail;
 
 	public function __construct()
 	{
-		$this->mail = new PHPMailer;
+		$this->mail = new PHPMailer();
 		$this->pdo = new ExtendedPdo(
 		    'mysql:host='.getenv('DB_HOST').';dbname='.getenv('DB_NAME').'',
 		    ''.getenv('DB_USER').'',
@@ -35,7 +36,6 @@ Class Email_helper extends Controller {
 		$content = $data['content'];
 
 		$this->mail->isSMTP();
-		//$this->mail->SMTPDebug = 4;
 		$this->mail->Host = getenv('SMTP_HOST');
 		$this->mail->Username = getenv('SMTP_USER');
 		$this->mail->Password = getenv('SMTP_PASS');
@@ -59,6 +59,7 @@ Class Email_helper extends Controller {
 			
 		}else{
 
+			$this->mail->SMTPDebug = 4;
 			$this->mail->SMTPAuth = false;
 			$this->mail->SMTPOptions = array(
 			    'ssl' => array(

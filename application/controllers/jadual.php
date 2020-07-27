@@ -110,6 +110,7 @@ class Jadual extends Controller {
 			            { data: 'ajk_1' },
 			            { data: 'ajk_2' },
 			            { data: 'ajk_3' },
+			            { data: 'ajk_4' },
 			            { data: 'action' }
 			        ],
 			        columnDefs: [
@@ -220,7 +221,7 @@ class Jadual extends Controller {
 			    cache: true
 			});
 
-			$('#chairman,#ajk_1,#ajk_2,#ajk_3').select2({
+			$('#chairman,#ajk_1,#ajk_2,#ajk_3,#ajk_4').select2({
 				placeholder: 'Pilih',
 			    ajax: {
 			        url: select_panel,
@@ -268,6 +269,10 @@ class Jadual extends Controller {
 
 			$('#padam_ajk3').on('click', function(){
 				$('#ajk_3').empty();
+			});
+
+			$('#padam_ajk4').on('click', function(){
+				$('#ajk_4').empty();
 			});
 		});
 
@@ -351,6 +356,7 @@ class Jadual extends Controller {
 			'ajk_1' => $this->filter->isInt($_POST['ajk_1']),
 			'ajk_2' => $this->filter->isInt($_POST['ajk_2']),
 			'ajk_3' => empty($_POST['ajk_3']) ? NULL : $_POST['ajk_3'],
+			'ajk_4' => empty($_POST['ajk_4']) ? NULL : $_POST['ajk_4'],
 			'keterangan' => $this->filter->htmlEntity($_POST['keterangan'])
 		);
 
@@ -384,7 +390,7 @@ class Jadual extends Controller {
 			    cache: true
 			});
 
-			$('#chairman,#ajk_1,#ajk_2,#ajk_3').select2({
+			$('#chairman,#ajk_1,#ajk_2,#ajk_3,#ajk_4').select2({
 				placeholder: 'Pilih',
 			    ajax: {
 			        url: select_panel,
@@ -460,6 +466,7 @@ class Jadual extends Controller {
 				'ajk_1' => $this->filter->sanitize($_POST['ajk_1']),
 				'ajk_2' => $this->filter->sanitize($_POST['ajk_2']),
 				'ajk_3' => empty($_POST['ajk_3']) ? NULL : $_POST['ajk_3'],
+				'ajk_4' => empty($_POST['ajk_4']) ? NULL : $_POST['ajk_4'],
 				'keterangan' => $this->filter->sanitize($_POST['keterangan'])
 			);
 
@@ -710,6 +717,7 @@ class Jadual extends Controller {
 		    array( 'db' => 'ajk_1', 'dt' => 'ajk_1' ),
 		    array( 'db' => 'ajk_2', 'dt' => 'ajk_2' ),
 		    array( 'db' => 'ajk_3', 'dt' => 'ajk_3' ),
+		    array( 'db' => 'ajk_4', 'dt' => 'ajk_4' ),
 		    array(
 		    	'db' => 'id',
 		    	'dt' => 'action',
