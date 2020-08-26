@@ -115,7 +115,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="header-title mb-0">Tambah Borang Manual</h4>
-                                    <a href="<?php echo BASE_URL ?>borang/pandangan/ptkl-2" class="btn btn-success btn-block mt-3 mb-3">Draf 2 PBRKL 2020</a>
+                                    <a href="<?php echo BASE_URL ?>perubahan/pilih_zon" class="btn btn-success btn-block mt-3 mb-3">Draf 3 PBRKL 2020</a>
                                     <a href="<?php echo BASE_URL ?>borang/pandangan/pskl" class="btn btn-info btn-block mb-3">Draf PSKL 2040</a>
                                 </div> <!-- end card-body-->
                             </div> <!-- end card-->

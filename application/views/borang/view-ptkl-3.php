@@ -14,10 +14,10 @@
                                     <li class="breadcrumb-item"><a href="javascript: void(0);"><?php echo getenv('SITE_TITLE') ?></a></li>
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Borang</a></li>
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">PBRKL 2020</a></li>
-                                    <li class="breadcrumb-item active">PBRKL2020/DRAF/3/<?php echo $data[0]['id'] ?></li>
+                                    <li class="breadcrumb-item active">PBRKL2020/DRAF/3/<?php echo $data[0]['borang_id'] ?></li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">PBRKL2020/DRAF/3/<?php echo $data[0]['id'] ?></h4>
+                            <h4 class="page-title">PBRKL2020/DRAF/3/<?php echo $data[0]['borang_id'] ?></h4>
                         </div>
                     </div>
                 </div>     
@@ -105,8 +105,10 @@
                         </div> <!-- end card -->
 
                         <div class="card">
+                            <div class="card-header bg-success">
+                                <h4 class="text-white">Bahagian B: Maklumat Peribadi</h4>
+                            </div>
                             <div class="card-body">
-                                <h4 class="header-title">Bahagian B: Maklumat Peribadi</h4>
                                 <dl class="row">
                                     <dt class="col-sm-3">Nama</dt>
                                     <dd class="col-sm-9"><?php echo ($profile[0]['nama_penuh']) ? $profile[0]['nama_penuh']: '-' ?></dd>
@@ -136,9 +138,27 @@
                             </div> <!-- end card body-->
                             <div class="card-footer">
                                 <button class="btn btn-secondary" id="back">Kembali</button>
-                                <a href="<?php echo BASE_URL ?>borang/pandangan/ptkl_3" class="btn btn-primary">Kemaskini</a>
+                                <!-- <a href="<?php echo BASE_URL ?>borang/pandangan/ptkl_3/" class="btn btn-primary">Kemaskini</a> -->
                             </div>
                         </div> <!-- end card -->
+
+                        <?php if($_SESSION['permission'] != 'user'): ?>
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <h4 class="text-white">Senarai Nama Memorandum</h4>
+                            </div>
+                            <div class="card-body">
+                                <ol>
+                                    <?php foreach ($memo as $value) {
+                                        echo "<li>".$value['nama']."</li>";
+                                    }
+                                    ?>
+                                </ol>
+                                <a href="#add-modal" class="btn btn-primary waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"><i class="mdi mdi-plus-circle mr-1"></i> Tambah Nama Memorandum</a>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+
                     </div><!-- end col-->
                     <div class="col-lg-3">
                         <!-- Portlet card -->
@@ -158,12 +178,12 @@
                             <div class="card-body">
                                 <h5 class="card-title">Lampiran A & C</h5>
 
-                                <?php $upload = array('id' => $data[0]['id'].'-a'); 
+                                <?php $upload = array('id' => $data[0]['borang_id'].'-a'); 
                                 $get = $helper->get($upload);
                                 if($get) echo "<div class=\"button-list\"><a href=\"".BASE_URL."files/".$get[0]['file']."\" class=\"btn btn-blue\"><span class=\"btn-label\"><i class=\"fas fa-file-pdf\"></i></span>Memorandum</a></div>";
                                 else echo "Tiada lampiran memorandum."; ?>
 
-                                <?php $upload = array('id' => $data[0]['id'].'-c'); 
+                                <?php $upload = array('id' => $data[0]['borang_id'].'-c'); 
                                 $get = $helper->get($upload);
                                 if($get) echo "<div class=\"button-list\"><a href=\"".BASE_URL."files/".$get[0]['file']."\" class=\"btn btn-blue\"><span class=\"btn-label\"><i class=\"fas fa-file-pdf\"></i></span>Lampiran</a></div>";
                                 else echo "Tiada lampiran berkaitan pandangan awam."; ?>
@@ -207,7 +227,7 @@
                                 </div>
                             </div>
                             <div class="card-footer d-print-none">
-                                <a class="btn btn-info" href="<?php echo BASE_URL."borang/cetak_ptkl_2/".$data[0]['borang_id'] ?>">Cetak</a>
+                                <a class="btn btn-info" href="<?php echo BASE_URL."borang/cetak_ptkl_3/".$data[0]['borang_id'] ?>">Cetak</a>
                             </div>
                         </div> <!-- end card-->
                         <?php endif; ?>
@@ -219,3 +239,25 @@
             </div> <!-- end container -->
         </div>
         <!-- end wrapper -->
+
+        <!-- Add Modal -->
+        <div id="add-modal" class="modal-demo">
+            <button type="button" class="close" onclick="Custombox.modal.close();">
+                <span>&times;</span><span class="sr-only">Tutup</span>
+            </button>
+            <h4 class="custom-modal-title">Tambah Nama dalam Memorandum</h4>
+            <div class="custom-modal-text text-left">
+                <form id="tambah-memo">
+                    <div class="form-group">
+                        <label for="name">Nama Penuh</label>
+                        <input type="text" class="form-control" name="nama" placeholder="Masukkan nama">
+                        <input type="hidden" name="borang_id" value="<?php echo $data[0]['borang_id'] ?>">
+                    </div>
+
+                    <div class="text-right">
+                        <button id="save-memo" class="btn btn-success waves-effect waves-light" onclick="Custombox.modal.close();">Simpan</button>
+                        <button type="button" class="btn btn-danger waves-effect waves-light m-l-10" onclick="Custombox.modal.close();">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>

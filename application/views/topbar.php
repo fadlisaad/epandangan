@@ -70,6 +70,7 @@
                                 <ul class="submenu">
                                     <li><a href="<?php echo BASE_URL ?>borang/ptkl"><i class="fe-file-text"></i> Draf Perubahan 1 PBRKL 2020</a></li>
                                     <li><a href="<?php echo BASE_URL ?>borang/ptkl_2"><i class="fe-file-text"></i> Draf Perubahan 2 PBRKL 2020</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>borang/ptkl_3"><i class="fe-file-text"></i> Draf Perubahan 3 PBRKL 2020</a></li>
                                     <li><a href="<?php echo BASE_URL ?>borang/pskl"><i class="fe-file-text"></i> Draf PSKL 2040</a></li>
                                 </ul>
                             </li>
@@ -89,6 +90,8 @@
                                 <ul class="submenu">
                                     <li><a href="<?php echo BASE_URL ?>laporan/download"><i class="fe-download-cloud"></i> Muat Turun</a></li>
                                     <li><a href="<?php echo BASE_URL ?>laporan/matlamat"><i class="fe-pie-chart"></i> Matlamat</a></li>
+                                    <!-- <li><a href="<?php echo BASE_URL ?>laporan/matlamat_ulasan"><i class="fe-pie-chart"></i> Matlamat (Ulasan)</a></li> -->
+                                    <li><a href="<?php echo BASE_URL ?>laporan/kriteria"><i class="fe-pie-chart"></i> Kriteria</a></li>
                                     <li><a href="<?php echo BASE_URL ?>laporan/kategori"><i class="fe-pie-chart"></i> Kategori</a></li>
                                     <li><a href="<?php echo BASE_URL ?>laporan/kehadiran"><i class="fe-pie-chart"></i> Kehadiran</a></li>
                                     <li><a href="<?php echo BASE_URL ?>laporan/attachment"><i class="fe-pie-chart"></i> Lampiran</a></li>

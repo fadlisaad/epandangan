@@ -7,4 +7,4 @@ tmp/*
 .env-local-mac
 .env-staging
 .well-known/
-files
+files/*

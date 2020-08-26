@@ -12,10 +12,10 @@
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>"><?php echo SITE_TITLE ?></a></li>
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Perubahan 3 PTKL 2040</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Perubahan 3 PBRKL 2020</a></li>
                                 </ol>
                             </div>
-                            <h4 class="page-title"><i class="fe-map"></i> Pilih Cadangan Perubahan 3 PTKL 2040</h4>
+                            <h4 class="page-title"><i class="fe-map"></i> Pilih Cadangan Perubahan 3 PBRKL 2020</h4>
                         </div>
                     </div>
                 </div>     

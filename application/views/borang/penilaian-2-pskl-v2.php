@@ -417,7 +417,9 @@
                     </tr>
                 </table>
                 <input type="hidden" name="borang_id" value="<?php echo $data[0]['borang_id'] ?>">
+                <?php if(isset($ulasanPanel[0]['cadangan'])): ?>
                 <input type="hidden" name="id" value="<?php echo $ulasanPanel[0]['id'] ?>">
+                <?php endif; ?>
             </div>
         </div>
 

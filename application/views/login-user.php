@@ -45,9 +45,9 @@
                                             <input type="hidden" name="redirect" id="redirect">
                                             <input type="hidden" name="token" value="<?php echo $token ?>">
                                         </form>
-                                        <p class="text-center mt-3">
+                                        <h4 class="text-center mt-3">
                                             <span data-tag="no-account"></span> <a href="<?php echo BASE_URL ?>auth/register" data-tag="register"></a>
-                                        </p>
+                                        </h4>
                                         <p class="text-center">
                                             <span data-tag="forgot-password"></span> <a href="<?php echo BASE_URL ?>auth/recover" data-tag="recover"></a>
                                         </p>
@@ -62,13 +62,14 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">Pengumuman</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                                        <h4 class="modal-title" id="myModalLabel">Announcement</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <h3>Makluman Gangguan Capaian Portal PPKL2040/E-Pandangan</h3>
-                                        <p>Adalah dimaklumkan bahawa akan berlaku gangguan capaian ke portal PPKL2040/E-Pandangan bermula jam 7.00 malam, 6 Mac 2020 (Jumaat) dan dijangka akan beroperasi semula pada jam 7.00 malam, 8 Mac 2020 (Ahad) disebabkan oleh kerja-kerja menaiktaraf rangkaian DBKL. Segala kesulitan amatlah dikesali</p>
-                                        <pre><?php var_dump($_SESSION) ?></pre>
+                                        <h4>Pengumuman #1</h4>
+                                        <p>Sila mendaftar dahulu jika anda belum mempunyai akaun dengan sistem e-Pandangan ini.</p>
+                                        <h4>Pengumuman #2</h4>
+                                        <p>Adalah dimaklumkan bahawa penghantaran borang bagi pandangan Draf PSKL 2040 telah ditutup.</p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">Tutup</button>

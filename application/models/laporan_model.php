@@ -52,6 +52,43 @@ Class Laporan_model extends Model {
 		}
 	}
 
+	public function countMatlamatUlasan($matlamat_id)
+	{
+		try{
+			$stm = "SELECT COUNT('matlamat_id') as total FROM view_borang_ulasan_matlamat WHERE matlamat_id = :matlamat_id";
+			$bind = array('matlamat_id' => $matlamat_id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
+	public function countKriteria()
+	{
+		try{
+			$stm = "SELECT * FROM count_kriteria";
+			$result = $this->pdo->fetchAll($stm);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
+	public function countLaporan($table)
+	{
+		try{
+			$stm = "SELECT * FROM ".$table;
+			$result = $this->pdo->fetchAll($stm);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function update($data)
 	{
 		try{

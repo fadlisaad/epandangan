@@ -16,7 +16,7 @@
                                     <li class="breadcrumb-item active">Matlamat vs Borang</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">Matlamat vs Borang</h4>
+                            <h4 class="page-title">Matlamat (Ulasan Pegawai) vs Borang</h4>
                         </div>
                     </div>
                 </div>     
@@ -35,6 +35,14 @@
                                     <th>Nama Matlamat</th>
                                     <th>Jumlah</th>
                                 </thead>
+                                <tr>
+                                    <td>Bab 1</td>
+                                    <td><span id="bab-1"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Bab 2</td>
+                                    <td><span id="bab-2"></span></td>
+                                </tr>
                                 <tr>
                                     <td>Matlamat 1</td>
                                     <td><span id="matlamat-1"></span></td>
@@ -71,8 +79,8 @@
 								<thead>
 									<tr>
                                         <th>ID</th>
-										<th>Nama</th>
-                                        <th>Matlamat</th>
+										<th>Nama Pegawai</th>
+                                        <th>Bab/Matlamat</th>
 									</tr>
 								</thead>
 							</table>

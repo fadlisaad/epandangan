@@ -204,6 +204,201 @@ class Laporan extends Controller {
 		$footer->render();
 	}
 
+	public function matlamat_ulasan()
+	{
+		if($this->session->get('permission') == 'user'){
+			$this->redirect('dashboard');
+		}
+
+		$matlamat_1 = $this->model->countMatlamatUlasan(1);
+		$matlamat_2 = $this->model->countMatlamatUlasan(2);
+		$matlamat_3 = $this->model->countMatlamatUlasan(3);
+		$matlamat_4 = $this->model->countMatlamatUlasan(4);
+		$matlamat_5 = $this->model->countMatlamatUlasan(5);
+		$matlamat_6 = $this->model->countMatlamatUlasan(6);
+		$bab_1 = $this->model->countMatlamatUlasan(7);
+		$bab_2 = $this->model->countMatlamatUlasan(8);
+
+		$js_url = array(
+			'https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js'
+		);
+
+		$custom_js = "<script>
+			var base_url = '".BASE_URL."laporan/process_view_matlamat_ulasan';
+			var lang_url = '".BASE_URL."languages/dataTables.my.json';
+
+			var matlamat_1 = '".$matlamat_1[0]['total']."';
+			var matlamat_2 = '".$matlamat_2[0]['total']."';
+			var matlamat_3 = '".$matlamat_3[0]['total']."';
+			var matlamat_4 = '".$matlamat_4[0]['total']."';
+			var matlamat_5 = '".$matlamat_5[0]['total']."';
+			var matlamat_6 = '".$matlamat_6[0]['total']."';
+			var bab_1 = '".$bab_1[0]['total']."';
+			var bab_2 = '".$bab_2[0]['total']."';
+
+			$(document).ready(function() {
+
+    			$('#datatable').DataTable({
+    				serverSide : true,
+    				processing : true,
+    				ajax : {
+    					url : base_url,
+    					type : 'POST'
+    				},
+    				deferRender : true,
+    				error : true,
+    				lengthMenu: [
+						[ 10, 25, 50, -1 ],
+						[ '10', '25', '50', 'Semua' ]
+					],
+    				dom: 'Bfltip',
+			        buttons: [
+			            'excel', 'pdf', 'print'
+			        ],
+    				columns: [
+			            { data: 'id' },
+			            { data: 'nama_penuh' },
+			            { data: 'matlamat' }
+			        ],
+			        language : {
+		                url: lang_url
+		            }
+    			});
+
+    			$('#matlamat-1').text(matlamat_1);
+    			$('#matlamat-2').text(matlamat_2);
+    			$('#matlamat-3').text(matlamat_3);
+    			$('#matlamat-4').text(matlamat_4);
+    			$('#matlamat-5').text(matlamat_5);
+    			$('#matlamat-6').text(matlamat_6);
+    			$('#bab-1').text(bab_1);
+    			$('#bab-2').text(bab_2);
+    		});
+
+    		$(function () {
+			  	Morris.Bar({
+					element: 'matlamat',
+					data: [
+						{device: 'Bab 1', geekbench: ".$bab_1[0]['total']."},
+						{device: 'Bab 2', geekbench: ".$bab_2[0]['total']."},
+						{device: 'Matlamat 1', geekbench: ".$matlamat_1[0]['total']."},
+						{device: 'Matlamat 2', geekbench: ".$matlamat_2[0]['total']."},
+						{device: 'Matlamat 3', geekbench: ".$matlamat_3[0]['total']."},
+						{device: 'Matlamat 4', geekbench: ".$matlamat_4[0]['total']."},
+						{device: 'Matlamat 5', geekbench: ".$matlamat_5[0]['total']."},
+						{device: 'Matlamat 6', geekbench: ".$matlamat_6[0]['total']."}
+					],
+					xkey: 'device',
+					ykeys: ['geekbench'],
+					labels: ['orang'],
+					barRatio: 0.5,
+					xLabelAngle: 35,
+					hideHover: 'auto',
+					barColors: function (row, series, type) {
+					    if (type === 'bar') {
+					      var red = Math.ceil(255 * row.y / this.ymax);
+					      return 'rgb(' + red + ',0,0)';
+					    }
+					    else {
+					      return '#000';
+					    }
+					 }
+				});
+    		});
+		</script>"; 
+
+		$header = $this->loadView('header');
+		$topbar = $this->loadView('topbar');
+        $template = $this->loadView('laporan/matlamat-ulasan');
+		$footer = $this->loadView('footer');
+
+		$header->set('css', $this->css);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
+		$footer->set('js_url', $js_url);
+		
+		$header->render();
+		$topbar->render();
+		$template->render();
+		$footer->render();
+	}
+
+	private function countElement($userArray, $value) {
+	    $cnt = 0;
+	    if(!empty($userArray)) {
+	        foreach($userArray as $user) {
+	            $unserializeArr = unserialize($user);
+	            $tmp = array_count_values($unserializeArr);
+	            if(isset($tmp[$value])) $cnt += $tmp[$value];
+	        }
+	    }
+	    return $cnt;
+	}
+
+	public function kriteria()
+	{
+		if($this->session->get('permission') == 'user'){
+			$this->redirect('dashboard');
+		}
+
+		$kriteria = $this->model->countLaporan('count_kriteria');
+		$matlamat = $this->model->countLaporan('count_matlamat');
+		$halatuju = $this->model->countLaporan('count_halatuju');
+		$tindakan = $this->model->countLaporan('count_tindakan');
+
+		$js_url = array(
+			'https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js'
+		);
+
+		$custom_js = "<script>
+			var lang_url = '".BASE_URL."languages/dataTables.my.json';
+
+			$(document).ready(function() {
+
+    			$('.datatable').DataTable({
+    				lengthMenu: [
+						[ 10, 25, 50, -1 ],
+						[ '10', '25', '50', 'Semua' ]
+					],
+    				dom: 'Bfltip',
+			        buttons: [
+			            'excel', 'pdf', 'print'
+			        ],
+			        language : {
+		                url: lang_url
+		            }
+    			});
+
+    		});
+			
+		</script>"; 
+
+		$header = $this->loadView('header');
+		$topbar = $this->loadView('topbar');
+        $template = $this->loadView('laporan/tindakan');
+		$footer = $this->loadView('footer');
+
+		$header->set('css', $this->css);
+		$template->set('kriteria', $kriteria);
+		$template->set('matlamat', $matlamat);
+		$template->set('halatuju', $halatuju);
+		$template->set('tindakan', $tindakan);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
+		$footer->set('js_url', $js_url);
+		
+		$header->render();
+		$topbar->render();
+		$template->render();
+		$footer->render();
+	}
+
 	public function kehadiran()
 	{
 		if($this->session->get('permission') == 'user'){
@@ -272,6 +467,70 @@ class Laporan extends Controller {
 		$header = $this->loadView('header');
 		$topbar = $this->loadView('topbar');
         $template = $this->loadView('laporan/kehadiran');
+		$footer = $this->loadView('footer');
+
+		$header->set('css', $this->css);
+		$footer->set('custom_js', $custom_js);
+		$footer->set('js', $this->js);
+		$footer->set('js_url', $js_url);
+		
+		$header->render();
+		$topbar->render();
+		$template->render();
+		$footer->render();
+	}
+
+	public function view($where)
+	{
+		if($this->session->get('permission') == 'user'){
+			$this->redirect('dashboard');
+		}
+
+		$js_url = array(
+			'https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js'
+		);
+
+		$custom_js = "<script>
+			var base_url = '".BASE_URL."laporan/process_view/".$where."';
+			var lang_url = '".BASE_URL."languages/dataTables.my.json';
+
+			$(document).ready(function() {
+
+    			$('#datatable').DataTable({
+    				serverSide : true,
+    				processing : true,
+    				ajax : {
+    					url : base_url,
+    					type : 'POST'
+    				},
+    				deferRender : true,
+    				error : true,
+    				lengthMenu: [
+						[ 10, 25, 50, -1 ],
+						[ '10', '25', '50', 'Semua' ]
+					],
+    				dom: 'Bfltip',
+			        buttons: [
+			            'excel', 'pdf', 'print'
+			        ],
+    				columns: [
+			            { data: 'id' },
+			            { data: 'nama_penuh' },
+			            { data: 'action' }
+			        ],
+			        language : {
+		                url: lang_url
+		            }
+    			});
+    		});
+		</script>";
+
+		$header = $this->loadView('header');
+		$topbar = $this->loadView('topbar');
+        $template = $this->loadView('laporan/view');
 		$footer = $this->loadView('footer');
 
 		$header->set('css', $this->css);
@@ -633,6 +892,39 @@ class Laporan extends Controller {
 		print_r($data);
 	}
 
+	// process datatable
+	function process_view_matlamat_ulasan()
+	{
+		$datatable = $this->loadHelper('datatable_helper');
+
+		$table = 'view_borang_ulasan_matlamat';
+		$primaryKey = 'id';
+		$columns = array(
+		    array(
+		    	'db' => 'id',
+		    	'dt' => 'id',
+		    	'formatter' => function( $d, $row ) {
+            		return "PSKL2040/DRAF/".$d;
+        		}
+        	),
+		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
+		    array( 'db' => 'matlamat', 'dt' => 'matlamat' )
+		);
+		 
+		// SQL server connection information
+		$sql_details = array(
+		    'user' => DB_USER,
+		    'pass' => DB_PASS,
+		    'db'   => DB_NAME,
+		    'host' => DB_HOST
+		);
+		 
+		$data = json_encode(
+		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+		);
+		print_r($data);
+	}
+
 	// process kehadiran
 	function process_kehadiran()
 	{
@@ -805,6 +1097,48 @@ class Laporan extends Controller {
 		 
 		$data = json_encode(
 		    $datatable::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+		);
+		print_r($data);
+	}
+
+	// process kehadiran
+	function process_view($where)
+	{
+		$datatable = $this->loadHelper('datatable_helper');
+
+		$table = 'view_borang_ulasan';
+		$primaryKey = 'id';
+
+		$whereData = explode('=', $where);
+		$where = $whereData[0]."='".urldecode($whereData[1])."'";
+		$columns = array(
+			array(
+		    	'db' => 'borang_id',
+		    	'dt' => 'id',
+		    	'formatter' => function( $d, $row ) {
+            		return "PSKL2040/DRAF/".$d;
+        		}
+        	),
+		    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
+		    array(
+		    	'db' => 'borang_id',
+		    	'dt' => 'action',
+		    	'formatter' => function( $d, $row ) {
+            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/penilaian/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a>";
+        		}
+        	)
+		);
+		 
+		// SQL server connection information
+		$sql_details = array(
+		    'user' => DB_USER,
+		    'pass' => DB_PASS,
+		    'db'   => DB_NAME,
+		    'host' => DB_HOST
+		);
+		 
+		$data = json_encode(
+		    $datatable::complex( $_POST, $sql_details, $table, $primaryKey, $columns, $where )
 		);
 		print_r($data);
 	}

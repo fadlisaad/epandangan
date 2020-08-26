@@ -625,11 +625,49 @@ class Borang extends Controller {
 			      	}
 			    }
 		  	});
+
+		  	// tambah memo baru
+			function createMemo(){
+
+				var post_url = '".BASE_URL."borang/addMemo';
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#tambah-memo').serialize(),
+					success:function(response){
+						if(parseInt(response) == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Ruangan nama adalah kosong. Sila isi dengan betul.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Nama memorandum telah berjaya ditambah.',
+								type: 'success'
+							}).then(function() {
+				                location.reload()
+				            });
+						}
+					}
+			    });
+
+			}
+
+			$('button#save-memo').bind('click', function (e) {
+				e.preventDefault();
+				$(this).attr('disabled', 'disabled');
+				createMemo();
+			});
 		</script>";
 
 		$data = $this->model->getPTKL3ByID($id);
-        $perubahan = $this->p_model->getPerubahanByID($data[0]['id']);
+        $perubahan = $this->p_model->getPerubahanByID($data[0]['borang_id']);
         $profile = $this->a_model->getUserProfile($data[0]['user_id']);
+        $memo = $this->model->getMemo($data[0]['borang_id']);
 
 		$header = $this->loadView('header');
 		$navigation = $this->loadView('topbar');
@@ -639,6 +677,7 @@ class Borang extends Controller {
 		$header->set('custom_css', $custom_css);
 		$header->set('css', $this->css);
 		$template->set('data', $data);
+		$template->set('memo', $memo);
 		$template->set('perubahan', $perubahan);
 		$template->set('profile', $profile);
 		$template->set('helper', $this->loadHelper('upload_helper'));
@@ -678,6 +717,44 @@ class Borang extends Controller {
 
 		$header->set('custom_css', $custom_css);
 		$template->set('data', $data);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+		
+		$header->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function cetak_ptkl_3($id)
+	{
+		$custom_css = "<style>
+		@media print {
+		    .printable {
+		        background-color: white;
+		        height: 100%;
+		        width: 100%;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        margin: 0;
+		        padding: 15px;
+		        font-size: 14px;
+		        line-height: 18px;
+		    }
+		}
+		</style>";
+
+		$data = $this->model->getPTKL3ByID($id);
+
+		$header = $this->loadView('header-print');
+		$footer = $this->loadView('footer-print');
+        $template = $this->loadView('borang/cetak-ptkl-3');
+
+		$header->set('custom_css', $custom_css);
+		$template->set('data', $data);
+		$perubahan = $this->p_model->getPerubahanByID($id);
+		$profile = $this->a_model->getUserProfile($data[0]['user_id']);
+		$template->set('profile', $profile);
+		$template->set('perubahan', $perubahan);
 		$template->set('helper', $this->loadHelper('upload_helper'));
 		
 		$header->render();
@@ -1654,7 +1731,7 @@ class Borang extends Controller {
 			    });
 			}
 
-			$('button#save-ulasan-panel').bind('click', function (e) {
+			$('button.save-ulasan-panel').bind('click', function (e) {
 				e.preventDefault();
 				$(this).attr('disabled', 'disabled');
 				insertUlasanPanel();
@@ -2468,6 +2545,30 @@ class Borang extends Controller {
 				'controller' => 'Borang',
 				'function' => 'addPegawai',
 				'action' => 'Add new officer name'
+			);
+			$log->add($data2);
+			return $add;
+		}
+	}
+
+	function addMemo()
+	{
+		if(isset($_POST['nama'])){
+			
+			$data = array(
+				'borang_id' => $_POST['borang_id'],
+				'nama' => $_POST['nama']
+			);
+
+			$add = $this->model->addMemo($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'addMemo',
+				'action' => 'Add new memorandum name'
 			);
 			$log->add($data2);
 			return $add;
@@ -3408,6 +3509,7 @@ class Borang extends Controller {
 							        <dt class=\"col-md-3\"><span data-tag=\"justifikasi\"></span></dt>
 							        <dd class=\"col-md-9\">".$value['justifikasi']."</dd>
 						       	</dl>
+						       	<a href=\"".BASE_URL."borang/ubahMatlamat/".$value['id']."\" class=\"btn btn-success btn-sm\"><i class=\"mdi mdi-edit\"></i> Ubah</a>
 						        <button type=\"button\" data-id=\"".$value['id']."\" class=\"btn btn-danger btn-sm\" onclick=\"deleteMatlamat(".$value['id'].")\"><i class=\"mdi mdi-close\"></i> Padam</button>
 		                    </div>
 		                </div>
@@ -3418,6 +3520,136 @@ class Borang extends Controller {
 		    }
 		}else{
 			echo "<div class=\"alert alert-info\">Sila simpan dahulu borang ini sebelum menambah komen matlamat.</div>";
+		}
+	}
+
+	function ubahMatlamat($id)
+	{
+		$custom_css = "<style>
+		@media print {
+		    .printable {
+		        background-color: white;
+		        height: 100%;
+		        width: 100%;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        margin: 0;
+		        padding: 15px;
+		        font-size: 14px;
+		        line-height: 18px;
+		    }
+		}
+		</style>";
+
+		$custom_js = "<script>
+    		$('.halatuju').chained('.matlamat');
+			$('.tindakan').chained('.halatuju');
+
+			$('.summernote').summernote({
+			    height: 250,
+			    minHeight: null,
+			    maxHeight: null,
+			    focus: false,
+			    toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+					['para', ['ul', 'ol']],
+				]
+			});
+
+			// Kemaskini matlamat
+			function kemaskiniMatlamat()
+			{
+				var post_url = '".BASE_URL."borang/updateMatlamat';
+				var borang_id = $('#borang_id').val();
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: $('form#borang-matlamat').serialize(),
+					success:function(response){
+						if(parseInt(response) == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Ruangan adalah kosong. Sila isi dengan betul.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Matlamat telah berjaya dikemaskini.',
+								type: 'success'
+							}).then(function() {
+				                location.href = '".BASE_URL."borang/edit/' + borang_id;
+				            });
+						}
+					}
+			    });
+			}
+
+			$('#save-matlamat').bind('click',function(e) {
+
+				e.preventDefault();
+				kemaskiniMatlamat();
+			});
+    	</script>";
+
+		$data = $this->model->getSingleByID('pskl_borang_matlamat', $id, 'id');
+
+		$header = $this->loadView('header');
+		$navigation = $this->loadView('topbar');
+		$footer = $this->loadView('footer');
+        $template = $this->loadView('borang/ubah-matlamat');
+
+        # dropdown chain select
+    	$edit_matlamat = $this->model->getDropdown('pskl_matlamat');
+    	$edit_halatuju = $this->model->getDropdown('pskl_halatuju');
+    	$edit_tindakan = $this->model->getDropdown('pskl_tindakan');
+
+		$header->set('css', $this->css);
+		$header->set('custom_css', $custom_css);
+		$template->set('data', $data);
+		$template->set('matlamat', $edit_matlamat);
+		$template->set('halatuju', $edit_halatuju);
+		$template->set('tindakan', $edit_tindakan);
+		$footer->set('js', $this->js);
+		$footer->set('custom_js', $custom_js);
+		
+		$header->render();
+		$navigation->render();
+		$template->render();
+		$footer->render();
+	}
+
+	function updateMatlamat()
+	{
+		if(isset($_POST['id'])){
+			
+			$data = array(
+				'id' => $_POST['id'],
+				'matlamat_id' => $_POST['matlamat'],
+				'halatuju_id' => $_POST['halatuju'],
+				'tindakan_id' => $_POST['tindakan'],
+				'cadangan' => $_POST['cadangan'],
+				'justifikasi' => $_POST['justifikasi']
+			);
+
+			$add = $this->model->updateMatlamat($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'updateMatlamat',
+				'action' => 'Kemaskini matlamat #ID '.$_POST['id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}else{
+			echo "failed";
 		}
 	}
 
@@ -3471,7 +3703,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'id',
 			    	'formatter' => function( $d, $row ) {
-	            		return "PBRKL2040/DRAF1/".$d;
+	            		return "PBRKL2040/DRAF/1/".$d;
 	        		}
 	        	),
 			    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
@@ -3493,7 +3725,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'id',
 			    	'formatter' => function( $d, $row ) {
-	            		return "PBRKL2040/DRAF2/".$d;
+	            		return "PBRKL2040/DRAF/2/".$d;
 	        		}
 	        	),
 			    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
@@ -3504,6 +3736,28 @@ class Borang extends Controller {
 			    	'dt' => 'action',
 			    	'formatter' => function( $d, $row ) {
 	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl_2/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a>";
+	        		}
+	        	)
+			);
+		}
+
+		if($table == 'borang_ptkl_3'){
+			$columns = array(
+			    array(
+			    	'db' => 'borang_id',
+			    	'dt' => 'id',
+			    	'formatter' => function( $d, $row ) {
+	            		return "PBRKL2040/DRAF/3/".$d;
+	        		}
+	        	),
+			    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
+			    array( 'db' => 'ic_passport', 'dt' => 'ic_passport' ),
+			    array( 'db' => 'tarikh_terima', 'dt' => 'tarikh_terima' ),
+	        	array(
+			    	'db' => 'borang_id',
+			    	'dt' => 'action',
+			    	'formatter' => function( $d, $row ) {
+	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl_3/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a>";
 	        		}
 	        	)
 			);

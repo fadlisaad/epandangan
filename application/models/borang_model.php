@@ -26,11 +26,11 @@ Class Borang_model extends Model {
 		}
 	}
 
-	public function getPTKL3ByID($id)
+	public function getPTKL3ByID($borang_id)
 	{
 		try{
-			$stm = "SELECT * FROM borang_ptkl_3 WHERE id = :id";
-			$bind = array('id' => $id);
+			$stm = "SELECT * FROM view_borang_ptkl_3 WHERE borang_id = :borang_id";
+			$bind = array('borang_id' => $borang_id);
 			$result = $this->pdo->fetchAll($stm, $bind);
 			return $result;
 		}
@@ -453,10 +453,43 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function addMemo($data)
+	{
+		try{
+			$stm  = "INSERT INTO memorandum (borang_id, nama) VALUES (:borang_id, :nama)";
+			$bind = array(
+				'borang_id' => $data['borang_id'],
+				'nama' => $data['nama']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
+		}
+	}
+
+	public function getMemo($borang_id)
+	{
+		try{
+			$stm = "SELECT * FROM memorandum WHERE borang_id = :borang_id";
+			$bind = array(
+				'borang_id' => $borang_id
+			);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function addUlasanPanel($data)
 	{
 		try{
-			$stm  = "INSERT INTO ulasan_panel (borang_id, penilaian, pengesyoran_diterima, catatan, pengesyoran, justifikasi, cadangan, tarikh_panel, tarikh_disahkan_1, tarikh_disahkan_2, tarikh_disahkan_3, tarikh_disahkan_4, pegawai_1, pegawai_2, tarikh_urusetia) VALUES (:borang_id, :penilaian, :pengesyoran_diterima, :catatan, :pengesyoran, :justifikasi, :cadangan, :tarikh_panel, :tarikh_disahkan_1, :tarikh_disahkan_2, :tarikh_disahkan_3, :tarikh_disahkan_4, :tarikh_disahkan_5, :pegawai_1, :pegawai_2, :tarikh_urusetia)";
+			$stm  = "INSERT INTO ulasan_panel (borang_id, penilaian, pengesyoran_diterima, catatan, pengesyoran, justifikasi, cadangan, tarikh_panel, tarikh_disahkan_1, tarikh_disahkan_2, tarikh_disahkan_3, tarikh_disahkan_4, tarikh_disahkan_5, pegawai_1, pegawai_2, tarikh_urusetia) VALUES (:borang_id, :penilaian, :pengesyoran_diterima, :catatan, :pengesyoran, :justifikasi, :cadangan, :tarikh_panel, :tarikh_disahkan_1, :tarikh_disahkan_2, :tarikh_disahkan_3, :tarikh_disahkan_4, :tarikh_disahkan_5, :pegawai_1, :pegawai_2, :tarikh_urusetia)";
 			$bind = array(
 				'borang_id' => $data['borang_id'],
 				'penilaian' => $data['penilaian'],
@@ -765,6 +798,28 @@ Class Borang_model extends Model {
 		}
 		catch(Exception $e){
 			echo $e->getMessage();
+		}
+	}
+
+	public function updateMatlamat($data)
+	{
+		try{
+			$stm  = "UPDATE pskl_borang_matlamat SET matlamat_id = :matlamat_id, halatuju_id = :halatuju_id, tindakan_id = :tindakan_id, cadangan = :cadangan, justifikasi = :justifikasi WHERE id = :id";
+			$bind = array(
+				'id' => $data['id'],
+				'matlamat_id' => $data['matlamat_id'],
+				'halatuju_id' => $data['halatuju_id'],
+				'tindakan_id' => $data['tindakan_id'],
+				'cadangan' => $data['cadangan'],
+				'justifikasi' => $data['justifikasi']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+			echo "0";
 		}
 	}
 }
