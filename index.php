@@ -8,8 +8,8 @@ define('APP_DIR', ROOT_DIR .'application/');
 require(ROOT_DIR .'vendor/autoload.php');
 
 // Load env
-$dotenv = new Dotenv\Dotenv(ROOT_DIR);
-$dotenv->load();
+//$dotenv = new Dotenv\Dotenv(ROOT_DIR);
+//$dotenv->load();
 
 //Start the Session
 session_save_path(getenv('UPLOAD_TMP_FOLDER'));
