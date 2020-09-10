@@ -143,7 +143,7 @@
                         </div> <!-- end card -->
 
                         <?php if($_SESSION['permission'] != 'user'): ?>
-                        <div class="card">
+                        <!-- <div class="card">
                             <div class="card-header bg-primary">
                                 <h4 class="text-white">Senarai Nama Memorandum</h4>
                             </div>
@@ -156,7 +156,7 @@
                                 </ol>
                                 <a href="#add-modal" class="btn btn-primary waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"><i class="mdi mdi-plus-circle mr-1"></i> Tambah Nama Memorandum</a>
                             </div>
-                        </div>
+                        </div> -->
                         <?php endif; ?>
 
                     </div><!-- end col-->
@@ -222,6 +222,10 @@
                                         <tr>
                                             <td>Tarikh Key-in</td>
                                             <td><?php echo ($data[0]['tarikh_key_in']) ? $data[0]['tarikh_key_in']: 'Tiada' ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rujukan</td>
+                                            <td><?php echo ($data[0]['rujukan']) ? $data[0]['rujukan']: 'Tiada' ?></td>
                                         </tr>
                                     </table>
                                 </div>
