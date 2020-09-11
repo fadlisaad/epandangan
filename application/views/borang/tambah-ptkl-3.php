@@ -101,6 +101,7 @@
                                     <label for="telefon_bimbit"><span data-tag="telefon-bimbit"></span> <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="telefon_bimbit" id="telefon_bimbit" required="" value="<?php echo @$profile[0]['telefon_bimbit'] ?>" form="borang-ptkl-3">
                                 </div>
+                                <input type="hidden" name="email" value="<?php echo @$profile[0]['email'] ?>">
                             </div>
                         </div>
 
@@ -120,6 +121,7 @@
                                 </div>
                             </div>
 
+                            <?php if($_SESSION['permission'] == 'user'): ?>
                             <div class="card-box">
                                 <h4 class="header-title"><span data-tag="part"></span> C</h4>
                                 <p class="sub-header" data-tag="part-c-description"></p>
@@ -198,7 +200,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" name="perubahan_3_id" value="<?php echo $ptkl_3[0]['id'] ?>">
+                                <input type="hidden" name="perubahan_3_id" value="<?php echo $ptkl_3[0]['id'] ?>" form="borang-ptkl-3">
 
                                 <p class="sub-header">Pandangan</p>
 
@@ -222,6 +224,7 @@
                                     <a href="<?php echo BASE_URL ?>perubahan/pilih_zon" class="btn btn-primary">Tambah</a>
                                 <?php endif; ?>
                             </div>
+                            <?php endif; ?>
 
                             <?php if($perubahan): ?>
                             <h3>Senarai Pandangan</h3>
@@ -289,6 +292,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php if($_SESSION['permission'] == 'user'): ?>
                                 <dl>
                                     <dt>Pandangan (Zon)</dt>
                                     <dd><?php echo @$value['pandangan_zon'] ?></dd>
@@ -298,6 +302,29 @@
                                     <dd><?php echo @$value['cadangan'] ?></dd>
                                 </dl>
                                 <button type="button" data-id="<?php echo $value['perubahan_id'] ?>" class="btn btn-danger btn-sm" onclick="deletePerubahan(<?php echo $value['perubahan_id'] ?>)"><i class="mdi mdi-close"></i> Padam</button>
+
+                                <?php else: ?>
+                                <!-- <form id="update-perubahan" name="update-perubahan"> -->
+                                <div class="form-group">
+                                    <label for="pandangan_zon"><span data-tag="pandangan-zon"></span> <span class="text-danger">*</span></label>
+                                    <textarea id="pandangan_zon" class="form-control summernote" name="pandangan_zon" rows="10" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-validation-threshold="50" required="" placeholder="Contoh: Selaraskan Syarat Nyata" form="borang-ptkl-3"><?php echo @$value['pandangan_zon'] ?></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pandangan_intensiti"><span data-tag="pandangan-intensiti"></span> <span class="text-danger">*</span></label>
+                                    <textarea id="pandangan_intensiti" class="form-control summernote" name="pandangan_intensiti" rows="10" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-validation-threshold="50" required="" placeholder="Contoh: Penyelarasan densiti dengan kawasan sekitar" form="borang-ptkl-3"><?php echo @$value['pandangan_intensiti'] ?></textarea>
+                                </div>
+
+                                <p class="sub-header">Cadangan/Justifikasi</p>
+
+                                <div class="form-group">
+                                    <label for="cadangan" data-tag="cadangan-penambahbaikan"></label>
+                                    <textarea id="cadangan" class="form-control summernote" name="cadangan" rows="10" placeholder="Contoh: Tukar zon gunatanah mengikut Syarat Nyata" form="borang-ptkl-3"><?php echo @$value['cadangan'] ?></textarea>
+                                </div>
+                                <input type="hidden" name="perubahan_3_id" value="<?php echo $ptkl_3[0]['id'] ?>" form="borang-ptkl-3">
+                                <!-- <button type="button" data-id="<?php echo $value['perubahan_id'] ?>" class="btn btn-primary btn-sm" onclick="updatePerubahan(<?php echo $value['perubahan_id'] ?>)">Kemaskini</button>
+                                <?php endif; ?> -->
+
                             </div>
                             <?php endforeach; ?>
                             <?php endif; ?>
@@ -305,14 +332,14 @@
                             <div class="card-box">
                                 <h4 class="header-title"><span data-tag="lampiran"></span> 1</h4>
                                 <?php if($data){
-                                    $upload = array('id' => $data[0]['id'].'-a'); 
+                                    $upload = array('id' => $data[0]['borang_id'].'-a'); 
                                     $get = $helper->get($upload);
                                     if($get) {
                                         echo "<p><div class=\"button-list\"><a href=\"".BASE_URL."files/".$get[0]['file']."\" class=\"btn btn-blue\"><span class=\"btn-label\"><i class=\"fas fa-file-pdf\"></i></span>Lampiran Memorandum</a></div></p>";
                                     }else{ ?>
                                         <p class="sub-header" data-tag="muatnaik-lampiran-2"></p>
                                         <div class="form-group">
-                                            <input type="file" name="lampiran_c" data-parsley-max-file-size="2000" form="borang-ptkl-3">
+                                            <input type="file" name="lampiran_a" data-parsley-max-file-size="2000" form="borang-ptkl-3">
                                         </div>
                                         <div class="alert alert-info" data-tag="alert-lampiran"></div>
                                     <?php }
@@ -327,7 +354,7 @@
                                 <h4 class="header-title"><span data-tag="lampiran"></span> 2</h4>
                                 <?php if($data)
                                 {
-                                    $upload = array('id' => $data[0]['id'].'-c'); 
+                                    $upload = array('id' => $data[0]['borang_id'].'-c'); 
                                     $get = $helper->get($upload);
                                     if($get){
                                         echo "<div class=\"button-list\"><a href=\"".BASE_URL."files/".$get[0]['file']."\" class=\"btn btn-green\"><span class=\"btn-label\"><i class=\"fas fa-file-pdf\"></i></span>Lampiran Berkaitan Pandangan Awam</a></div>";
@@ -353,7 +380,9 @@
                                 <p class="sub-header">Sila pilih nama pegawai yang key-in borang ini</p>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <select class="form-control" id="pegawai" required="" name="pegawai" form="borang-ptkl-3"></select>
+                                        <select class="form-control" id="pegawai" required="" name="pegawai" form="borang-ptkl-3">
+                                            <?php if(isset($data[0]['pegawai'])) echo "<option value=\"".$data[0]['pegawai']."\" selected>".$data[0]['pegawai']."</option>"; ?>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <a id="clear_select" href="#" class="btn btn-warning">Clear Selection</a>
@@ -364,7 +393,7 @@
 
                                 <div class="form-group mb-0">
                                     <input type="hidden" name="token" value="<?php echo $token ?>" form="borang-ptkl-3">
-                                    <input type="hidden" name="borang_id" value="<?php echo $data[0]['id'] ?>" form="borang-ptkl-3">
+                                    <input type="hidden" name="borang_id" value="<?php echo $data[0]['borang_id'] ?>" form="borang-ptkl-3">
                                     <input type="hidden" name="draf" value="2" form="borang-ptkl-3">
                                     <input type="submit" class="btn btn-success" name="submit" value="Simpan" form="borang-ptkl-3">
                                 </div>

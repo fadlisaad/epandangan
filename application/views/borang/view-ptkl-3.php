@@ -133,6 +133,9 @@
 
                                     <dt class="col-sm-3">No. Telefon Bimbit</dt>
                                     <dd class="col-sm-9"><?php echo ($profile[0]['telefon_bimbit']) ? $profile[0]['telefon_bimbit']: '-' ?></dd>
+
+                                    <dt class="col-sm-3">Alamat E-mail</dt>
+                                    <dd class="col-sm-9"><?php echo ($profile[0]['email']) ? $profile[0]['email']: '-' ?></dd>
                                 </dl>
 
                             </div> <!-- end card body-->

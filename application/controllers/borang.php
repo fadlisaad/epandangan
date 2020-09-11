@@ -241,7 +241,7 @@ class Borang extends Controller {
 					    { width: '5%', 'targets': 0 },
 					    { width: '12%', 'targets': 2 },
 					    { width: '12%', 'targets': 3 },
-					    { width: '10%', 'targets': 4 }
+					    { width: '13%', 'targets': 4 }
 					]
     			});
 
@@ -384,6 +384,12 @@ class Borang extends Controller {
 	{
 		$this->session->set('borang_id', $borang_id);
 		$this->redirect('borang/pandangan/pskl');
+	}
+
+	function edit_ptkl_3($borang_id)
+	{
+		$this->session->set('borang_id', $borang_id);
+		$this->redirect('borang/pandangan/ptkl_3');
 	}
 
 	function papar_ptkl($id)
@@ -2370,6 +2376,7 @@ class Borang extends Controller {
         	$template->set('select_matlamat', $matlamat);
         	$template->set('select_halatuju', $halatuju);
         	$template->set('select_tindakan', $tindakan);
+        	$template->set('matlamat', $dataMatlamat);
 
         //}else if($borang == 'ptkl' || $borang == 'ptkl-2' || $borang == 'ptkl-3'){
         }else if($borang == 'ptkl' || $borang == 'ptkl-2'){
@@ -2405,6 +2412,8 @@ class Borang extends Controller {
         	$template = $this->loadView('borang/tambah-'.$borang);
         
         }else{
+
+        	$borang_id = $this->session->get('borang_id');
 
         	$custom_js .= "<script>
 
@@ -2467,6 +2476,40 @@ class Borang extends Controller {
 			    });
 			}
 
+			function updatePerubahan(id){
+
+				var post_url = '".BASE_URL."borang/updatePerubahan';
+
+				var pandangan_zon = $('#pandangan_zon').val();
+				var pandangan_intensiti = $('#pandangan_intensiti').val();
+				var cadangan = $('#cadangan').val();
+
+				$.ajax({
+					type: 'POST',
+					url: post_url,
+					dataType: 'html',
+					data: 'id=' + id + '&pandangan_zon=' + pandangan_zon + '&pandangan_intensiti=' + pandangan_intensiti + '&cadangan=' + cadangan,
+					success:function(response){
+						if(parseInt(response) == 0){
+							Swal.fire({
+								title: 'Ralat',
+								text: 'Terdapat ralat semasa menyimpan maklumat ini. Sila cuba semula.',
+								type: 'warning'
+							});
+						}else{
+							Swal.fire({
+								title: 'Berjaya',
+								text: 'Maklumat berjaya dikemaskini.',
+								type: 'success'
+							}).then(function() {
+				                
+				            });
+						}
+					}
+			    });
+
+			}
+
         	</script>";
 
         	if($this->session->get('permission') == 'officer')
@@ -2498,14 +2541,21 @@ class Borang extends Controller {
 			}
 
         	$template = $this->loadView('borang/tambah-ptkl-3');
+        	
         	# PTKL 3
-        	parse_str($borang, $output);
-        	$perubahan_id = $output['ptkl-3?tapak'];
+        	$parse = parse_str($borang, $output);
+        	if($parse == NULL){
+        		$data_ptkl_perubahan = $this->model->getPerubahan3ByID($borang_id);
+        		$perubahan_id = $data_ptkl_perubahan[0]['perubahan_3_id'];
+        	}else{
+        		$perubahan_id = $output['ptkl-3?tapak'];
+        	}
         	$ptkl_3 = $this->p_model->getByID('perubahan_3', $perubahan_id);
+        	
         	$template->set('ptkl_3', $ptkl_3);
 
         	if($data){
-	        	$perubahan = $this->p_model->getPerubahanByID($data[0]['id']);
+	        	$perubahan = $this->p_model->getPerubahanByID($borang_id);
 		        $template->set('perubahan', $perubahan);
 		    }else{
 		        $template->set('perubahan', NULL);
@@ -2516,7 +2566,6 @@ class Borang extends Controller {
         $template->set('token', $token);
         $template->set('profile', $profile);
         $template->set('data', $data);
-        $template->set('matlamat', $dataMatlamat);
         $template->set('user_id', $this->session->get('user_id'));
         $footer->set('js', $this->js);
         $footer->set('custom_js', $custom_js);
@@ -2946,17 +2995,19 @@ class Borang extends Controller {
 				case 'admin':
 				case 'super':
 
-					# create user
-					$username = 'pbrkl2020-draf3-'.rand(0,9999).'@yopmail.com';
-					$dataUser = array(
-						'username' => $username,
-						'password' => '12345678'
-					);
-
 					# check if user already exist
-					$exist = $this->a_model->getUserByEmail($username);
+					$exist = $this->a_model->getUserByEmail($_POST['email']);
 					
 					if($exist == NULL){
+
+						$user_id = $this->model->getLastUserID() + 1;
+
+						# create user
+						$username = 'ptkl2020-3-'.$user_id.'@yopmail.com';
+						$dataUser = array(
+							'username' => $username,
+							'password' => '12345678'
+						);
 
 						# add new user credential
 						$addUser = $this->a_model->addUser($dataUser);
@@ -2983,7 +3034,6 @@ class Borang extends Controller {
 
 					}else{
 
-						# create user profile
 						$dataProfile = array(
 							'nama_penuh' => $this->filter->sanitize($_POST['nama_penuh']),
 							'ic_passport' => $this->filter->sanitize($_POST['ic_passport']),
@@ -3013,7 +3063,7 @@ class Borang extends Controller {
 
 			if($table == 'ptkl_3'){
 
-				# check if borang exist
+				# check if borang exist public user
 				$exist = $this->model->getPTKL3ByUserID($user_id);
 				
 				if($exist == NULL){
@@ -3653,6 +3703,35 @@ class Borang extends Controller {
 		}
 	}
 
+	function updatePerubahan()
+	{
+		if(isset($_POST['id'])){
+			
+			$data = array(
+				'id' => $_POST['id'],
+				'pandangan_zon' => $_POST['pandangan_zon'],
+				'pandangan_intensiti' => $_POST['pandangan_intensiti'],
+				'cadangan' => $_POST['cadangan']
+			);
+
+			$add = $this->model->updatePTKL3($data);
+
+			# log user action
+			$log = $this->loadHelper('log_helper');
+			$data2 = array(
+				'user_id' => $this->session->get('user_id'),
+				'controller' => 'Borang',
+				'function' => 'updatePerubahan',
+				'action' => 'Kemaskini perubahan 3 #ID '.$_POST['id']
+			);
+			$log->add($data2);
+
+			return $add;
+		}else{
+			echo "failed";
+		}
+	}
+
 	function getMatlamatPegawai($borang_id = NULL)
 	{
 		if($borang_id){
@@ -3713,7 +3792,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'action',
 			    	'formatter' => function( $d, $row ) {
-	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a>";
+	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl/".$d."\"></i> Papar</a> <a class=\"btn btn-xs btn-warning\" href=\"".BASE_URL."borang/edit/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Ubah</a>";
 	        		}
 	        	)
 			);
@@ -3735,7 +3814,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'action',
 			    	'formatter' => function( $d, $row ) {
-	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl_2/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a>";
+	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl_2/".$d."\">Papar</a> <a class=\"btn btn-xs btn-warning\" href=\"".BASE_URL."borang/edit/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Ubah</a>";
 	        		}
 	        	)
 			);
@@ -3757,7 +3836,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'action',
 			    	'formatter' => function( $d, $row ) {
-	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl_3/".$d."\"> <i class=\"mdi mdi-square-edit-outline\"></i> Papar</a>";
+	            		return "<a class=\"btn btn-xs btn-info\" href=\"".BASE_URL."borang/papar_ptkl_3/".$d."\">Papar</a> <a class=\"btn btn-xs btn-warning\" href=\"".BASE_URL."borang/edit_ptkl_3/".$d."\">Ubah</a>";
 	        		}
 	        	)
 			);

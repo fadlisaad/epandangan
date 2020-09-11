@@ -26,6 +26,19 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function getPerubahan3ByID($borang_id)
+	{
+		try{
+			$stm = "SELECT * FROM view_ptkl_perubahan WHERE borang_id = :borang_id";
+			$bind = array('borang_id' => $borang_id);
+			$result = $this->pdo->fetchAll($stm, $bind);
+			return $result;
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
 	public function getPTKL3ByID($borang_id)
 	{
 		try{
@@ -108,6 +121,18 @@ Class Borang_model extends Model {
 	{
 		try{
 			$stm = "SELECT id FROM pskl_borang ORDER BY id DESC";
+			$result = $this->pdo->fetchAll($stm);
+			return $result[0]['id'];
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+
+	public function getLastUserID()
+	{
+		try{
+			$stm = "SELECT id FROM users ORDER BY id DESC";
 			$result = $this->pdo->fetchAll($stm);
 			return $result[0]['id'];
 		}
@@ -203,14 +228,11 @@ Class Borang_model extends Model {
 	public function updatePTKL3($data)
 	{
 		try{
-			$stm = "UPDATE ptkl_perubahan SET perubahan_3_id = :perubahan_3_id, pandangan_zon = :pandangan_zon, pandangan_intensiti = :pandangan_intensiti, pandangan_awam = ".$data['pandangan_awam'].", cadangan = ".$data['cadangan'].", cadangan = :cadangan, borang_id = :borang_id WHERE id = :id";
+			$stm = "UPDATE ptkl_perubahan SET pandangan_zon = :pandangan_zon, pandangan_intensiti = :pandangan_intensiti, cadangan = :cadangan WHERE id = :id";
 			$bind = array(
-				'perubahan_3_id' => $data['perubahan_3_id'],
 				'pandangan_zon' => $data['pandangan_zon'],
 				'pandangan_intensiti' => $data['pandangan_intensiti'],
-				'pandangan_awam' => $data['pandangan_awam'],
 				'cadangan' => $data['cadangan'],
-				'borang_id' => $data['borang_id'],
 				'id' => $data['id']
 			);
 			
