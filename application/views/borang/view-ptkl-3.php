@@ -235,6 +235,7 @@
                             </div>
                             <div class="card-footer d-print-none">
                                 <a class="btn btn-info" href="<?php echo BASE_URL."borang/cetak_ptkl_3/".$data[0]['borang_id'] ?>">Cetak</a>
+                                <a class="btn btn-warning" onclick="deletePerubahan(<?php echo $data[0]['borang_id'] ?>)">Hapus</a>
                             </div>
                         </div> <!-- end card-->
                         <?php endif; ?>

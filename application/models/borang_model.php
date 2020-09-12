@@ -429,6 +429,34 @@ Class Borang_model extends Model {
 		}
 	}
 
+	public function deletePerubahan($data)
+	{
+		try{
+			$stm = "DELETE FROM borang_ptkl_3 WHERE id = :id LIMIT 1";
+			$bind = array(
+				'id' => $data['id']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+
+		try{
+			$stm = "DELETE FROM ptkl_perubahan WHERE borang_id = :id LIMIT 1";
+			$bind = array(
+				'id' => $data['id']
+			);
+			
+			$this->pdo->fetchAffected($stm, $bind);
+			echo "1";
+		}
+		catch(Exception $e){
+			return $e->getMessage();
+		}
+	}
+
 	public function deleteMatlamat($id)
 	{
 		try{

@@ -668,6 +668,43 @@ class Borang extends Controller {
 				$(this).attr('disabled', 'disabled');
 				createMemo();
 			});
+
+			function deletePerubahan(id)
+			{
+				var delete_url = '".BASE_URL."borang/deletePerubahan';
+		    
+			    Swal.fire({
+			        title: 'Anda pasti?',
+			        text: 'Borang ini akan dipadam.',
+			        type: 'warning',
+			        showCancelButton: true,
+			        confirmButtonColor: '#DD6B55',
+			        confirmButtonText: 'Ya, padam',
+			    }).then(function(result){
+			    	if (result.value) {
+				        $.ajax({
+				            url: delete_url,
+				            dataType: 'html',
+				            data: 'id=' + id,
+				            type: 'POST',
+				            success: function(response) {
+				            	if(parseInt(response) == 1){
+				                	Swal.fire('Berjaya!', 'Rekod ini berjaya dihapus', 'success').then((result) => {
+				                		location.href = '".BASE_URL."borang/ptkl_3/';
+				                	});
+			                	}else{
+			                		Swal.fire('Ralat', 'Sila cuba semula', 'error');
+			                	}
+				            },
+				            error: function (xhr, ajaxOptions, thrownError) {
+				                Swal.fire('Ralat!', 'Sila cuba semula', 'error');
+				            }
+				        });
+				    }else if(result.dismiss === Swal.DismissReason.cancel) {
+				    	Swal.fire('Cancelled', 'Tiada maklumat yang dihapus', 'info');	
+				    }
+			    });
+			}
 		</script>";
 
 		$data = $this->model->getPTKL3ByID($id);
@@ -3529,6 +3566,14 @@ class Borang extends Controller {
 			'id' => $_POST['id']
 		);
 		return $this->model->deleteAJAX($data);
+	}
+
+	function deletePerubahan()
+	{
+		$data = array(
+			'id' => $_POST['id']
+		);
+		return $this->model->deletePerubahan($data);
 	}
 
 	function getMatlamat($borang_id = NULL)
