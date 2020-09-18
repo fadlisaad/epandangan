@@ -893,6 +893,90 @@ class Borang extends Controller {
 		$footer->render();
 	}
 
+	function appendix($id)
+	{
+		$custom_css = "<style>
+		@media print {
+			@page {
+			  	size: A4 potrait !important;
+			  	margin: 25mm 18mm 25mm 25mm;
+			}
+		    .printable {
+		        background-color: white;
+		        height: 100%;
+		        width: 100%;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        margin: 0;
+		        padding: 15px;
+		        font-size: 14px;
+		        line-height: 18px;
+		    }
+		}
+		.square {
+			height: 20px;
+			width: 20px;
+			border: 1px solid grey;
+		}
+		.square-check{
+			padding-left: 20px;
+		}
+		.borang_title{
+			float: right;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.borang_id{
+			float: right;
+			border: 1px solid black;
+			padding: 5px;
+			display: block;
+			font-weight:bold;
+		}
+		.title-box {
+			border: 1px solid black;
+		}
+		</style>";
+
+		$custom_js = "<script>
+    		var get_matlamat = '".$id."';
+
+    		function getMatlamat()
+			{
+				var get_url = '".BASE_URL."borang/getMatlamat/".$id."';
+				var get_data = $.get(get_url, function(data, status){
+					$('#success').html(data);
+				});
+			}
+
+			getMatlamat();
+		</script>";
+
+		$header = $this->loadView('header-print');
+		$footer = $this->loadView('footer-print');
+        $template = $this->loadView('borang/appendix');
+
+		$header->set('custom_css', $custom_css);
+
+		$data = $this->model->getByID('pskl', $id);
+		$dataMatlamat = $this->model->getByID('matlamat', $id);
+		$profile = $this->a_model->getUserProfile($data[0]['user_id']);
+
+		$template->set('profile', $profile);
+        $template->set('data', $data);
+        $template->set('matlamat', $dataMatlamat);
+		$template->set('helper', $this->loadHelper('upload_helper'));
+		$template->set('dateHelper', $this->loadHelper('date_helper'));
+
+		$footer->set('custom_js', $custom_js);
+		
+		$header->render();
+		$template->render();
+		$footer->render();
+	}
+
 	function papar_pskl($id)
 	{
 		$borang_id = $id;
@@ -3827,7 +3911,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'id',
 			    	'formatter' => function( $d, $row ) {
-	            		return "PBRKL2040/DRAF/1/".$d;
+	            		return "PBRKL2020/DRAF/1/".$d;
 	        		}
 	        	),
 			    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
@@ -3849,7 +3933,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'id',
 			    	'formatter' => function( $d, $row ) {
-	            		return "PBRKL2040/DRAF/2/".$d;
+	            		return "PBRKL2020/DRAF/2/".$d;
 	        		}
 	        	),
 			    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
@@ -3871,7 +3955,7 @@ class Borang extends Controller {
 			    	'db' => 'borang_id',
 			    	'dt' => 'id',
 			    	'formatter' => function( $d, $row ) {
-	            		return "PBRKL2040/DRAF/3/".$d;
+	            		return "PBRKL2020/DRAF/3/".$d;
 	        		}
 	        	),
 			    array( 'db' => 'nama_penuh', 'dt' => 'nama_penuh' ),
