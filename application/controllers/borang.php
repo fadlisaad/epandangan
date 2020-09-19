@@ -952,6 +952,11 @@ class Borang extends Controller {
 			}
 
 			getMatlamat();
+
+			$(document).ready(function(){
+				document.title = get_matlamat;
+				window.print();
+			});
 		</script>";
 
 		$header = $this->loadView('header-print');
