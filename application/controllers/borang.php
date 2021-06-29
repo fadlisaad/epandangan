@@ -1934,6 +1934,7 @@ class Borang extends Controller {
 
 		$data = $this->model->getByID('pskl', $id);
 		$matlamat = $this->model->getByID('matlamat', $id);
+		$matlamat_pegawai = $this->model->getByID('matlamat_pegawai', $id);
 		$ulasan = $this->model->getByID('ulasan', $id);
 		$ulasanOverall = $this->model->getByID('ulasan_keseluruhan', $id);
 		$ulasanMatlamat = $this->model->getByID('ulasan_matlamat', $id);
@@ -1943,12 +1944,13 @@ class Borang extends Controller {
 		$footer = $this->loadView('footer-print');
         #$template = $this->loadView('borang/penilaian-2');
         #$template = $this->loadView('borang/penilaian-2-pskl');
-        $template = $this->loadView('borang/penilaian-2-pskl-v2');
+        $template = $this->loadView('borang/penilaian-2-pskl-v3');
 
 		$header->set('css', $this->css);
 		$header->set('custom_css', $custom_css);
 		$template->set('data', $data);
 		$template->set('matlamat', $matlamat);
+		$template->set('matlamat_pegawai', $matlamat_pegawai);
 		$template->set('ulasan', $ulasan);
 		$template->set('ulasanPanel', $ulasanPanel);
 		$template->set('ulasanOverall', $ulasanOverall);
